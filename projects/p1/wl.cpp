@@ -94,7 +94,7 @@ main(int argc, char *argv[])
 //     cout<<command<<endl;
     // parse the command
     if ( splitstr(command,argvs) < 0 ) {
-      cout<<"Nothing read"<<endl;
+//       cout<<"Nothing read"<<endl;
       continue; // no command, try read again
     }
 //     for ( unsigned int i = 0 ; i < argvs.size(); i++ )
@@ -103,10 +103,10 @@ main(int argc, char *argv[])
     command = argvs.at(0);
     argnum = argvs.size();
     if ( command == "load" && argnum == 2 ) {
-        cout<< "I will load" << endl;
+//      cout<< "I will load" << endl;
         srcfile.open(argvs.at(1).c_str());
         if(srcfile.fail()) {
-  cerr<<"Open file " << argvs.at(1).c_str() << " failed"<<endl;
+//  cerr<<"Open file " << argvs.at(1).c_str() << " failed"<<endl;
           invalidcmd();
           continue;
         }
@@ -128,7 +128,7 @@ main(int argc, char *argv[])
 
         //
     } else if ( command == "locate" && argnum == 3 ) {
-        // cout<< "I will locate" << endl;
+// cout<< "I will locate" << endl;
         word = argvs.at(1); //< whatever being located at second arg
         index = strtol(argvs.at(2).c_str(),&endptr, 10);
         if ( *endptr != '\0' ) {
@@ -136,26 +136,26 @@ main(int argc, char *argv[])
           continue;
         }
         // valid query, look into the database and find
-cout << "Will perform: locate "<<word<<" "<<index<<endl; 
+// cout << "Will perform: locate "<<word<<" "<<index<<endl; 
         if ( (pos = locate(tree, word, index)) < 0 ) {
-          cerr << "No matching entry"<<endl;
+          // cerr << "No matching entry"<<endl;
+          cout << "No matching entry"<<endl;
           continue;
         }
         cout<<pos<<endl;
     } else if ( command == "new" && argnum == 1 ) {
-        cout<< "I will new" << endl;
+// cout<< "I will new" << endl;
         tree->clear();
     } else if ( command == "end" && argnum == 1 ) {
-        cout<< "I will clean mem and exit" << endl;
+// cout<< "I will clean mem and exit" << endl;
         // clean the memory
         delete tree;
         delete newtree;
         return 1;
-
-    } else if ( command == "print" ) {
-      tree->printTree();
+// } else if ( command == "print" ) {
+//   tree->printTree();
     } else // any other command
-        invalidcmd();
+      invalidcmd();
   }
 
   return 1;
@@ -180,7 +180,7 @@ buildTree(ifstream &srcfile, RBTree *tree) {
     lineStr.str("");
     olineStr.str("");
     words.clear();
-    cout<<"Whole line: "<<line<<endl;
+// cout<<"Whole line: "<<line<<endl;
     lineStr<<line;
     char c;
     for ( unsigned int i = 0 ; i < line.size(); ++i ) {
@@ -204,7 +204,7 @@ buildTree(ifstream &srcfile, RBTree *tree) {
 //         olineStr<<" ";
 //       }
 //     }
-    cout<<"rewri line: "<<olineStr.str()<<endl;
+// cout<<"rewri line: "<<olineStr.str()<<endl;
     line = olineStr.str();
   // split
     splitstr(line, words);
@@ -214,7 +214,6 @@ buildTree(ifstream &srcfile, RBTree *tree) {
 
     int wcount = words.size();
     for ( int n = 0 ; n < wcount ; ++n ) {
-//      pos++;
       insert(tree,words.at(n),pos++);
     }
   }
@@ -234,9 +233,9 @@ void insert(RBTree *tree, string word, int pos) {
   wpp_t newword;
   newword.word = word;
   newword.pos = pos;
-//cout << "try insert "<<word <<endl;
+// cout << "try insert "<<word <<endl;
   tree->insert(newword);
-//cout << word <<" inserted" <<endl;
+// cout << word <<" inserted" <<endl;
 }
 
 
@@ -253,10 +252,10 @@ int
 locate(RBTree *tree, string word, int index) {
   int pos = -1;
   TreeNode *node = tree->getNode(word);
-cout<<"Returned node: "<<node<<endl;
+// cout<<"Returned node: "<<node<<endl;
   if ( node != NULL )
     pos = node->poss->get(index-1); // index in tree start from 0
   return pos;
 }
 
-
+// 

@@ -7,7 +7,7 @@
  *   email: Add stuff here .. 
  */
 
-#include <stdio.h>
+//#include <stdio.h>
 #include <iostream>
 #include <string>
 
@@ -213,18 +213,18 @@ tree->poss->print();
 
 /** Constructor of RBTree */
 RBTree::RBTree() {
-  cout<<"New RB Tree"<<endl;
+//  cout<<"New RB Tree"<<endl;
   root = NULL;
 }
 
 /** Destructor of RBTree */
 RBTree::~RBTree() {
-  cout<<"Destruct RB Tree"<<endl;
+//  cout<<"Destruct RB Tree"<<endl;
   deleteNode(root);
 }
 
 void RBTree::clear() {
-  cout<<"Delete RB Tree content"<<endl;
+//  cout<<"Delete RB Tree content"<<endl;
   if ( root ) {
     deleteNode(root);
     root = NULL;
@@ -237,7 +237,7 @@ void RBTree::deleteNode(TreeNode* node) {
   TreeNode *left, *right;
   left = node->left;
   right = node->right;
-cout<<"Address of node to be deleted: "<<node<<endl;
+// cout<<"Address of node to be deleted: "<<node<<endl;
   delete node;
   deleteNode(left);
   deleteNode(right);
@@ -275,16 +275,16 @@ void RBTree::insert(wpp_t newword) {
   curr = root;
   parent = curr;
   if ( root == NULL ) {
-cout<<"This is the root with "<<newword.word<<endl;
+// cout<<"This is the root with "<<newword.word<<endl;
     root = new TreeNode(newword);
     curr = root;
 // cout<< "Address of root: " <<root<<endl;
   } else {
     while ( curr!= NULL ){
       parent = curr;
-cout<< "Compare "<<curr->word<<" "<< newword.word<< endl;
+// cout<< "Compare "<<curr->word<<" "<< newword.word<< endl;
       if ( curr->word == newword.word ) {
-cout<<"Just incr occurance of "<<newword.word<<" at "<<newword.pos<<endl;
+// cout<<"Just incr occurance of "<<newword.word<<" at "<<newword.pos<<endl;
         curr->poss->add(newword.pos);
         return; // only add a pos, no change in tree structure
       } else if ( curr->word < newword.word )
@@ -292,7 +292,7 @@ cout<<"Just incr occurance of "<<newword.word<<" at "<<newword.pos<<endl;
       else
         curr = curr->left;
     }
-cout<<"New node for "<<newword.word<<" and pos "<<newword.pos<<endl;
+// cout<<"New node for "<<newword.word<<" and pos "<<newword.pos<<endl;
     curr = new TreeNode(newword);
     curr->parent = parent;
     if (parent->word < curr->word)
@@ -314,22 +314,23 @@ void RBTree::balance(TreeNode *node) {
 //cout<<"balance(): Address of node: " << node<< endl;
   // Case 1: it's the root!
   if ( node->parent == NULL ) {
-cout<<"Case 1"<<endl;
+// cout<<"Case 1"<<endl;
     node->color = 'b';
     return;
   }
 
   // Case 2: parent is black, it is fine..
   if ( node->parent->color == 'b' ) {
-cout<<"Case 2"<<endl;
+// cout<<"Case 2"<<endl;
     return;
   }
 
   // Case 3: parent and uncle are red, I can't be red, I need to repaint
   TreeNode* uncle = getUncle(node);
-  TreeNode* gp = getGparent(node);
+  TreeNode* gp;
   if ( uncle != NULL && uncle->color == 'r' ) {
-cout<<"Case 3"<<endl;
+    gp = getGparent(node);
+// cout<<"Case 3"<<endl;
     uncle->color = 'b';
     node->parent->color = 'b';
     gp->color = 'r';
@@ -339,8 +340,9 @@ cout<<"Case 3"<<endl;
 
   // Case 4: parent red, uncle black, and node close to uncle
   TreeNode *save_p = node->parent;
+  gp = getGparent(node);
   if ( node == save_p->right && gp->left == save_p ) {
-cout<<"Case 4 left"<<endl;
+// cout<<"Case 4 left"<<endl;
     // left rotate
     gp->left = node;
     node->parent = gp;
@@ -349,8 +351,8 @@ cout<<"Case 4 left"<<endl;
       node->left->parent = save_p;
     node->left = save_p;
     save_p->parent = node;
-  } else if ( node == node->parent->left && gp->right == node->parent ) {
-cout<<"Case 4 right"<<endl;
+  } else if ( node == node->parent->left && gp->right == save_p ) {
+// cout<<"Case 4 right"<<endl;
     // right rotate
     gp->right = node;
     node->parent = gp;
@@ -360,7 +362,7 @@ cout<<"Case 4 right"<<endl;
     node->right = save_p;
     save_p->parent = node;
   } else { // if none of the 4 cases applies, you are fine.
-cout<<"Case 0"<<endl;
+// cout<<"Case 0"<<endl;
     return;
   }
   node = save_p;
@@ -370,22 +372,24 @@ cout<<"Case 0"<<endl;
   save_p->color = 'b';
   gp->color = 'r';
   if ( save_p == gp->left) {
-cout<<"Case 5 left"<<endl;
+// cout<<"Case 5 left"<<endl;
     // right rotate
     gp->left = save_p->right;
     if ( gp->left != NULL ) 
       gp->left->parent = gp;
-    if ( gp->parent != NULL ) {
+    if ( gp->parent != NULL ) { // grandpa may be the root
       if ( gp->parent->left == gp )
         gp->parent->left = save_p;
       else 
         gp->parent->right = save_p;
+    } else {
+      root = save_p;
     }
     save_p->parent = gp->parent;
     save_p->right = gp;
     gp->parent = save_p;
   } else {
-cout<<"Case 5 right"<<endl;
+// cout<<"Case 5 right"<<endl;
     // left rotate
     gp->right = save_p->left;
     if ( gp->right != NULL ) 
@@ -395,6 +399,8 @@ cout<<"Case 5 right"<<endl;
         gp->parent->right = save_p;
       else 
         gp->parent->left = save_p;
+    } else {
+      root = save_p;
     }
     save_p->parent = gp->parent;
     save_p->left = gp;
@@ -416,12 +422,14 @@ TreeNode* RBTree::getUncle(TreeNode *node) {
 
 /** Get the gparent node */
 TreeNode* RBTree::getGparent(TreeNode *node) {
-  try { // potentially no parent
-    return node->parent->parent;
-  } catch ( const exception&) {
+  if ( node->parent )
+    return node->parent->parent; 
+  else
     return NULL;
-  }
+//   try { // potentially no parent
+//     return node->parent->parent;
+//   } catch ( const exception&) {
+//     return NULL;
+//   }
 }
-
-
 
