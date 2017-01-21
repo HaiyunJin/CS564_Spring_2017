@@ -1,0 +1,42 @@
+ File: report.txt
+
+ Description: Design reprot
+ Student Name: Haiyun Jin
+ UW Campus ID: 9069998087
+ email: hjin38@wisc.edu
+
+
+1. The data structure I choose to use is Red-Black Tree with Arraylist to
+  to store the position of each occurrance. In each treenode, there is a 
+  (string word) field and a (Arraylist poss) field. The word is used to store
+  the word and the poss is a dynamically increasing array to store the 
+  positions of the occurrence of this word. 
+
+    Since the time complexity is asked to be less than O(n^2), a tree structure
+  is the natural data structure I came out with. The first tree I was thinking
+  about is a 38-ary tree, which basically classify the word by the character. 
+  Then I realized that the frequency of occurrance each letter is very uneven
+  thus the average locate time complexity will lean to the worst case and there
+  will be lots of space wasted since some letter will simple not show at all. To
+  improve average and worst case time complexity, I decide to use balanced
+  binary tree. I considered Red-Black Tree.
+
+2. Let n be the number of words in the file and
+       m be the number of **unique** words in the file.
+   Generally, m <= n. For daily texts, the repeat of determiners like "the",
+   "a", "this", "that" and prepositions like "of", "on", "to" will greatly
+   reduce the value of m and let m << n.
+
+  locate query time complexity: 
+     Best case: O(1), when the word queried is just the root of the tree.
+    Worst case: O(log(m)) ~ O(log(n)), height of the tree.
+  Average case: O(log(m)) ~ O(log(n)), height of the tree.
+
+3. Assume the same defintion of m and n, let's further assume the length of
+   the words i is k_i and occurance is o_i. The space needed for each node is 
+  less than k_i + 1.5*o_i. Since there are m nodes, the total space needed 
+  m(k+1.5*o), where k and o are the average of word length and occurence. 
+  Assume k and o are relate constant, the space comlexity is
+      O(m(k+o)) ~ O(m) ~ O(n).
+
+

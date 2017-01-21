@@ -1,0 +1,1203 @@
+desc: (none)
+cmd: ./wl
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=28871819
+mem_heap_B=231093
+mem_heap_extra_B=101267
+mem_stacks_B=0
+heap_tree=detailed
+n7: 231093 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 92880 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 92880 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 92880 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 92880 0x40209F: main (wl.cpp:126)
+ n2: 62537 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 62407 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 61333 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 60860 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 60860 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 60860 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 60860 0x40209F: main (wl.cpp:126)
+    n0: 473 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 130 in 3 places, all below massif's threshold (01.00%)
+ n1: 31136 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 31136 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 31136 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 31136 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 31136 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 31136 0x40209F: main (wl.cpp:126)
+ n2: 30976 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 30960 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 30960 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 30960 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 30960 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n1: 8192 0x4EE18AA: std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n1: 8192 0x4EE1EC0: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n0: 8192 0x402051: main (fstream:540)
+ n2: 4596 0x402781: TreeNode::TreeNode(wpp) (wl.h:60)
+  n1: 4596 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 4596 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 4596 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 4596 0x40209F: main (wl.cpp:126)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 776 in 5 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=2
+#-----------
+time=53649086
+mem_heap_B=343625
+mem_heap_extra_B=148095
+mem_stacks_B=0
+heap_tree=detailed
+n7: 343625 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 133488 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 133488 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 133488 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 133488 0x40209F: main (wl.cpp:126)
+ n2: 89677 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 89558 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 88484 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 88069 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 88069 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 88069 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 88069 0x40209F: main (wl.cpp:126)
+    n0: 415 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 119 in 3 places, all below massif's threshold (01.00%)
+ n1: 60780 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 60780 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 60780 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 60780 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 60780 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 60780 0x40209F: main (wl.cpp:126)
+ n2: 44512 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 44496 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 44496 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 44496 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 44496 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n1: 8192 0x4EE18AA: std::basic_filebuf<char, std::char_traits<char> >::_M_allocate_internal_buffer() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n1: 8192 0x4EE1EC0: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n0: 8192 0x402051: main (fstream:540)
+ n2: 6200 0x402781: TreeNode::TreeNode(wpp) (wl.h:60)
+  n1: 6200 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 6200 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 6200 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 6200 0x40209F: main (wl.cpp:126)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 776 in 5 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=3
+#-----------
+time=103985437
+mem_heap_B=534564
+mem_heap_extra_B=218492
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=146921117
+mem_heap_B=682959
+mem_heap_extra_B=268233
+mem_stacks_B=0
+heap_tree=detailed
+n6: 682959 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 239376 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 239376 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 239376 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 239376 0x40209F: main (wl.cpp:126)
+ n1: 184192 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 184192 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 184192 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 184192 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 184192 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 184192 0x40209F: main (wl.cpp:126)
+ n2: 160623 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 160505 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 159431 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 158990 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 158990 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 158990 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 158990 0x40209F: main (wl.cpp:126)
+    n0: 441 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 118 in 3 places, all below massif's threshold (01.00%)
+ n2: 79808 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 79792 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 79792 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 79792 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 79792 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n2: 9864 0x402781: TreeNode::TreeNode(wpp) (wl.h:60)
+  n1: 9864 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 9864 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 9864 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 9864 0x40209F: main (wl.cpp:126)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n0: 9096 in 6 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=5
+#-----------
+time=198068805
+mem_heap_B=847720
+mem_heap_extra_B=320504
+mem_stacks_B=0
+heap_tree=detailed
+n5: 847720 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 285216 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 285216 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 285216 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 285216 0x40209F: main (wl.cpp:126)
+ n1: 255536 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 255536 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 255536 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 255536 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 255536 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 255536 0x40209F: main (wl.cpp:126)
+ n2: 191232 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 191150 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 190076 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 189844 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 189844 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 189844 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 189844 0x40209F: main (wl.cpp:126)
+    n0: 232 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 82 in 3 places, all below massif's threshold (01.00%)
+ n2: 95088 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 95072 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 95072 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 95072 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 95072 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 20648 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=6
+#-----------
+time=239852672
+mem_heap_B=970038
+mem_heap_extra_B=363522
+mem_stacks_B=0
+heap_tree=detailed
+n5: 970038 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 322368 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 322368 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 322368 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 322368 0x40209F: main (wl.cpp:126)
+ n1: 301896 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 301896 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 301896 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 301896 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 301896 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 301896 0x40209F: main (wl.cpp:126)
+ n2: 216302 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 216122 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 215015 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 214576 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 214576 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 214576 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 214576 0x40209F: main (wl.cpp:126)
+    n0: 439 in 3 places, all below massif's threshold (01.00%)
+   n0: 1107 in 1 place, below massif's threshold (01.00%)
+  n0: 180 in 3 places, all below massif's threshold (01.00%)
+ n2: 107472 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 107456 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 107456 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 107456 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 107456 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 22000 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=7
+#-----------
+time=266508793
+mem_heap_B=1056794
+mem_heap_extra_B=387974
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=303192901
+mem_heap_B=1150889
+mem_heap_extra_B=418295
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=335701452
+mem_heap_B=1233834
+mem_heap_extra_B=439718
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=377476614
+mem_heap_B=1343911
+mem_heap_extra_B=459713
+mem_stacks_B=0
+heap_tree=detailed
+n5: 1343911 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 504740 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 504740 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 504740 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 504740 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 504740 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 504740 0x40209F: main (wl.cpp:126)
+ n1: 406320 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 406320 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 406320 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 406320 0x40209F: main (wl.cpp:126)
+ n2: 273131 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 273015 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 271941 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 271547 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 271547 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 271547 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 271547 0x40209F: main (wl.cpp:126)
+    n0: 394 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 116 in 3 places, all below massif's threshold (01.00%)
+ n2: 135456 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 135440 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 135440 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 135440 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 135440 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 24264 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=11
+#-----------
+time=414013150
+mem_heap_B=1417233
+mem_heap_extra_B=478975
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=442361853
+mem_heap_B=1478173
+mem_heap_extra_B=496363
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=476189771
+mem_heap_B=1550061
+mem_heap_extra_B=511123
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=525121893
+mem_heap_B=1674816
+mem_heap_extra_B=536440
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=574114048
+mem_heap_B=1790500
+mem_heap_extra_B=556548
+mem_stacks_B=0
+heap_tree=detailed
+n5: 1790500 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 782416 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 782416 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 782416 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 782416 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 782416 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 782416 0x40209F: main (wl.cpp:126)
+ n1: 489360 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 489360 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 489360 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 489360 0x40209F: main (wl.cpp:126)
+ n2: 329424 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 329302 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 328228 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 327781 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 327781 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 327781 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 327781 0x40209F: main (wl.cpp:126)
+    n0: 447 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 122 in 3 places, all below massif's threshold (01.00%)
+ n2: 163136 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 163120 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 163120 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 163120 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 163120 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 26164 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=16
+#-----------
+time=610858616
+mem_heap_B=1857056
+mem_heap_extra_B=581240
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=652575914
+mem_heap_B=1943509
+mem_heap_extra_B=604251
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=702399410
+mem_heap_B=2082913
+mem_heap_extra_B=627159
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2082913 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 952908 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 952908 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 952908 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 952908 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 952908 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 952908 0x40209F: main (wl.cpp:126)
+ n1: 549072 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 549072 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 549072 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 549072 0x40209F: main (wl.cpp:126)
+ n2: 370225 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 370107 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 369033 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 368494 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 368494 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 368494 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 368494 0x40209F: main (wl.cpp:126)
+    n0: 539 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 118 in 3 places, all below massif's threshold (01.00%)
+ n2: 183040 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 183024 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 183024 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 183024 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 183024 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 27668 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=19
+#-----------
+time=741237839
+mem_heap_B=2155086
+mem_heap_extra_B=650530
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=792081134
+mem_heap_B=2267930
+mem_heap_extra_B=666238
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=830509875
+mem_heap_B=2365004
+mem_heap_extra_B=683540
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2365004 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1135956 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1135956 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1135956 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1135956 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1135956 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1135956 0x40209F: main (wl.cpp:126)
+ n1: 597456 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 597456 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 597456 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 597456 0x40209F: main (wl.cpp:126)
+ n2: 403428 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 403311 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 402237 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 401818 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 401818 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 401818 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 401818 0x40209F: main (wl.cpp:126)
+    n0: 419 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 117 in 3 places, all below massif's threshold (01.00%)
+ n2: 199168 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 199152 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 199152 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 199152 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 199152 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 28996 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=22
+#-----------
+time=852121130
+mem_heap_B=2403274
+mem_heap_extra_B=692790
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=884477329
+mem_heap_B=2451287
+mem_heap_extra_B=704665
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2451287 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1184384 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1184384 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1184384 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1184384 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1184384 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1184384 0x40209F: main (wl.cpp:126)
+ n1: 616032 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 616032 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 616032 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 616032 0x40209F: main (wl.cpp:126)
+ n2: 416139 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 415959 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 414852 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 414336 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 414336 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 414336 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 414336 0x40209F: main (wl.cpp:126)
+    n0: 516 in 3 places, all below massif's threshold (01.00%)
+   n0: 1107 in 1 place, below massif's threshold (01.00%)
+  n0: 180 in 3 places, all below massif's threshold (01.00%)
+ n2: 205360 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 205344 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 205344 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 205344 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 205344 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 29372 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=24
+#-----------
+time=927710782
+mem_heap_B=2518083
+mem_heap_extra_B=721325
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=952564318
+mem_heap_B=2568419
+mem_heap_extra_B=728253
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2568419 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1260576 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1260576 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1260576 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1260576 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1260576 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1260576 0x40209F: main (wl.cpp:126)
+ n1: 636144 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 636144 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 636144 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 636144 0x40209F: main (wl.cpp:126)
+ n2: 429735 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 429613 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 428539 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 428118 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 428118 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 428118 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 428118 0x40209F: main (wl.cpp:126)
+    n0: 421 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 122 in 3 places, all below massif's threshold (01.00%)
+ n2: 212064 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 212048 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 212048 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 212048 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 212048 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 29900 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=26
+#-----------
+time=989312191
+mem_heap_B=2635341
+mem_heap_extra_B=736339
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2635341 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1313748 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1313748 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1313748 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1313748 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1313748 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1313748 0x40209F: main (wl.cpp:126)
+ n1: 642960 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 642960 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 642960 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 642960 0x40209F: main (wl.cpp:126)
+ n2: 434249 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 434161 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 433087 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 432795 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 432795 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 432795 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 432795 0x40209F: main (wl.cpp:126)
+    n0: 292 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 88 in 3 places, all below massif's threshold (01.00%)
+ n2: 214336 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 214320 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 214320 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 214320 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 214320 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 30048 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=27
+#-----------
+time=1009992841
+mem_heap_B=2688758
+mem_heap_extra_B=743402
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=1042773473
+mem_heap_B=2757731
+mem_heap_extra_B=757933
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=1065020851
+mem_heap_B=2803423
+mem_heap_extra_B=766609
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=1109266503
+mem_heap_B=2958287
+mem_heap_extra_B=782401
+mem_stacks_B=0
+heap_tree=detailed
+n5: 2958287 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1556240 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1556240 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1556240 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1556240 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1556240 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1556240 0x40209F: main (wl.cpp:126)
+ n1: 682224 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 682224 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 682224 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 682224 0x40209F: main (wl.cpp:126)
+ n2: 461559 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 461441 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 460367 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 459853 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 459853 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 459853 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 459853 0x40209F: main (wl.cpp:126)
+    n0: 514 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 118 in 3 places, all below massif's threshold (01.00%)
+ n2: 227424 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 227408 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 227408 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 227408 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 227408 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 30840 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=31
+#-----------
+time=1140787508
+mem_heap_B=3067911
+mem_heap_extra_B=794649
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3067911 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1643596 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1643596 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1643596 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1643596 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1643596 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1643596 0x40209F: main (wl.cpp:126)
+ n1: 693216 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 693216 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 693216 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 693216 0x40209F: main (wl.cpp:126)
+ n2: 468911 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 468791 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 467717 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 467248 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 467248 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 467248 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 467248 0x40209F: main (wl.cpp:126)
+    n0: 469 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 120 in 3 places, all below massif's threshold (01.00%)
+ n2: 231088 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 231072 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 231072 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 231072 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 231072 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 31100 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=32
+#-----------
+time=1178985318
+mem_heap_B=3051050
+mem_heap_extra_B=807790
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=1219012479
+mem_heap_B=3139021
+mem_heap_extra_B=817779
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3139021 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1673864 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1673864 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1673864 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1673864 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1673864 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1673864 0x40209F: main (wl.cpp:126)
+ n1: 713328 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 713328 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 713328 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 713328 0x40209F: main (wl.cpp:126)
+ n2: 482521 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 482418 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 481344 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 480989 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 480989 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 480989 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 480989 0x40209F: main (wl.cpp:126)
+    n0: 355 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 103 in 3 places, all below massif's threshold (01.00%)
+ n2: 237792 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 237776 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 237776 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 237776 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 237776 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 31516 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=34
+#-----------
+time=1256328493
+mem_heap_B=3201591
+mem_heap_extra_B=828265
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=1281420246
+mem_heap_B=3233517
+mem_heap_extra_B=835523
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=1316290149
+mem_heap_B=3315997
+mem_heap_extra_B=847539
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3315997 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1798848 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1798848 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1798848 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1798848 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1798848 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1798848 0x40209F: main (wl.cpp:126)
+ n1: 738816 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 738816 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 738816 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 738816 0x40209F: main (wl.cpp:126)
+ n2: 499933 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 499815 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 498741 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 498321 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 498321 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 498321 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 498321 0x40209F: main (wl.cpp:126)
+    n0: 420 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 118 in 3 places, all below massif's threshold (01.00%)
+ n2: 246288 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 246272 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 246272 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 246272 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 246272 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 32112 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=37
+#-----------
+time=1349841742
+mem_heap_B=3349761
+mem_heap_extra_B=857007
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3349761 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1816588 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1816588 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1816588 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1816588 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1816588 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1816588 0x40209F: main (wl.cpp:126)
+ n1: 746592 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 746592 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 746592 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 746592 0x40209F: main (wl.cpp:126)
+ n2: 505341 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 505220 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 504146 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 503630 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 503630 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 503630 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 503630 0x40209F: main (wl.cpp:126)
+    n0: 516 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 121 in 3 places, all below massif's threshold (01.00%)
+ n2: 248880 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 248864 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 248864 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 248864 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 248864 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 32360 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=38
+#-----------
+time=1371142421
+mem_heap_B=3386451
+mem_heap_extra_B=863421
+mem_stacks_B=0
+heap_tree=detailed
+n5: 3386451 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 1841996 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 1841996 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 1841996 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 1841996 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 1841996 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 1841996 0x40209F: main (wl.cpp:126)
+ n1: 752160 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 752160 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 752160 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 752160 0x40209F: main (wl.cpp:126)
+ n2: 509115 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 508991 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 507917 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 507443 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 507443 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 507443 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 507443 0x40209F: main (wl.cpp:126)
+    n0: 474 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 124 in 3 places, all below massif's threshold (01.00%)
+ n2: 250736 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 250720 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 250720 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 250720 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 250720 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 32444 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=39
+#-----------
+time=1413907831
+mem_heap_B=3434534
+mem_heap_extra_B=876138
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=1443490059
+mem_heap_B=3477699
+mem_heap_extra_B=881789
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=1492017343
+mem_heap_B=3579422
+mem_heap_extra_B=896578
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=1524936415
+mem_heap_B=3633433
+mem_heap_extra_B=905943
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=1568095818
+mem_heap_B=3733948
+mem_heap_extra_B=916628
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=1605444437
+mem_heap_B=3804325
+mem_heap_extra_B=923499
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=1657190145
+mem_heap_B=3939895
+mem_heap_extra_B=933569
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=1693538915
+mem_heap_B=4036725
+mem_heap_extra_B=943883
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=1719909532
+mem_heap_B=4065419
+mem_heap_extra_B=950101
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=1753017305
+mem_heap_B=4139060
+mem_heap_extra_B=960604
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=1799562131
+mem_heap_B=4204196
+mem_heap_extra_B=971532
+mem_stacks_B=0
+heap_tree=detailed
+n5: 4204196 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2472468 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 2472468 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 2472468 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 2472468 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 2472468 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 2472468 0x40209F: main (wl.cpp:126)
+ n1: 844080 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 844080 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 844080 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 844080 0x40209F: main (wl.cpp:126)
+ n2: 572236 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 572117 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 571043 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 570623 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 570623 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 570623 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 570623 0x40209F: main (wl.cpp:126)
+    n0: 420 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 119 in 3 places, all below massif's threshold (01.00%)
+ n2: 281376 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 281360 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 281360 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 281360 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 281360 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 34036 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=50
+#-----------
+time=1820243528
+mem_heap_B=4226364
+mem_heap_extra_B=975396
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=1833015743
+mem_heap_B=4262952
+mem_heap_extra_B=979480
+mem_stacks_B=0
+heap_tree=detailed
+n5: 4262952 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2518000 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 2518000 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 2518000 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 2518000 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 2518000 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 2518000 0x40209F: main (wl.cpp:126)
+ n1: 850560 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 850560 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 850560 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 850560 0x40209F: main (wl.cpp:126)
+ n2: 576704 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 576585 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 575511 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 575041 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 575041 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 575041 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 575041 0x40209F: main (wl.cpp:126)
+    n0: 470 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 119 in 3 places, all below massif's threshold (01.00%)
+ n2: 283536 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 283520 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 283520 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 283520 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 283520 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 34152 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=52
+#-----------
+time=1853696483
+mem_heap_B=4291258
+mem_heap_extra_B=982998
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=1867034590
+mem_heap_B=4308894
+mem_heap_extra_B=985978
+mem_stacks_B=0
+heap_tree=detailed
+n5: 4308894 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2552916 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 2552916 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 2552916 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 2552916 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 2552916 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 2552916 0x40209F: main (wl.cpp:126)
+ n1: 855936 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 855936 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 855936 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 855936 0x40209F: main (wl.cpp:126)
+ n2: 580442 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 580290 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 579183 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 578801 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 578801 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 578801 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 578801 0x40209F: main (wl.cpp:126)
+    n0: 382 in 3 places, all below massif's threshold (01.00%)
+   n0: 1107 in 1 place, below massif's threshold (01.00%)
+  n0: 152 in 3 places, all below massif's threshold (01.00%)
+ n2: 285328 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 285312 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 285312 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 285312 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 285312 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 34272 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=54
+#-----------
+time=1887715832
+mem_heap_B=4322546
+mem_heap_extra_B=989198
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=1902075023
+mem_heap_B=4375631
+mem_heap_extra_B=994129
+mem_stacks_B=0
+heap_tree=detailed
+n5: 4375631 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2605276 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 2605276 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 2605276 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 2605276 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 2605276 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 2605276 0x40209F: main (wl.cpp:126)
+ n1: 862992 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 862992 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 862992 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 862992 0x40209F: main (wl.cpp:126)
+ n2: 585331 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 585213 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 584139 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 583671 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 583671 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 583671 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 583671 0x40209F: main (wl.cpp:126)
+    n0: 468 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 118 in 3 places, all below massif's threshold (01.00%)
+ n2: 287680 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 287664 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 287664 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 287664 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 287664 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 34352 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=56
+#-----------
+time=1922756422
+mem_heap_B=4381438
+mem_heap_extra_B=997882
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=1943437103
+mem_heap_B=4398991
+mem_heap_extra_B=1001513
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=1957086624
+mem_heap_B=4438460
+mem_heap_extra_B=1005100
+mem_stacks_B=0
+heap_tree=detailed
+n5: 4438460 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2649692 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 2649692 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 2649692 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 2649692 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 2649692 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 2649692 0x40209F: main (wl.cpp:126)
+ n1: 872160 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 872160 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 872160 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 872160 0x40209F: main (wl.cpp:126)
+ n2: 591368 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 591295 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 590221 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 590016 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 590016 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 590016 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 590016 0x40209F: main (wl.cpp:126)
+    n0: 205 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 73 in 3 places, all below massif's threshold (01.00%)
+ n2: 290736 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 290720 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 290720 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 290720 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 290720 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 34504 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=59
+#-----------
+time=1977770398
+mem_heap_B=4449087
+mem_heap_extra_B=1009921
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=1998451132
+mem_heap_B=4477015
+mem_heap_extra_B=1016753
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=1999697922
+mem_heap_B=4492148
+mem_heap_extra_B=1016924
+mem_stacks_B=0
+heap_tree=peak
+n5: 4492148 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 2682964 0x4026A1: ArrayList::resize() (wl.h:84)
+  n1: 2682964 0x40270F: ArrayList::add(int) (wl.h:73)
+   n1: 2682964 0x402CBC: RBTree::insert(wpp) (wl.h:288)
+    n1: 2682964 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+     n1: 2682964 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+      n0: 2682964 0x40209F: main (wl.cpp:126)
+ n1: 881952 0x402CFA: RBTree::insert(wpp) (wl.h:296)
+  n1: 881952 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+   n1: 881952 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+    n0: 881952 0x40209F: main (wl.cpp:126)
+ n2: 598548 0x4EE8247: std::string::_Rep::_S_create(unsigned long, unsigned long, std::allocator<char> const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+  n2: 598433 0x4EE8E09: std::string::_Rep::_M_clone(std::allocator<char> const&, unsigned long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+   n2: 597359 0x4EE948A: std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(std::string const&) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19)
+    n1: 596894 0x402CE8: RBTree::insert(wpp) (wl.h:100)
+     n1: 596894 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+      n1: 596894 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+       n0: 596894 0x40209F: main (wl.cpp:126)
+    n0: 465 in 3 places, all below massif's threshold (01.00%)
+   n0: 1074 in 1 place, below massif's threshold (01.00%)
+  n0: 115 in 3 places, all below massif's threshold (01.00%)
+ n2: 294000 0x402766: TreeNode::TreeNode(wpp) (wl.h:132)
+  n1: 293984 0x402D08: RBTree::insert(wpp) (wl.h:296)
+   n1: 293984 0x402FB4: insert(RBTree*, std::string, int) (wl.cpp:237)
+    n1: 293984 0x403D2B: buildTree(std::basic_ifstream<char, std::char_traits<char> >&, RBTree*) (wl.cpp:217)
+     n0: 293984 0x40209F: main (wl.cpp:126)
+  n0: 16 in 1 place, below massif's threshold (01.00%)
+ n0: 34684 in 7 places, all below massif's threshold (01.00%)
+#-----------
+snapshot=62
+#-----------
+time=2020382611
+mem_heap_B=4508667
+mem_heap_extra_B=1022117
+mem_stacks_B=0
+heap_tree=empty

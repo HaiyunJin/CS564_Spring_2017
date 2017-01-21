@@ -1,20 +1,33 @@
-/* \file
- *  File: wl.h
+/*
+ *  @file wl.h
+ *  @author Haiyun Jin
+ *  @version 0.1
  *  
- *   Description: Add stuff here ... 
+ *   Description: Class implementation and helper function
  *   Student Name: Haiyun Jin
  *   UW Campus ID: 9069998087
- *   email: Add stuff here .. 
+ *   email: hjin38@wisc.edu
  */
 
-//#include <stdio.h>
-#include <iostream>
 #include <string>
-
 using namespace std;
 
+/** 
+ * @brief word-pos pair
+ *
+ * word-position pair structure.
+ * Has string word and int pos fields.
+ */
+typedef struct wpp {
+  string word;
+  int pos;
+} wpp_t;
 
-/** convert str to lower case in-place */
+/** 
+ * @brief Convert str to lower case in-place 
+ *
+ * @param str - string to convert
+ */
 void toLowerCase(string &str) {
   const int length = str.length();
   for ( int i = 0 ; i < length; ++i ) {
@@ -22,14 +35,11 @@ void toLowerCase(string &str) {
   }
 }
 
-
-/** ArrayList
- *  TreeNode
- *  RBTree
- */
-
-/**  ArrayList:
- *   At each node, use an arraylist to store the pos
+/**  
+ * @brief An implementation of Java ArrayList
+ *
+ * This implementation has only add and get method. 
+ * That's enough for this project.
  */
 class ArrayList
 {
@@ -40,47 +50,62 @@ class ArrayList
     int get(int n);
     void print();
   private:
-    int* array;
+    int* array;  //< The acutual array that stores the integers.
     int arraySize;
     int size;
     void resize();
 };
 
+/*
+ *  @breif Print the content in the List
+ *
+ *  separated by single space
+ */
 void ArrayList::print() {
-  for ( int i = 0 ; i < size ; ++i ) {
+  for ( int i = 0 ; i < size ; ++i )
     cout << array[i]<<" ";
-  }
   cout << endl;
 }
 
-/** Constructor of ArrayList */
-ArrayList::ArrayList(void) {
+/** 
+ * @brief Constructor of ArrayList. 
+ * 
+ * Initialized the capacity as 1.
+ */
+ArrayList::ArrayList() {
   arraySize = 1;
   size = 0;
   array = new int[arraySize];
 }
 
-/** Destructor of ArrayList */
-ArrayList::~ArrayList(void) {
+/**
+ * @brief Destructor of ArrayList.
+ * 
+ * Delete the allocated array.
+ */ 
+ArrayList::~ArrayList() {
   delete [] array;
 }
 
-/** Add a pos into the arary
- * @param pos new pos
+/** 
+ * @brief Add an integer into the arary
+ *
+ * @param pos - new integer pos
  */
 void ArrayList::add(int pos) {
-  if ( size == arraySize ) {//< need to resize
+  if ( size == arraySize ) // need to resize
     resize();
-  }
   array[size++] = pos;
   return;
 }
 
 /** 
- * Resize the capacity of array to 150%
+ * @brief Resize the capacity of array 
+ *
+ * The capacity of array is increased by about 50%
  */
 void ArrayList::resize() {
-  arraySize = arraySize + arraySize/2 + 1; //< increase by about 50%
+  arraySize = arraySize + arraySize/2 + 1; // increase by about 50%
   int *newarray = new int[arraySize];
   for ( int i = 0 ; i < size ; i++)
     newarray[i] = array[i];
@@ -89,44 +114,52 @@ void ArrayList::resize() {
   return;
 }
 
-/** get the nth pos */
+/** 
+ * @brief get the nth pos 
+ *
+ * @param n - index of request the integer
+ * @return The value of the nth integer
+ */
 int ArrayList::get(int n) {
   if ( n >= size || n < 0 ) return -1;
   return array[n];
 }
 
 
-/** word-pos pair*/
-typedef struct wpp {
-  string word;
-  int pos;
-} wpp_t;
-
-/** Binary tree:
- *   Words are stored in the self-balanced binary tree.
- *   RB tree:
- *   Node: 
- *      string word
- *      arraylist poss
- *      Node left, right
+/** 
+ * @brief TreeNode with word and pos[].
+ *  
+ *  This is node in the Red-Black Tree.
+ *  It stores a string type word and ArrayList type integer list.
  */
 class TreeNode
 {
   public:
     TreeNode(wpp_t newword); //< Constructor
     ~TreeNode(); //< Destructor
-    TreeNode *getLeft();
-    TreeNode *getRight();
-    void setLeft(TreeNode* node);
-    void setRight(TreeNode* node);
-    ArrayList* poss; //< pos's
-    string word;
-    TreeNode *left, *right;
-    TreeNode* parent;
+    /** color of this node */
     char color;
+    /** word in this node */
+    string word;  
+    /** ArrayList of occurence position*/
+    ArrayList* poss;
+    /** Left child of this node*/
+    TreeNode *left;
+    /** Right child of this node*/
+    TreeNode *right;
+    /** parent node of this node*/
+    TreeNode* parent;
 };
 
-/** Constructor of TreeNode */
+/** 
+ * @brief Constructor of TreeNode 
+ *
+ * Set the color as red.
+ * Create ArrayList poss and save the first occurance.
+ * Set the word as the incoming word.
+ * 
+ * @param newword - wpp_t type word-pos pair
+ */
 TreeNode::TreeNode(wpp_t newword) {
   word = newword.word;
   poss = new ArrayList;
@@ -137,37 +170,19 @@ TreeNode::TreeNode(wpp_t newword) {
   right = NULL;
 }
 
-/** Destructor of TreeNode */
+/** 
+ * @brief Destructor of TreeNode 
+ *
+ * free the ArrayList poss
+ * */
 TreeNode::~TreeNode() {
   delete poss;
 }
 
-/** Get the left child */
-TreeNode *TreeNode::getLeft(){
-  return left;
-}
 
-/** Get the right child */
-TreeNode *TreeNode::getRight(){
-  return right;
-}
-
-/** Set left child 
- *  @param node left node to add
- */
-void TreeNode::setLeft(TreeNode* node) {  // < there must be bug in param passing
-  left = node;
-}
-
-/** Set right child 
- *  @param node right node to add
- */
-void TreeNode::setRight(TreeNode* node) {  // < there must be bug in param passing
-  right = node;
-}
-
-
-/** Red-Black Tree 
+/** 
+ * @brief implementation of Red-Black Tree 
+ *
  * ref: https://en.wikipedia.org/wiki/Red%E2%80%93black_tree
  */
 class RBTree
@@ -190,63 +205,82 @@ class RBTree
 
 
 /** 
- * Public print tree method 
- * */
+ * @Brief Public method to in-order print tree
+ */
 void RBTree::printTree() {
   aug_printTree(root);
 }
 
-
 /**
- * Private recursive printTree method
+ * @brief Private recursive printTree method
+ *
+ * Print the tree in-order
  *
  * @param tree - The tree to be printed
  */
 void RBTree::aug_printTree(TreeNode *tree) {
   if ( tree == NULL ) return;
   aug_printTree(tree->left);
-cout<<tree->word<<": ";
-tree->poss->print();
+  cout<<tree->word<<": ";
+  tree->poss->print();
   aug_printTree(tree->right);
 }
 
 
-/** Constructor of RBTree */
+/** 
+ * @brief Constructor of RBTree 
+ *
+ * Not much to be done.
+ * Initialize the root pointer to NULL
+ */
 RBTree::RBTree() {
-//  cout<<"New RB Tree"<<endl;
   root = NULL;
 }
 
-/** Destructor of RBTree */
+/** 
+ * @brief Destructor of RBTree 
+ *
+ * Rree all nodes
+ */
 RBTree::~RBTree() {
-//  cout<<"Destruct RB Tree"<<endl;
   deleteNode(root);
 }
 
+/**
+ * @brief Clear the tree
+ *
+ * Clear the tree by free and delete all nodes.
+ * Root is set to NULL
+ */
 void RBTree::clear() {
-//  cout<<"Delete RB Tree content"<<endl;
   if ( root ) {
     deleteNode(root);
     root = NULL;
   }
 }
 
-/** Recursively delete the whole tree */
+/** 
+ * @brief Recursively delete the node and all its descendants
+ *
+ * @param node - node to be delete
+ *
+ */
 void RBTree::deleteNode(TreeNode* node) {
   if ( node == NULL ) return;
   TreeNode *left, *right;
   left = node->left;
   right = node->right;
-// cout<<"Address of node to be deleted: "<<node<<endl;
   delete node;
   deleteNode(left);
   deleteNode(right);
   return;
 }
 
-/** Accessor: getNode
- * Lookup a word, return the node 
- * @param word - A string that is needed to locate
+/** 
+ * @brief Get the node that stores the word
+ *
+ * Locate and return the node that saves the occurance of the word
+ * @param word - A string word that is needed to locate and return
  */
 TreeNode* RBTree::getNode(string word) {
   if (root == NULL ) return NULL; // new node yet
@@ -265,9 +299,11 @@ TreeNode* RBTree::getNode(string word) {
 }
 
 
-/** Mutator: insert
+/** 
+ * @brief Insert a word-pos pair into the tree
+ *
  * Insert new word, either add to existing or create new node
- * @param newword wpp_t stucture with {word, pos}
+ * @param newword - wpp_t stucture with {word, pos}
  */
 void RBTree::insert(wpp_t newword) {
   TreeNode *curr, *parent;
@@ -275,16 +311,12 @@ void RBTree::insert(wpp_t newword) {
   curr = root;
   parent = curr;
   if ( root == NULL ) {
-// cout<<"This is the root with "<<newword.word<<endl;
     root = new TreeNode(newword);
     curr = root;
-// cout<< "Address of root: " <<root<<endl;
   } else {
     while ( curr!= NULL ){
       parent = curr;
-// cout<< "Compare "<<curr->word<<" "<< newword.word<< endl;
       if ( curr->word == newword.word ) {
-// cout<<"Just incr occurance of "<<newword.word<<" at "<<newword.pos<<endl;
         curr->poss->add(newword.pos);
         return; // only add a pos, no change in tree structure
       } else if ( curr->word < newword.word )
@@ -292,7 +324,6 @@ void RBTree::insert(wpp_t newword) {
       else
         curr = curr->left;
     }
-// cout<<"New node for "<<newword.word<<" and pos "<<newword.pos<<endl;
     curr = new TreeNode(newword);
     curr->parent = parent;
     if (parent->word < curr->word)
@@ -300,28 +331,26 @@ void RBTree::insert(wpp_t newword) {
     else
       parent->left = curr;
   }
-//cout<< "Address of parent: " <<parent<<endl;
   balance(curr);
 }
 
-/** balance
- * balance the tree by check the RB properties and rotate.
+/** 
+ * @brief Balance the tree by check the RB properties and rotate.
+ *
  * Starting from the newly inserted or deleted node,
- * Do it recursively.
+ * Do it recursively to ancestors until root.
+ *
  * @param node The starting node to balance.
  */
 void RBTree::balance(TreeNode *node) {
-//cout<<"balance(): Address of node: " << node<< endl;
   // Case 1: it's the root!
   if ( node->parent == NULL ) {
-// cout<<"Case 1"<<endl;
     node->color = 'b';
     return;
   }
 
   // Case 2: parent is black, it is fine..
   if ( node->parent->color == 'b' ) {
-// cout<<"Case 2"<<endl;
     return;
   }
 
@@ -330,7 +359,6 @@ void RBTree::balance(TreeNode *node) {
   TreeNode* gp;
   if ( uncle != NULL && uncle->color == 'r' ) {
     gp = getGparent(node);
-// cout<<"Case 3"<<endl;
     uncle->color = 'b';
     node->parent->color = 'b';
     gp->color = 'r';
@@ -342,7 +370,6 @@ void RBTree::balance(TreeNode *node) {
   TreeNode *save_p = node->parent;
   gp = getGparent(node);
   if ( node == save_p->right && gp->left == save_p ) {
-// cout<<"Case 4 left"<<endl;
     // left rotate
     gp->left = node;
     node->parent = gp;
@@ -352,7 +379,6 @@ void RBTree::balance(TreeNode *node) {
     node->left = save_p;
     save_p->parent = node;
   } else if ( node == node->parent->left && gp->right == save_p ) {
-// cout<<"Case 4 right"<<endl;
     // right rotate
     gp->right = node;
     node->parent = gp;
@@ -362,7 +388,6 @@ void RBTree::balance(TreeNode *node) {
     node->right = save_p;
     save_p->parent = node;
   } else { // if none of the 4 cases applies, you are fine.
-// cout<<"Case 0"<<endl;
     return;
   }
   node = save_p;
@@ -372,7 +397,6 @@ void RBTree::balance(TreeNode *node) {
   save_p->color = 'b';
   gp->color = 'r';
   if ( save_p == gp->left) {
-// cout<<"Case 5 left"<<endl;
     // right rotate
     gp->left = save_p->right;
     if ( gp->left != NULL ) 
@@ -389,7 +413,6 @@ void RBTree::balance(TreeNode *node) {
     save_p->right = gp;
     gp->parent = save_p;
   } else {
-// cout<<"Case 5 right"<<endl;
     // left rotate
     gp->right = save_p->left;
     if ( gp->right != NULL ) 
@@ -409,7 +432,15 @@ void RBTree::balance(TreeNode *node) {
   return;
 }
 
-/** Get the uncle node */
+/** 
+ * @brief Get the uncle node 
+ * 
+ * Get the unlce node of current node. 
+ * Uncle node is defined as the brother of the node's parent
+ *
+ * @param node - this node
+ * @return uncle if uncle exists, otherwise  NULL
+ */
 TreeNode* RBTree::getUncle(TreeNode *node) {
   TreeNode *gp = getGparent(node);
   if ( gp == NULL ) // no uncle
@@ -420,16 +451,18 @@ TreeNode* RBTree::getUncle(TreeNode *node) {
     return gp->left;
 }
 
-/** Get the gparent node */
+/** 
+ * @brief Get the gparent node
+ *
+ * Return the parent node of the node's parent
+ * 
+ * @param node - this node
+ * @return grandparent node if exists, otherwise NULL
+ */
 TreeNode* RBTree::getGparent(TreeNode *node) {
   if ( node->parent )
     return node->parent->parent; 
   else
     return NULL;
-//   try { // potentially no parent
-//     return node->parent->parent;
-//   } catch ( const exception&) {
-//     return NULL;
-//   }
 }
 
