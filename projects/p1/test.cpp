@@ -2,6 +2,9 @@
 #include <iostream>
 using namespace std;
 
+
+void newstr(int c, string **str);
+
 int
 main() {
   int size = 10;
@@ -42,8 +45,32 @@ main() {
   cout<<"sizeof wpp2 "<<sizeof(wpp2)<<endl;
 
 
+
+  string *strs = NULL;
+  int c = 2;
+
+//   string newstrs[c];
+//   newstrs[0] = "aaa";
+//   newstrs[1] = "bbb";
+  
+//  string newstr[2];
+  newstr(c,&strs);
+//  strs = newstrs;
+  cout<<strs<<" "<<*strs<<" "<<*(strs+1)<<endl;
+
+
   return 1;
 
 }
+
+void newstr(int c, string **str) {
+
+  string *newstrs = new string[c];
+  newstrs[0] = string("aaa");
+  newstrs[1] = string("bbb");
+  *str = newstrs;
+
+}
+
 
 

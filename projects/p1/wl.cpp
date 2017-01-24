@@ -25,7 +25,6 @@
 #include <sstream> // string stream
 #include <string>
 #include <stdlib.h>
-#include <vector>
 #include "wl.h"
 
 using namespace std;
@@ -34,7 +33,7 @@ int buildTree(ifstream &srcfile, RBTree *tree);
 int locate(RBTree *tree, string word, int index);
 void insert(RBTree *tree, string word, int pos);
 int filterStr(string &line);
-int splitstr(string &line, vector<string> &argvs);
+int splitstr(string &line, string **argvs);
 
 /**
  *  @brief Print out the usage
@@ -60,43 +59,32 @@ invalidcmd() {
  *  @param argv - array of string
  */
 int 
-main(int argc, char *argv[])
-{
-  // is that we accept command line commands only? 
+main(int argc, char *argv[]) {
   if ( argc > 1 ) usage();
 
-  vector<string> argvs;
-  string command;
+  string *argvs, command, word;
   char *endptr = NULL;
-  int argnum;
-  string word;
-  int index;
+  int argnum, index, pos;
   ifstream srcfile;
   RBTree *tree = new RBTree;
-  RBTree *newtree = new RBTree;
-  int pos;
   // main loop
   while ( true ) {
-    argvs.clear();
     cout<<'>';
     getline(cin,command);
 //     cout<<command<<endl;
     // parse the command
-    if ( splitstr(command,argvs) < 0 ) {
-//       cout<<"Nothing read"<<endl;
+    if ( (argnum = splitstr(command, &argvs)) ==  0 )
       continue; // no command, try read again
-    }
-//     for ( unsigned int i = 0 ; i < argvs.size(); i++ )
-//       cout << argvs.at(i) << " ";
-//     cout<< endl;
-    command = argvs.at(0);
-    argnum = argvs.size();
+    
+    command = argvs[0];
+    // Check the first command
     if ( command == "load" && argnum == 2 ) {
 //      cout<< "I will load" << endl;
-        srcfile.open(argvs.at(1).c_str());
+        srcfile.open(argvs[1].c_str());
         if(srcfile.fail()) {
 //  cerr<<"Open file " << argvs.at(1).c_str() << " failed"<<endl;
           invalidcmd();
+          delete [] argvs;
           continue;
         }
         tree->clear();
@@ -104,14 +92,17 @@ main(int argc, char *argv[])
         //
     } else if ( command == "locate" && argnum == 3 ) {
 // cout<< "I will locate" << endl;
-      word = argvs.at(1); //< whatever being located at second arg
+      word = argvs[1]; //< whatever being located at second arg
       if (filterStr(word) == 1 ) { // check if the word is valid
         invalidcmd();
+        delete [] argvs;
         continue;
       }
-      index = strtol(argvs.at(2).c_str(),&endptr, 10);
+      index = strtol(argvs[2].c_str(),&endptr, 10);
       if ( *endptr != '\0' ) {
         invalidcmd();
+        free(endptr);
+        delete [] argvs;
         continue;
       }
       // valid query, look into the database and find
@@ -119,6 +110,7 @@ main(int argc, char *argv[])
       if ( (pos = locate(tree, word, index)) < 0 ) {
         // cerr << "No matching entry"<<endl;
         cout << "No matching entry"<<endl;
+        delete [] argvs;
         continue;
       }
       cout<<pos<<endl;
@@ -129,14 +121,14 @@ main(int argc, char *argv[])
 // cout<< "I will clean mem and exit" << endl;
         // clean the memory
         delete tree;
-        delete newtree;
+        delete [] argvs;
         return 1;
 // } else if ( command == "print" ) {
 //   tree->printTree();
     } else // any other command
       invalidcmd();
+    delete [] argvs;
   }
-
   return 1;
 }
 
@@ -149,27 +141,26 @@ main(int argc, char *argv[])
  */
 int
 buildTree(ifstream &srcfile, RBTree *tree) {
-  vector<string> words;
+  string *words;
   string line;
   // readline
   int pos = 1; // position starts from 1, not 0
   int wcount;
   while (getline(srcfile,line)) {
-    words.clear();
     filterStr(line);  // wash the line
-    splitstr(line, words); // split into words
-//     for ( unsigned int i = 0 ; i < words.size(); i++ )
-//       cout << words.at(i) << " ";
-//     cout<< endl;
-    wcount = words.size();
+    if ( (wcount = splitstr(line, &words)) == 0 ) { // split into words
+      continue;
+    }
+//      for ( int i = 0 ; i < wcount; i++ )
+//        cout << words[i] << " ";
+//      cout<< endl;
     for ( int n = 0 ; n < wcount ; ++n )
-      insert(tree,words.at(n),pos++);
+      insert(tree, words[n], pos++);
+    delete [] words;
   }
-
   srcfile.close();
   return 1;
 }
-
 
 /**
  * @brief Helper function that filter out all invalid characters
@@ -198,21 +189,10 @@ int filterStr(string &line) {
         olineStr<<" ";
       }
     }
-//     while (lineStr.get(c)) {
-//       if ( (c >= 'A' && c <= 'Z')     // capital letter
-//           || (c >= 'a' && c <= 'z')   // lower case letter
-//           || (c >= '0' && c <= '9')   // numbers 
-//           || (c == '\'' ) ) {         // apostrophe
-//         olineStr<<c;
-//       } else {
-//         olineStr<<" ";
-//       }
-//     }
 // cout<<"rewri line: "<<olineStr.str()<<endl;
     line = olineStr.str();
     return change;
 }
-
 
 /**
  * @brief Insert the word and pos into the tree
@@ -225,9 +205,7 @@ void insert(RBTree *tree, string word, int pos) {
   wpp_t newword;
   newword.word = word;
   newword.pos = pos;
-// cout << "try insert "<<word <<endl;
   tree->insert(newword);
-// cout << word <<" inserted" <<endl;
 }
 
 /** 
@@ -250,21 +228,34 @@ locate(RBTree *tree, string word, int index) {
 
 /** 
  *  @brief Split the command read from user input
+ *  If there is no arguments in the line, does not allocate memory,
+ *  thus do not need to delete.
  *
  *  @param command - A string contains the command read
  *  @param argvs - arguements splited from the command
- *  @return -1 if cannot split. 1 if split successfully
+ *  @return number of argument int the line.
  */
 int
-splitstr(string &line, vector<string> &argvs) {
+splitstr(string &line, string **argvs) {
   stringstream lineStr(line);
-  string arg;
-  int noarg = -1;
+  string arg, *strs;
+  int noarg = 0, i = 0;
+
+  while ( lineStr >> arg)
+    noarg++;
+  if ( noarg == 0 ) return 0;
+
+  lineStr.str(""); // empty stream
+  lineStr.clear(); // clear the eof bit
+  lineStr<<line;   // fill with new
+
+  strs = new string[noarg];
   while ( lineStr >> arg) {
     toLowerCase(arg);
-    argvs.push_back(arg);
-    noarg = 1;
+    strs[i++] = string(arg);
   }
+  
+  *argvs = strs;
   return noarg;
 }
 
