@@ -166,12 +166,12 @@ void testBufMgr()
 	std::cout << "\n" << "Passed all tests." << "\n";
 }
 
-void test1()
+void test1()  // test allocate and read page
 {
 	//Allocating pages in a file...
 	for (i = 0; i < num; i++)
 	{
-		bufMgr->allocPage(file1ptr, pid[i], page);
+        bufMgr->allocPage(file1ptr, pid[i], page);
 		sprintf((char*)tmpbuf, "test.1 Page %d %7.1f", pid[i], (float)pid[i]);
 		rid[i] = page->insertRecord(tmpbuf);
 		bufMgr->unPinPage(file1ptr, pid[i], true);
@@ -180,7 +180,7 @@ void test1()
 	//Reading pages back...
 	for (i = 0; i < num; i++)
 	{
-		bufMgr->readPage(file1ptr, pid[i], page);
+        bufMgr->readPage(file1ptr, pid[i], page);
 		sprintf((char*)&tmpbuf, "test.1 Page %d %7.1f", pid[i], (float)pid[i]);
 		if(strncmp(page->getRecord(rid[i]).c_str(), tmpbuf, strlen(tmpbuf)) != 0)
 		{
@@ -242,7 +242,7 @@ void test2()
 	std::cout << "Test 2 passed" << "\n";
 }
 
-void test3()
+void test3() // test readPage with none-exist file
 {
 	try
 	{
@@ -256,7 +256,7 @@ void test3()
 	std::cout << "Test 3 passed" << "\n";
 }
 
-void test4()
+void test4() // test unPinPage
 {
 	bufMgr->allocPage(file4ptr, i, page);
 	bufMgr->unPinPage(file4ptr, i, true);

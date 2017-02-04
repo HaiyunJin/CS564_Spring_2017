@@ -36,110 +36,169 @@ BufMgr::BufMgr(std::uint32_t bufs)
 
 
 BufMgr::~BufMgr() {
-  // 1. Flush all dirty pages to disk
-  // 2. deallocate buffer pool
-  // 3. deallocate BufDesc table
 
-  // 1. TODO
-  // 2.
+  // 1. Flush all dirty pages to disk
+  for ( std::uint32_t i = 0 ; i < numBufs; ++i ) {
+    if (bufDescTable[i].dirty) {
+      bufDescTable[i].file->writePage(bufPool[i]);
+    }
+  }
+  // 2. deallocate buffer pool
   delete hashTable; // ?? not mentioned in the pdf
-  delete bufPool;
-  // 3.
-  delete bufDescTable;
+  delete [] bufPool;
+  // 3. deallocate BufDesc table
+  delete [] bufDescTable;
 
 
 }
 
 void BufMgr::advanceClock()
 { // advance the clock hand to the next frame in the buffer pool
-  clockHand = (clockHand+1)%bufs;
+  clockHand = (clockHand+1)%numBufs;
 }
 
 void BufMgr::allocBuf(FrameId & frame) 
 {
-  // |-->Advance clock
-  // |     |
-  // |     v
-  // |    check valid bit --------------------------------------|
-  // |     | Yes                      No                        |
-  // |Yes  v                                                    |
-  // |-<- check refbit                                          |
-  // |     | No                                                 |
-  // |Yes  v                                                    |
-  // -< page pinned?                                            |
-  //       | No                                                 |
-  //       v                                                    |
-  //    dirty bit set? --> if yes, flush to disk                |
-  //       | No                     |                           |
-  //       v                        v                           |
-  //    call set() <----------------J---------------------------J
-  //       |
-  //       v
-  //    Use it.
+  //    |------->Advance clock
+  //    |          |
+  //    |          v
+  //    |         check valid bit --------------------------------------|
+  //    |          | Yes                      No                        |
+  //    |clear,Y   v                                                    |
+  //    |------<- check refbit                                          |
+  //    |          | No                                                 |
+  //    |     Yes  v                                                    |
+  //    ----- < page pinned?                                            |
+  //               | No                                                 |
+  //               v                                                    |
+  //            dirty bit set? --> if yes, flush to disk                |
+  //               | No                     |                           |
+  //               v                        v                           |
+  //            call set() <----------------J---------------------------J
+  //               |
+  //               v
+  //            Use it.
   /**
    * frames that checked
    */
-  std::uint32_t numPinned = 0 ;
+  BufDesc* tmpbuf;
+  std::uint32_t i = 0 ;
 
-  while ( numPinned < numBufs ) {
+  for ( i  = 0 ; i < numBufs*2; ++i ) {
     advanceClock();
-    if ( ! bufDescTable[clockHand]->valid ) 
-      break;
-    if ( bufDescTable[clockHand]->refbit )
-      continue;
-    if ( bufDescTable[clockHand]->pinCnt > 0 ){
-      numPinned++;
+    tmpbuf = &bufDescTable[clockHand];
+    if ( ! tmpbuf->valid ) 
+      goto invalid;
+    if ( tmpbuf->refbit ) {
+      tmpbuf->refbit = false; // clear the refbit
       continue;
     }
-    if ( bufDescTable[clockHand]->dirty ) {
-      // flush into disk, then
-      break;
-    }
-  }
-  if ( numPinned == numBufs ) 
-    throw BufferExceededException();
+    if ( tmpbuf->pinCnt > 0 )
+      continue;
 
-  frame = bufDescTable[clockHand].frameNo; //  Id == No ?? YES
-  
-  // remove the entry if the frame is valid before
-  if ( bufDescTable[clockHand]->valid ) {
-    hashTable->remove(bufDescTable[clockHand]->file,
-                      bufDescTable[clockHand]->pageNo);
+    if ( tmpbuf->dirty )  // flush into disk
+      tmpbuf->file->writePage(bufPool[clockHand]);
+    goto replace;
   }
+  
+  throw BufferExceededException();
+
+replace:
+  // remove the entry if the frame is valid before
+  hashTable->remove(tmpbuf->file, tmpbuf->pageNo);
+
+invalid:
+  frame = tmpbuf->frameNo; //  Id == No ?? YES
+  tmpbuf->Clear();
 }
 
-	
+
 void BufMgr::readPage(File* file, const PageId pageNo, Page*& page)
 {
   FrameId frameNo;
-  if ( hashTable->lookup(file, pageNo, frameNo)) { // found
-    bufDescTable[frameNo]->refbit = true;
-    bufDescTable[frameNo]->pinCnt++;
+  if ( hashTable->lookup(file, pageNo, frameNo) ) { // found
+    bufDescTable[frameNo].refbit = true;
+    bufDescTable[frameNo].pinCnt++;
   } else { // not found
     allocBuf(frameNo);
-    *bufPool[frameNo] = file->readPage(pageNo);
+    bufPool[frameNo] = file->readPage(pageNo);
     hashTable->insert(file, pageNo, frameNo);
-    bufDescTable[frameNo]->Set(file, pageNo);
+    bufDescTable[frameNo].Set(file, pageNo);
   }
-  page = bufPool[frameNo];
+  page = &bufPool[frameNo];
 }
 
 
 void BufMgr::unPinPage(File* file, const PageId pageNo, const bool dirty) 
 {
+  FrameId frameNo;
+  if ( hashTable->lookup(file, pageNo, frameNo)) { // found
+    if ( dirty ) bufDescTable[frameNo].dirty = true;
+    if ( bufDescTable[frameNo].pinCnt > 0 ) {
+      bufDescTable[frameNo].pinCnt--;
+    } else {
+      throw PageNotPinnedException(file->filename(), pageNo, frameNo);
+    }
+  }
+
 }
 
 void BufMgr::flushFile(const File* file) 
 {
+
+  BufDesc* tmpbuf;
+  for (unsigned int i = 0 ; i < numBufs ; ++i ) {
+    tmpbuf = &bufDescTable[i];
+    if ( tmpbuf->file == file ) {
+      if ( tmpbuf->pinCnt > 0 )  {
+        throw PagePinnedException(file->filename(), 
+                                tmpbuf->pageNo,
+                                tmpbuf->frameNo);
+      }
+      if ( ! tmpbuf->valid ) {
+          throw BadBufferException(tmpbuf->frameNo,
+                                   tmpbuf->dirty,
+                                   tmpbuf->valid,
+                                   tmpbuf->refbit);
+      }
+      if ( tmpbuf->dirty )
+        tmpbuf->file->writePage(bufPool[i]);
+      hashTable->remove(tmpbuf->file, tmpbuf->pageNo);
+      tmpbuf->Clear();
+
+    }
+  }
+
 }
 
 void BufMgr::allocPage(File* file, PageId &pageNo, Page*& page) 
 {
+  FrameId frameNo;
+  Page new_page;
+//  std::cout<<" Allocate page in bufmgr, call file->allocatepage\n";
+  new_page = file->allocatePage();
+//  std::cout<<" Allocate page succeuss\n";
+  pageNo = new_page.page_number();
+
+// fprintf(stderr, "info: %s +%d %s\n", __FILE__, __LINE__, __func__);
+  allocBuf(frameNo);
+// fprintf(stderr, "info: %s +%d %s\n", __FILE__, __LINE__, __func__);
+  bufPool[frameNo] = new_page;
+
+  hashTable->insert(file, pageNo, frameNo);
+  bufDescTable[frameNo].Set(file, pageNo);
+  page = &bufPool[frameNo];
 }
 
 void BufMgr::disposePage(File* file, const PageId PageNo)
 {
-    
+  // TODO: error check is not finished
+  FrameId frameNo;
+  if ( hashTable->lookup(file, PageNo, frameNo) ) {
+    file->deletePage(PageNo);
+    bufDescTable[frameNo].Clear();
+  }
+
 }
 
 void BufMgr::printSelf(void) 
