@@ -147,12 +147,16 @@ void testBufMgr()
 	test5();
 	test6();
 
+//     bufMgr->printSelf();
+
+	delete bufMgr;
 	//Close files before deleting them
 	file1.~File();
 	file2.~File();
 	file3.~File();
 	file4.~File();
 	file5.~File();
+
 
 	//Delete files
 	File::remove(filename1);
@@ -161,17 +165,16 @@ void testBufMgr()
 	File::remove(filename4);
 	File::remove(filename5);
 
-	delete bufMgr;
 
 	std::cout << "\n" << "Passed all tests." << "\n";
 }
 
-void test1()  // test allocate and read page
+void test1()
 {
 	//Allocating pages in a file...
 	for (i = 0; i < num; i++)
 	{
-        bufMgr->allocPage(file1ptr, pid[i], page);
+		bufMgr->allocPage(file1ptr, pid[i], page);
 		sprintf((char*)tmpbuf, "test.1 Page %d %7.1f", pid[i], (float)pid[i]);
 		rid[i] = page->insertRecord(tmpbuf);
 		bufMgr->unPinPage(file1ptr, pid[i], true);
@@ -180,7 +183,7 @@ void test1()  // test allocate and read page
 	//Reading pages back...
 	for (i = 0; i < num; i++)
 	{
-        bufMgr->readPage(file1ptr, pid[i], page);
+		bufMgr->readPage(file1ptr, pid[i], page);
 		sprintf((char*)&tmpbuf, "test.1 Page %d %7.1f", pid[i], (float)pid[i]);
 		if(strncmp(page->getRecord(rid[i]).c_str(), tmpbuf, strlen(tmpbuf)) != 0)
 		{
@@ -242,7 +245,7 @@ void test2()
 	std::cout << "Test 2 passed" << "\n";
 }
 
-void test3() // test readPage with none-exist file
+void test3()
 {
 	try
 	{
@@ -256,7 +259,7 @@ void test3() // test readPage with none-exist file
 	std::cout << "Test 3 passed" << "\n";
 }
 
-void test4() // test unPinPage
+void test4()
 {
 	bufMgr->allocPage(file4ptr, i, page);
 	bufMgr->unPinPage(file4ptr, i, true);
