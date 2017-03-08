@@ -6,4 +6,58 @@ Design:
 
 
 
+Non-leaf nodes uses the first key of it's right child as key
+
+
+rootIsLeaf:
+
+"""
+Root page starts as page 2 but since a split can occur at the root the root
+page may get moved up and get a new page no.
+"""
+In other word, if the root num is 2, it is the leaf, otherwise, root is non-leaf
+
+
+if rootIsLeaf:
+  insert the RIDKeyPair in the root 
+
+
+// insert into a leaf page/node ( node is page, page is node)
+insertLeafNode(RIDKeyPair rkpair, node)
+
+
+
+
+template<class T, class T_NonLeafNode, class T_LeafNode>
+const PageID findLeafNode(PageId pageNo, T *key)
+{
+  // pageNo should points to a non-leaf node page
+  Page tempPage;
+  bufMgr->readFile(file, pageNo, &tempPage);
+  T_NonLeafNode* rootPage = (T_NonLeafNode*) tempPage;
+  if ( rootPage->level == 0 ) { // next level is non-leaf node
+    return findLeafNode<T, T_NonLeafNode, T_LeafNode>(rkpair);
+  } else { // next level is leaf node
+  
+  }
+
+}
+
+// need two methods for both leaf and non-leaf?? Maybe one?
+splitNode
+
+
+
+when adding the record into the leaf node, does it need to be sorted?
+If not, it will be painful later when split and delete.
+
+
+Is it beneficial to define a parent node pageNo in the split?
+Pros: can speed up the insertion if split encountered
+
+
+
+Need to decide if the current page is the last page
+
+
 

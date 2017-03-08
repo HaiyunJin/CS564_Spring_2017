@@ -182,7 +182,7 @@ void test1()
 	std::cout << "createRelationForward" << std::endl;
 	createRelationForward();
 	indexTests();
-// 	deleteRelation();
+	deleteRelation();
 }
 
 void test2()
@@ -375,10 +375,6 @@ void createRelationRandom()
 
 void indexTests()
 {
-
-#ifdef DEBUG
-  std::cout<<"Starting indexTest!!!!!!!!!!!!!!!\n";
-#endif
   if(testNum == 1)
   {
     intTests();
@@ -390,10 +386,10 @@ void indexTests()
   else if(testNum == 2)
   {
     doubleTests();
-// 	try { // TODO
-// 		File::remove(doubleIndexName);
-// 	} catch(FileNotFoundException e) {
-//   	}
+	try {
+		File::remove(doubleIndexName);
+	} catch(FileNotFoundException e) {
+  	}
   }
   else if(testNum == 3)
   {
@@ -496,17 +492,15 @@ void doubleTests()
 {
   std::cout << "Create a B+ Tree index on the double field" << std::endl;
   BTreeIndex index(relationName, doubleIndexName, bufMgr, offsetof(tuple,d), DOUBLE);
-  std::cout << "FINISHED CREATING INDEX FILE" << std::endl;
 
-  // don't run test
-// 	// run some tests
-// 	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
-// 	checkPassFail(doubleScan(&index,20,GTE,35,LTE), 16)
-// 	checkPassFail(doubleScan(&index,-3,GT,3,LT), 3)
-// 	checkPassFail(doubleScan(&index,996,GT,1001,LT), 4)
-// 	checkPassFail(doubleScan(&index,0,GT,1,LT), 0)
-// 	checkPassFail(doubleScan(&index,300,GT,400,LT), 99)
-// 	checkPassFail(doubleScan(&index,3000,GTE,4000,LT), 1000)
+	// run some tests
+	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
+	checkPassFail(doubleScan(&index,20,GTE,35,LTE), 16)
+	checkPassFail(doubleScan(&index,-3,GT,3,LT), 3)
+	checkPassFail(doubleScan(&index,996,GT,1001,LT), 4)
+	checkPassFail(doubleScan(&index,0,GT,1,LT), 0)
+	checkPassFail(doubleScan(&index,300,GT,400,LT), 99)
+	checkPassFail(doubleScan(&index,3000,GTE,4000,LT), 1000)
 }
 
 int doubleScan(BTreeIndex * index, double lowVal, Operator lowOp, double highVal, Operator highOp)
