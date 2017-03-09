@@ -245,11 +245,11 @@ void createRelationForward()
     		new_page.insertRecord(new_data);
 				break;
 			}
-			catch(InsufficientSpaceException e)
-			{
-				file1->writePage(new_page_number, new_page);
-  			new_page = file1->allocatePage(new_page_number);
-			}
+            catch(InsufficientSpaceException e)
+            {
+              file1->writePage(new_page_number, new_page);
+              new_page = file1->allocatePage(new_page_number);
+            }
 		}
   }
 

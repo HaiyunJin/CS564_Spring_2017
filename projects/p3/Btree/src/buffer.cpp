@@ -220,6 +220,10 @@ void BufMgr::allocPage(File* file, PageId &pageNo, Page*& page)
   // allocate a new page in the file
 	//std::cerr << "buffer data size:" << bufPool[frameNo].data_.length() << "\n";
   bufPool[frameNo] = file->allocatePage(pageNo);
+
+// haiyun DEBUG
+std::cout<< "pageNo get from the file is " << pageNo << std::endl;
+
   page = &bufPool[frameNo];
 
   // set up the entry properly

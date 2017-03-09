@@ -200,10 +200,14 @@ void Page::insertRecordInSlot(const SlotId slot_number,
 
 void Page::validateRecordId(const RecordId& record_id) const {
   if (record_id.page_number != page_number()) {
+// haiyun
+std::cout<<"page number not match"<<std::endl;
     throw InvalidRecordException(record_id, page_number());
   }
   const PageSlot& slot = getSlot(record_id.slot_number);
   if (!slot.used) {
+// haiyun
+std::cout<<"slot not used"<<std::endl;
     throw InvalidRecordException(record_id, page_number());
   }
 }

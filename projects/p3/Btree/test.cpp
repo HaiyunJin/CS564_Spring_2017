@@ -12,6 +12,12 @@ using namespace std;
 int readDoubleAsInt( int a);
 void printstuff(void * stuff);
 
+template < class T >
+void printT(void * a) {
+  std::cout<<(*((T *)a))<<endl;
+}
+
+
 int main(int argc, char **argv)
 {
   string *str2 = new string("2");
@@ -35,8 +41,10 @@ int main(int argc, char **argv)
     a[i] = a[i-1]+1;
   }
 
-  printstuff((void*)a);
+//   printstuff((void*)a);
 
+
+  printT<char[5]>((void*)a);
   cout<<"Using std::stirng"<<endl;
 //   string * stra = new string("abcdefg");
   string stra ="cdefg";
@@ -46,10 +54,26 @@ int main(int argc, char **argv)
 //   printstuff((void*)(&(stra[0u])));
 //   printstuff((void*)(&((*strap)[0u])));
 //   printstuff((void*)(&((*strap)[0u])));
-  printstuff((void*)(&stra[0u]));
-  printstuff((void*)(&stra));
+//   printstuff((void*)(&stra[0u]));
+//   printstuff((void*)(&stra));
+    printT<string>((void *)strap);
+
+  cout<<"Using int"<<endl;
+  int inta = 123;
+  printT<int>((void*)(&inta));
 
 
+
+  cout<<endl;
+  cout<<endl;
+  cout<<endl;
+  cout<<"Testing char[] compare"<<endl;
+  char chara[5] = {'a','b','c','d','e'};
+  char charb[5] = {'b','c','d','e','f'};
+  bool com = chara > charb;
+  cout<<com<<endl;
+  com = chara < charb;
+  cout<<com<<endl;
 
 }
 

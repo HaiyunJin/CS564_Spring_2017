@@ -62,25 +62,25 @@ const  int DOUBLEARRAYLEAFSIZE = ( Page::SIZE - 2*sizeof( PageId ) - sizeof(int)
  * @brief Number of key slots in B+Tree leaf for STRING key.
  */
 //                                             parent,sibling ptr      size                   key                      rid
-const  int STRINGARRAYLEAFSIZE = ( Page::SIZE - 2*sizeof( PageId ) - sizeof(int) ) / ( 10 * sizeof(char) + sizeof( RecordId ) );
+const  int STRINGARRAYLEAFSIZE = ( Page::SIZE - 2*sizeof( PageId ) - sizeof(int) ) / ( STRINGSIZE * sizeof(char) + sizeof( RecordId ) );
 
 /**
  * @brief Number of key slots in B+Tree non-leaf for INTEGER key.
  */
-//                                                     level     extra pageNo        parent            size          key       pageNo
-const  int INTARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) - sizeof( PageId ) - sizeof(PageId) - sizeof(int) ) / ( sizeof( int ) + sizeof( PageId ) );
+//                                                     level     parent pageNo        parent            size          key       pageNo
+const  int INTARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) /*- sizeof( PageId )*/ - sizeof(PageId) - sizeof(int) ) / ( sizeof( int ) + sizeof( PageId ) );
 
 /**
  * @brief Number of key slots in B+Tree leaf for DOUBLE key.
  */
-//                                                        level        extra pageNo     parent            size                   key            pageNo   -1 due to structure padding
-const  int DOUBLEARRAYNONLEAFSIZE = (( Page::SIZE - sizeof( int ) - sizeof( PageId )- sizeof(PageId) - sizeof(int)) / ( sizeof( double ) + sizeof( PageId ) )) - 1;
+//                                                        level        parent pageNo     parent            size                   key            pageNo   -1 due to structure padding
+const  int DOUBLEARRAYNONLEAFSIZE = (( Page::SIZE - sizeof( int ) /*- sizeof( PageId )*/- sizeof(PageId) - sizeof(int)) / ( sizeof( double ) + sizeof( PageId ) )) - 1;
 
 /**
  * @brief Number of key slots in B+Tree leaf for STRING key.
  */
-//                                                        level        extra pageNo    parent            size                key                   pageNo
-const  int STRINGARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) - sizeof( PageId )- sizeof(PageId) - sizeof(int)) / ( 10 * sizeof(char) + sizeof( PageId ) );
+//                                                        level        parent pageNo    parent            size                key                   pageNo
+const  int STRINGARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) /*- sizeof( PageId )*/- sizeof(PageId) - sizeof(int)) / ( STRINGSIZE * sizeof(char) + sizeof( PageId ) );
 
 /**
  * @brief Structure to store a key-rid pair. It is used to pass the pair to 
@@ -490,18 +490,19 @@ class BTreeIndex {
      * @param key key pointer
      */
     template<class T, class T_NonLeafNode>
-      const PageId findLeafNode(PageId pageNo, const T *key);
+      const PageId findLeafNode(PageId pageNo, const T & key);
 
 
     /**
      * insert the RIDKeyPair into a leaf node
      *
      * @param pageNo Page number of the node
+     * @parem rkpair RIDKeyPair, contains rid and key
      * @param key	 Key to insert, pointer to integer/double/char string
      * @param rid	 Record ID of a record whose entry is getting inserted into the index.
      */
     template<class T, class T_NonLeafNode, class T_LeafNode> 
-      const void insertLeafNode(PageId pageNo, RIDKeyPair<T>* rkpair);
+      const void insertLeafNode(PageId pageNo, RIDKeyPair<T> rkpair);
 
 
     /**
@@ -538,7 +539,8 @@ class BTreeIndex {
      * @param rid	 Record ID of a record whose entry is getting inserted into the index.
      */
     template<class T, class T_NonLeafNode>
-      const void insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair);
+      const void insertNonLeafNode(PageId pageNo, T key, PageId childPageNo);
+//       const void insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair);
 
 
 
@@ -553,6 +555,14 @@ class BTreeIndex {
     template<class T, class T_NonLeafNode>
       const PageId splitNonLeafNode( PageId pageNo);
 
+
+
+
+    /**
+     * print the whole tree
+     */
+    template <class T, class T_NonLeafNode, class T_LeafNode>
+      const void printTree();
 
 
  public:

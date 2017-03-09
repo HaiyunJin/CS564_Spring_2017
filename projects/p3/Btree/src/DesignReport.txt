@@ -60,4 +60,12 @@ Pros: can speed up the insertion if split encountered
 Need to decide if the current page is the last page
 
 
+2017/03/09
+
+Some questions here:
+   Check the split, it seems the corner case is not properly handled.
+   all the keys are 0.
+
+To copyKey function works fine. The problem should comes from th split process
+potential problem: bufMgr->allocPage gives wrong PageId
 
