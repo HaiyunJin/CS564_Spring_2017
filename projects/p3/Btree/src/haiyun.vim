@@ -100,14 +100,16 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +506 btree.cpp
+badd +47 ~/private/cs564-spr17/projects/p3/Btree/test.cpp
+badd +103 haiyun.vim
+badd +12 btree.cpp
 badd +44 DesignReport.txt
 badd +449 file.h
 badd +1 file.cpp
-badd +150 main.cpp
+badd +328 main.cpp
 badd +1 btree.h
 badd +59 types.h
-badd +228 buffer.h
+badd +253 buffer.h
 badd +495 test.cpp
 badd +222 buffer.cpp
 args file.h
@@ -121,8 +123,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -230,7 +232,7 @@ setlocal nowinfixwidth
 setlocal nowrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 449 - ((21 * winheight(0) + 22) / 44)
+let s:l = 449 - ((29 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -345,15 +347,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 364 - ((21 * winheight(0) + 22) / 44)
+let s:l = 364 - ((29 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 364
 normal! 016|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
 tabedit btree.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -368,11 +370,11 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 22 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe '2resize ' . ((&lines * 21 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 3resize ' . ((&columns * 90 + 90) / 181)
+exe '1resize ' . ((&lines * 30 + 32) / 65)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe '2resize ' . ((&lines * 30 + 32) / 65)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 3resize ' . ((&columns * 102 + 102) / 205)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -481,42 +483,12 @@ set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
 silent! normal! zE
-62,72fold
-62,72fold
-254,275fold
-279,304fold
-279,304fold
-279,304fold
-279,304fold
-312,343fold
-310,343fold
-310,344fold
-62
-normal! zo
-62
-normal! zo
-254
-normal! zo
-279
-normal! zo
-279
-normal! zo
-279
-normal! zo
-279
-normal! zo
-310
-normal! zo
-310
-normal! zo
-312
-normal! zo
-let s:l = 368 - ((12 * winheight(0) + 11) / 22)
+let s:l = 267 - ((22 * winheight(0) + 15) / 30)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-368
-normal! 048|
+267
+normal! 016|
 wincmd w
 argglobal
 edit btree.cpp
@@ -629,47 +601,228 @@ setlocal wrapmargin=0
 silent! normal! zE
 62,72fold
 62,72fold
-254,275fold
-279,304fold
-279,304fold
-279,304fold
-279,304fold
-312,343fold
-310,343fold
-310,344fold
-367,380fold
-367,380fold
-417,488fold
-62
+43,167fold
+177,221fold
+253,278fold
+282,307fold
+282,307fold
+282,307fold
+282,307fold
+249,309fold
+320,345fold
+316,346fold
+315,346fold
+313,346fold
+313,347fold
+369,384fold
+369,384fold
+387,403fold
+357,404fold
+357,404fold
+444,448fold
+443,448fold
+442,448fold
+440,448fold
+440,448fold
+451,452fold
+455,457fold
+451,461fold
+450,467fold
+469,485fold
+468,489fold
+495,499fold
+490,500fold
+501,511fold
+512,518fold
+501,518fold
+490,518fold
+468,518fold
+468,518fold
+468,518fold
+450,518fold
+450,519fold
+449,519fold
+449,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+440,526fold
+531,534fold
+528,535fold
+537,552fold
+537,552fold
+537,552fold
+555,571fold
+555,571fold
+555,571fold
+555,571fold
+528,573fold
+528,573fold
+528,573fold
+528,573fold
+626,628fold
+630,656fold
+585,662fold
+581,662fold
+43
 normal! zo
 62
 normal! zo
-254
+62
 normal! zo
-279
+249
 normal! zo
-279
+253
 normal! zo
-279
+282
 normal! zo
-279
+282
 normal! zo
-310
+282
 normal! zo
-310
+282
 normal! zo
-312
+313
 normal! zo
-310
+313
+normal! zo
+315
+normal! zo
+316
+normal! zo
+320
+normal! zo
+357
+normal! zo
+357
+normal! zo
+369
+normal! zo
+369
+normal! zo
+387
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+440
+normal! zo
+442
+normal! zo
+443
+normal! zo
+444
+normal! zo
+443
 normal! zc
-367
+449
 normal! zo
-let s:l = 516 - ((13 * winheight(0) + 10) / 21)
+449
+normal! zo
+450
+normal! zo
+450
+normal! zo
+450
+normal! zo
+451
+normal! zo
+451
+normal! zc
+468
+normal! zo
+468
+normal! zo
+468
+normal! zo
+468
+normal! zo
+469
+normal! zo
+490
+normal! zo
+490
+normal! zo
+501
+normal! zo
+501
+normal! zo
+512
+normal! zo
+528
+normal! zo
+528
+normal! zo
+528
+normal! zo
+528
+normal! zo
+528
+normal! zo
+531
+normal! zo
+537
+normal! zo
+537
+normal! zo
+537
+normal! zo
+555
+normal! zo
+555
+normal! zo
+555
+normal! zo
+555
+normal! zo
+581
+normal! zo
+585
+normal! zo
+626
+normal! zo
+630
+normal! zo
+let s:l = 649 - ((20 * winheight(0) + 15) / 30)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-516
-normal! 0
+649
+normal! 045|
 wincmd w
 argglobal
 edit btree.h
@@ -780,19 +933,18 @@ set nowrap
 setlocal nowrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 108 - ((21 * winheight(0) + 22) / 44)
+let s:l = 516 - ((31 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-108
-normal! 07|
+516
+normal! 049|
 wincmd w
-2wincmd w
-exe '1resize ' . ((&lines * 22 + 24) / 48)
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe '2resize ' . ((&lines * 21 + 24) / 48)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 3resize ' . ((&columns * 90 + 90) / 181)
+exe '1resize ' . ((&lines * 30 + 32) / 65)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe '2resize ' . ((&lines * 30 + 32) / 65)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 3resize ' . ((&columns * 102 + 102) / 205)
 tabedit buffer.h
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -803,8 +955,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -913,7 +1065,7 @@ set nowrap
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 253 - ((29 * winheight(0) + 22) / 44)
+let s:l = 253 - ((40 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1029,16 +1181,15 @@ set nowrap
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 130 - ((29 * winheight(0) + 22) / 44)
+let s:l = 130 - ((40 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 130
 normal! 014|
 wincmd w
-2wincmd w
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
 tabedit main.cpp
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -1049,8 +1200,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -1159,7 +1310,7 @@ set nowrap
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 149 - ((15 * winheight(0) + 22) / 44)
+let s:l = 149 - ((21 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -1275,16 +1426,15 @@ set nowrap
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 63 - ((43 * winheight(0) + 22) / 44)
+let s:l = 63 - ((60 * winheight(0) + 30) / 61)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 63
 normal! 0
 wincmd w
-2wincmd w
-exe 'vert 1resize ' . ((&columns * 90 + 90) / 181)
-exe 'vert 2resize ' . ((&columns * 90 + 90) / 181)
+exe 'vert 1resize ' . ((&columns * 102 + 102) / 205)
+exe 'vert 2resize ' . ((&columns * 102 + 102) / 205)
 tabnext 2
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

@@ -68,19 +68,19 @@ const  int STRINGARRAYLEAFSIZE = ( Page::SIZE - 2*sizeof( PageId ) - sizeof(int)
  * @brief Number of key slots in B+Tree non-leaf for INTEGER key.
  */
 //                                                     level     extra pageNo        parent            size          key       pageNo
-const  int INTARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) - sizeof( PageId ) - sizeof(PageID) - sizeof(int) ) / ( sizeof( int ) + sizeof( PageId ) );
+const  int INTARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) - sizeof( PageId ) - sizeof(PageId) - sizeof(int) ) / ( sizeof( int ) + sizeof( PageId ) );
 
 /**
  * @brief Number of key slots in B+Tree leaf for DOUBLE key.
  */
 //                                                        level        extra pageNo     parent            size                   key            pageNo   -1 due to structure padding
-const  int DOUBLEARRAYNONLEAFSIZE = (( Page::SIZE - sizeof( int ) - sizeof( PageId )- sizeof(PageID) - sizeof(int)) / ( sizeof( double ) + sizeof( PageId ) )) - 1;
+const  int DOUBLEARRAYNONLEAFSIZE = (( Page::SIZE - sizeof( int ) - sizeof( PageId )- sizeof(PageId) - sizeof(int)) / ( sizeof( double ) + sizeof( PageId ) )) - 1;
 
 /**
  * @brief Number of key slots in B+Tree leaf for STRING key.
  */
 //                                                        level        extra pageNo    parent            size                key                   pageNo
-const  int STRINGARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) - sizeof( PageId )- sizeof(PageID) - sizeof(int)) / ( 10 * sizeof(char) + sizeof( PageId ) );
+const  int STRINGARRAYNONLEAFSIZE = ( Page::SIZE - sizeof( int ) - sizeof( PageId )- sizeof(PageId) - sizeof(int)) / ( 10 * sizeof(char) + sizeof( PageId ) );
 
 /**
  * @brief Structure to store a key-rid pair. It is used to pass the pair to 
@@ -465,116 +465,139 @@ class BTreeIndex {
    */
 	std::string highValString;
 	
-  /**
-   * Low Operator. Can only be GT(>) or GTE(>=).
-   */
-	Operator	lowOp;
+    /**
+     * Low Operator. Can only be GT(>) or GTE(>=).
+     */
+    Operator	lowOp;
 
-  /**
-   * High Operator. Can only be LT(<) or LTE(<=).
-   */
-	Operator	highOp;
+    /**
+     * High Operator. Can only be LT(<) or LTE(<=).
+     */
+    Operator	highOp;
 
 
-  /**
-   * Build the intial BTree from given relation
-   * @param relationName Name of the file that stores the relation
-   */
+    /**
+     * Build the intial BTree from given relation
+     * @param relationName Name of the file that stores the relation
+     */
     const void buildBTree(const std::string & relationName);
 
-  /**
-   * insert the RIDKeyPair into a leaf node
-   *
-   * @param pageNo Page number of the node
-   * @param key	 Key to insert, pointer to integer/double/char string
-   * @param rid	 Record ID of a record whose entry is getting inserted into the index.
-   */
-    template<typename T> 
-    const void insertLeafNode(PageId pageNo, RIDKeyPair<T> *key, const RecordId rid);
-// 
-// 
-//   /**
-//    * insert the RIDKeyPair into a non-leaf node
-//    *
-//    * @param pageNo Page number of the node
-//    * @param key	 Key to insert, pointer to integer/double/char string
-//    * @param rid	 Record ID of a record whose entry is getting inserted into the index.
-//    */
-//     template<typename T> 
-//     const void insertNonLeafNode(PageId pageNo, RIDKeyPair<T> *key, const RecordId rid);
-	
 
-  /**
-   * Find Leaf page to insert the record in
-   */
-  template<class T, class T_NonLeafNode>
-    const PageId findLeafNode(PageId pageNo, const T *key);
+    /**
+     * Find Leaf page to insert the record in
+     *
+     * @param pageNo given leaf/non-leaf node, find the key or trace down further
+     * @param key key pointer
+     */
+    template<class T, class T_NonLeafNode>
+      const PageId findLeafNode(PageId pageNo, const T *key);
 
 
-  /**
-   * Split leaf node.
-   * If necessary, the split will propagate upward until no split is needed.
-   * Worst case the root get splitted
-   * @param pageNo the node to be splitted
-   */
-  template<class T, class T_NonLeafNode, class T_LeafNode>
-    const void splitLeafNode( PageId pageNo);
+    /**
+     * insert the RIDKeyPair into a leaf node
+     *
+     * @param pageNo Page number of the node
+     * @param key	 Key to insert, pointer to integer/double/char string
+     * @param rid	 Record ID of a record whose entry is getting inserted into the index.
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode> 
+      const void insertLeafNode(PageId pageNo, RIDKeyPair<T>* rkpair);
 
 
-  /**
-   * Split non-leaf node.
-   * If necessary, the split will propagate upward until no split is needed.
-   * Worst case the root get splitted
-   * @param pageNo the node to be splitted
-   */
-  template<class T, class T_NonLeafNode>
-    const void splitNonLeafNode( PageId & pageNo);
+    /**
+     * General copy method. 
+     * Has to do in this way because string is special
+     * @param dest     destiny page
+     * @param desIndex destiny page index
+     * @param scr      scource page
+     * @param scrIndex scource page index
+     */
+//     const void copyKey( Page * dest, int desIndex, Page * scr, int scrIndex);
+    const void copyKey( void * dest, void * scr);
+
+
+
+    /**
+     * Split leaf node.
+     * If necessary, the split will propagate upward until no split is needed.
+     * Worst case the root get splitted
+     * @param pageNo the node to be splitted
+     *
+     * @return PageId of the newly created page
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const PageId splitLeafNode( PageId pageNo);
+
+
+
+    /**
+     * insert the RIDKeyPair into a non-leaf node
+     *
+     * @param pageNo Page number of the node
+     * @param key	 Key to insert, pointer to integer/double/char string
+     * @param rid	 Record ID of a record whose entry is getting inserted into the index.
+     */
+    template<class T, class T_NonLeafNode>
+      const void insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair);
+
+
+
+    /**
+     * Split non-leaf node.
+     * If necessary, the split will propagate upward until no split is needed.
+     * Worst case the root get splitted
+     * @param pageNo the node to be splitted
+     *
+     * @return PageId of the newly created page
+     */
+    template<class T, class T_NonLeafNode>
+      const PageId splitNonLeafNode( PageId pageNo);
 
 
 
  public:
 
-  /**
-   * BTreeIndex Constructor. 
-   * Check to see if the corresponding index file exists. If so, open the file.
-   * If not, create it and insert entries for every tuple in the base relation
-   * using FileScan class.
-   *
-   * @param relationName    Name of file.
-   * @param outIndexName    Return the name of index file.
-   * @param bufMgrIn		Buffer Manager Instance
-   * @param attrByteOffset  Offset of attribute, over which index is to be built, in the record
-   * @param attrType		Datatype of attribute over which index is built
-   * @throws  BadIndexInfoException     If the index file already exists for the corresponding attribute, but values in metapage(relationName, attribute byte offset, attribute type etc.) do not match with values received through constructor parameters.
-   */
-	BTreeIndex(const std::string & relationName, std::string & outIndexName,
-						BufMgr *bufMgrIn,	const int attrByteOffset,	const Datatype attrType);
-	
+    /**
+     * BTreeIndex Constructor. 
+     * Check to see if the corresponding index file exists. If so, open the file.
+     * If not, create it and insert entries for every tuple in the base relation
+     * using FileScan class.
+     *
+     * @param relationName    Name of file.
+     * @param outIndexName    Return the name of index file.
+     * @param bufMgrIn		Buffer Manager Instance
+     * @param attrByteOffset  Offset of attribute, over which index is to be built, in the record
+     * @param attrType		Datatype of attribute over which index is built
+     * @throws  BadIndexInfoException     If the index file already exists for the corresponding attribute, but values in metapage(relationName, attribute byte offset, attribute type etc.) do not match with values received through constructor parameters.
+     */
+    BTreeIndex(const std::string & relationName, std::string & outIndexName,
+        BufMgr *bufMgrIn,	const int attrByteOffset,	const Datatype attrType);
 
-  /**
-   * BTreeIndex Destructor. 
-	 * End any initialized scan, flush index file, after unpinning any pinned
+
+    /**
+     * BTreeIndex Destructor. 
+     * End any initialized scan, flush index file, after unpinning any pinned
      * pages, from the buffer manager
-	 * and delete file instance thereby closing the index file.
-	 * Destructor should not throw any exceptions. All exceptions should be
+     * and delete file instance thereby closing the index file.
+     * Destructor should not throw any exceptions. All exceptions should be
      * caught in here itself. 
-	 * */
-	~BTreeIndex();
+     * */
+    ~BTreeIndex();
 
 
-  /**
-	 * Insert a new entry using the pair <value,rid>. 
-	 * Start from root to recursively find out the leaf to insert the entry in.
+    /**
+     * Insert a new entry using the pair <value,rid>. 
+     * Start from root to recursively find out the leaf to insert the entry in.
      * The insertion may cause splitting of leaf node.
-	 * This splitting will require addition of new leaf page number entry into
+     * This splitting will require addition of new leaf page number entry into
      * the parent non-leaf, which may in-turn get split.
-	 * This may continue all the way upto the root causing the root to get 
+     * This may continue all the way upto the root causing the root to get 
      * split. If root gets split, metapage needs to be changed accordingly.
-	 * Make sure to unpin pages as soon as you can.
-   * @param key	 Key to insert, pointer to integer/double/char string
-   * @param rid	 Record ID of a record whose entry is getting inserted into the index.
-	**/
-	const void insertEntry(const void* key, const RecordId rid);
+     * Make sure to unpin pages as soon as you can.
+     * @param key	 Key to insert, pointer to integer/double/char string
+     * @param rid	 Record ID of a record whose entry is getting inserted into the index.
+     **/
+    const void insertEntry(const void* key, const RecordId rid);
 
 
   /**

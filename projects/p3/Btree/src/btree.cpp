@@ -103,26 +103,22 @@ std::cout<<"Creating new index file!!!\n";
     bufMgr->unPinPage(file, headerPageNum, true);
 
     // construct root page
-    switch ( attributeType ) {
-    case INTEGER:
+    if ( attributeType == INTEGER ) {
       LeafNodeInt* intRootPage = reinterpret_cast<LeafNodeInt*>(rootPage);
       intRootPage->size = 0;
       intRootPage->parentPageNo = -1;
       intRootPage->rightSibPageNo = -1;
-      break;
-    case DOUBLE:
+    } else if ( attributeType == DOUBLE ) {
       LeafNodeDouble* doubleRootPage = reinterpret_cast<LeafNodeDouble*>(rootPage);
       doubleRootPage->size = 0;
       doubleRootPage->parentPageNo = -1;
       doubleRootPage->rightSibPageNo = -1;
-      break;
-    case STRING:
+    } else if ( attributeType == STRING ) {
       LeafNodeString* stringRootPage = reinterpret_cast<LeafNodeString*>(rootPage);
       stringRootPage->size = 0;
       stringRootPage->parentPageNo = -1;
       stringRootPage->rightSibPageNo = -1;
-      break;
-    default:
+    } else {
       std::cout<<"Unsupported data type\n";
     }
     // done with root page
@@ -137,7 +133,6 @@ std::cout<<"Creating new index file!!!\n";
     bufMgr->flushFile(file);
 
     // build B-Tree: insert the record into the B-Tree
-    // TODO rootPage
     buildBTree(relationName);
 
 #ifdef DEBUG
@@ -208,11 +203,15 @@ const void BTreeIndex::buildBTree(const std::string & relationName)
           char* str = ((char *)(record + attrByteOffset));
           for (int i = 0 ; i < 10 ; ++i)
             strKey[i] = str[i];
-          std::string key = std::string(strKey);
+//           std::string key = std::string(strKey);
+          char *key = strKey;
 #ifdef DEBUG
 //             std::cout << "Extracted : " << key << std::endl;
 #endif
-            insertEntry(&key, scanRid);
+
+          // for string key is already a pointer
+//           insertEntry(&key, scanRid);
+          insertEntry(key, scanRid);
         } else {
           std::cout<<"Unsupported data type\n";
         }
@@ -251,54 +250,58 @@ const void BTreeIndex::insertEntry(const void *key, const RecordId rid)
   bool rootIsLeaf = rootPageNum == 2;
   if ( rootIsLeaf ) {
     // insert into the root node, also leaf node
-    switch ( attributeType ) {
-      case INTEGER:
-        RIDKeyPair<int> *rkpair = new RIDKeyPair<int>();
-        rkpair->set(rid, *(int*)key);
-        insertLeafNode<int, struct LeafNodeInt>(rootPageNum, rkpair);
-        break;
-      case DOUBLE:
-        RIDKeyPair<double> rkpair = new RIDKeyPair<double>();
-        rkpair->set(rid, *(double*)key);
-        insertLeafNode<double, struct LeafNodeDouble>(rootPageNum, rkpair);
-        break;
-      case STRING:
-        ridkeypair<std::string> rkpair = new ridkeypair<std::string>();
-        char chark[10];
-        strncpy(chark,(char*)key,10);
-        std::string *stringkey = new std::string(chark);
-        rkpair->set(rid, *stringkey);
-        insertLeafNode(rootPageNum, rkpair);
-        break;
-      default:
-        std::cout<<"Unsupported data type\n";
-        break;
+    if ( attributeType == INTEGER ) {
+      RIDKeyPair<int> *rkpair = new RIDKeyPair<int>();
+      rkpair->set(rid, *(int*)key);
+      insertLeafNode<int, struct NonLeafNodeInt, struct LeafNodeInt>(rootPageNum, rkpair);
+    } else if ( attributeType == DOUBLE ) {
+      RIDKeyPair<double> *rkpair = new RIDKeyPair<double>();
+      rkpair->set(rid, *(double*)key);
+      insertLeafNode<double, struct NonLeafNodeDouble, struct LeafNodeDouble>(rootPageNum, rkpair);
+    } else if ( attributeType == STRING ) {
+
+
+      // I will change the string key to be char array
+      // however, I need to decide what generic T is for string case
+      // For Integer/double, it is just int/double, 
+      // char* ?
+
+
+
+      RIDKeyPair<std::string> *rkpair = new RIDKeyPair<std::string>();
+      char chark[10];
+      strncpy(chark,(char*)key,10);
+      std::string *stringkey = new std::string(chark);
+      rkpair->set(rid, *stringkey);
+      insertLeafNode<std::string, struct NonLeafNodeString, struct LeafNodeString>(rootPageNum, rkpair);
+    } else {
+      std::cout<<"Unsupported data type\n";
     }
   } else  {
     // determine the type, find the leaf node to insert, and insert
     if ( attributeType == INTEGER ) {
-        RIDKeyPair<int> rkpair;
+        RIDKeyPair<int> *rkpair = new RIDKeyPair<int>();
         int *intKey = (int*)key;
-        rkpair.set(rid, *intkey);
+        rkpair->set(rid, *intKey);
         PageId leafToInsert = 
-          findLeafNode<int, struct NonLeafNodeInt>(rootPageNum,intkey);
-        insertLeafNode(leafToInsert, rkpair);
+          findLeafNode<int, struct NonLeafNodeInt>(rootPageNum, intKey);
+        insertLeafNode<int, struct NonLeafNodeInt, struct LeafNodeInt>(leafToInsert, rkpair);
     } else if ( attributeType == DOUBLE ) {
-        RIDKeyPair<double> rkpair;
+        RIDKeyPair<double> *rkpair = new RIDKeyPair<double>();
         double *doubleKey = (double*)key;
-        rkpair.set(rid, *doubleKey);
+        rkpair->set(rid, *doubleKey);
         PageId leafToInsert =
           findLeafNode<double, struct NonLeafNodeDouble>(rootPageNum,doubleKey);
-        insertLeafNode(leafToInsert, rkpair);
+        insertLeafNode<double, struct NonLeafNodeDouble, struct LeafNodeDouble>(leafToInsert, rkpair);
     } else if ( attributeType == STRING ) {
-        ridkeypair<std::string> rkpair;
+        RIDKeyPair<std::string> *rkpair = new RIDKeyPair<std::string>();
         char chark[10];
         strncpy(chark,(char*)key,10);
         std::string *stringkey = new std::string(chark);
-        rkpair.set(rid, *stringkey);
-        pageid leaftoinsert = 
-          findleafnode<std::string, struct nonleafnodestring>(rootPageNum,stringkey);
-        insertLeafNode(leaftoinsert, rkpair);
+        rkpair->set(rid, *stringkey);
+        PageId leafToInsert = 
+          findLeafNode<std::string, struct NonLeafNodeString>(rootPageNum,stringkey);
+        insertLeafNode<std::string, struct NonLeafNodeString, struct LeafNodeString>(leafToInsert, rkpair);
     } else {
         std::cout<<"Unsupported data type\n";
     }
@@ -349,8 +352,7 @@ const PageId BTreeIndex::findLeafNode(PageId pageNo, const T *key)
 // -----------------------------------------------------------------------------
 
 template<class T, class T_NonLeafNode, class T_LeafNode> 
-const void BTreeIndex::insertLeafNode(PageId pageNo,
-                                      const RIDKeyPair<T>* rkpair)
+const void BTreeIndex::insertLeafNode(PageId pageNo, RIDKeyPair<T>* rkpair)
 {
   // root and leaf do not have to be at least half full
 
@@ -358,65 +360,89 @@ const void BTreeIndex::insertLeafNode(PageId pageNo,
   // Add a new field size to all
 
   Page *tempPage; // temperary point, can be reused after cast
-  bufMgr->readPage(file, PageNo, tempPage);
-  T_LeafNode * leafPage = reinterpret_cast<T_LeafNode*>(tempPage);
+  bufMgr->readPage(file, pageNo, tempPage);
+  T_LeafNode * thisPage = reinterpret_cast<T_LeafNode*>(tempPage);
   T thisKey = rkpair->key;
-  int size = leafPage->size;
+  int size = thisPage->size;
   if ( size < leafOccupancy ) {
     // Still have space, just insert into correct position
     int index = 0;
     // find the index that this record should be
-    while ( thisKey > leafPage->keyArray[index] ) ++index;
+    while ( thisKey > thisPage->keyArray[index] ) ++index;
     // shift all keys right by 1
     for ( int i = size ; i > index ; --i ) {
-      leafPage->keyArray[i] = leafPage->keyArray[i-1];
-      leafPage->ridArray[i] = leafPage->ridArray[i-1];
+//       thisPage->keyArray[i] = thisPage->keyArray[i-1];
+      copyKey((void *)(&(thisPage->keyArray[i])), (void *)(&(thisPage->keyArray[i-1])));
+      thisPage->ridArray[i] = thisPage->ridArray[i-1];
     }
     // insert the current key
-    leafPage->keyArray[index] = thisKey;
-    leafPage->ridArray[index] = rkpair->rid;
-    // increase the size by 1;
-    (leafPage->size)++;
-    bufMgr->unPinPage(file, PageNo, true);
-  } else {
-    // No more space for new key, need to split
-    bufMgr->unPinPage(file, PageNo, false);
-
-    // split the node and insert to correct leaf
-    splitLeafNode(pageNo);
-
-    // The whole tree may changed, need to re-read the node
-    bufMgr->readPage(file, PageNo, tempPage);
-    leafPage = reinterpret_cast<T_LeafNode*>(tempPage);
-
-    PageId rightPageNo = leafPage->rightSibPageNo;
-    bufMgr->readPage(file, rightPageNo, tempPage);
-    T_LeafNode* rightPage = reinterpret_cast<T_LeafNode*>(tempPage);
-
-    T parentKey = rightPage->keyArray[0];
-    bufMgr->unPinPage(file, PageNo, false);
-    bufMgr->unPinPage(file, rightPageNo, false);
-
-    // decide which node to insert the new key 
-    if ( thisKey < parentKey ) {
-      // insert into current node
-      insertLeafNode(pageNo, rkpair);
+    if ( attributeType == STRING ) {
+      copyKey((void *)(&(thisPage->keyArray[index])), (void *)(&(thisKey[0u])));
     } else {
-      // insert into right sibling node
-      insertLeafNode(rightPageNo, rkpair);
+      copyKey((void *)(&(thisPage->keyArray[index])), (void *)(&thisKey));
     }
+    thisPage->ridArray[index] = rkpair->rid;
+
+    // increase the size by 1;
+    (thisPage->size)++;
+    bufMgr->unPinPage(file, pageNo, true);
+  } else {
+    // not enough space, need to split
+
+    // determine where this rkpair should go
+    int midIndex = leafOccupancy/2 + leafOccupancy%2;
+    bool insertLeftNode = thisKey < thisPage->keyArray[midIndex];
+
+    // close the page to split
+    bufMgr->unPinPage(file, pageNo, false);
+
+    // split the node and get the newly allocated PageId
+    PageId rightPageNo = splitLeafNode<T, T_NonLeafNode, T_LeafNode>(pageNo);
+
+    // insert to proper page
+    PageId pageNoToInsert = pageNo;
+    if ( !insertLeftNode ) // insert second page
+      pageNoToInsert = rightPageNo;
+    insertLeafNode<T, T_NonLeafNode, T_LeafNode>(pageNoToInsert, rkpair);
 
   }
 }
 
-// insertLeafNode<int, struct LeafNodeInt>(rootPageNum, rkpair);
+
+// -----------------------------------------------------------------------------
+// BTreeIndex::copyKey
+// -----------------------------------------------------------------------------
+
+// const void BTreeIndex::copyKey( Page * dest, int desIndex, 
+//                                 Page * scr, int scrIndex)
+
+const void BTreeIndex::copyKey( void * dest, void * scr)
+{
+  if ( attributeType == INTEGER ) {
+    int *intDest = (int*)dest;
+    int *intScr = (int*)scr;
+    *intDest = *intScr;
+  } else if ( attributeType == DOUBLE ) {
+    double *doubleDest = (double*)dest;
+    double *doubleScr = (double*)scr;
+    *doubleDest = *doubleScr;
+  } else if ( attributeType == STRING ) {
+    // lots of work for String
+
+    // 2 cases:
+    //     1. copy from a char array
+    //     2. copy from a string
+  }
+}
+
 
 
 // -----------------------------------------------------------------------------
 // BTreeIndex::splitLeafNode
 // -----------------------------------------------------------------------------
+
 template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::splitLeafNode(PageId pageNo)
+const PageId BTreeIndex::splitLeafNode(PageId pageNo)
 {
     Page *tempPage; // can be reused
     PageId firstPageNo = pageNo;
@@ -438,24 +464,31 @@ const void BTreeIndex::splitLeafNode(PageId pageNo)
     // copy the second half keys to secondPage
     int midIndex = leafOccupancy/2 + leafOccupancy%2;
     for ( int i1 = midIndex, i2=0 ; i1 < leafOccupancy ; ++i1,++i2) {
-      secondPage->keyArray[i2] = firstPage->keyArray[i1];
+      copyKey((void *)(&(secondPage->keyArray[i2])),
+              (void *)(&(firstPage->keyArray[i1] )));
+//       secondPage->keyArray[i2] = firstPage->keyArray[i1];
       secondPage->ridArray[i2] = firstPage->ridArray[i1];
     }
     firstPage->size = midIndex;
     secondPage->size = leafOccupancy - midIndex;
 
     T copyUpKey = firstPage->keyArray[midIndex];
+//     bool rootIsLeaf = firstPage->parentPageNo < 1;
+    bool rootIsLeaf = rootPageNum == pageNo;
+
+    // done with first and second page
+    bufMgr->unPinPage(file, firstPageNo, true);
+    bufMgr->unPinPage(file, secondPageNo, true);
 
     // check if here is parent
     //
     // I think, as long as the parent page no is not -1, it is not root 
     // but we can do extra check, TODO
-    if ( firstPage->parentPageNo > 1 ) { // normal parent, insert new pkpair
+    if ( !rootIsLeaf ) { // normal parent, insert new pkpair
       PageKeyPair<T> pkpair;
       pkpair.set(secondPageNo, copyUpKey);
-      insertNonLeafNode(firstPage->parentPageNo, pkpair);
+      insertNonLeafNode<T, T_NonLeafNode>(firstPage->parentPageNo, pkpair);
     } else {  // it is the root leaf node
-
       // allocate new parent node
       PageId parentPageNo;
       bufMgr->allocPage(file, parentPageNo, tempPage);
@@ -475,8 +508,13 @@ const void BTreeIndex::splitLeafNode(PageId pageNo)
 
       // construct the parent node
       parentPage->level = 1;  // just above leaf
-      parentPage->size = 2;   // first and second page
-      parentPage->keyArray[0] = copyUpKey;
+      parentPage->size = 1;   // one key, points to first and second page
+//       parentPage->keyArray[0] = copyUpKey;
+      if ( attributeType == STRING ) {
+        copyKey((void *)(&(parentPage->keyArray[0])),(void *)(&(copyUpKey[0u])));
+      } else {
+        copyKey((void *)(&(parentPage->keyArray[0])),(void *)(&(copyUpKey)));
+      }
       parentPage->pageNoArray[0] = firstPageNo;
       parentPage->pageNoArray[1] = secondPageNo;
 
@@ -484,53 +522,159 @@ const void BTreeIndex::splitLeafNode(PageId pageNo)
       bufMgr->unPinPage(file, parentPageNo, true);
     }
 
-
+    // return the second page number created
+    return secondPageNo;
 }
 
 
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair) {
+// -----------------------------------------------------------------------------
+// BTreeIndex::insertNonLeafNode
+// -----------------------------------------------------------------------------
+
+template<class T, class T_NonLeafNode>
+const void BTreeIndex::insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair)
+{
 
     Page *tempPage;
     bufMgr->readPage(file, pageNo, tempPage);
     T_NonLeafNode* thisPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-    T thisKey = pkpair->key;
+    T thisKey = pkpair.key;
     int size = thisPage->size;
     if ( size < nodeOccupancy ) {
       // still have space, just insert
-
       int index = 0;
       // find the correct position to insert the key
       while ( thisKey > thisPage->keyArray[index] ) ++index;
       // shift all keys and pageNos right by 1 position
       for ( int i = size ; i > index ; --i ) {
-        thisPage->keyArray[i] = thisPage->keyArray[i-1];
+//         thisPage->keyArray[i] = thisPage->keyArray[i-1];
+        copyKey((void *)(&(thisPage->keyArray[i])), (void *)(&(thisPage->keyArray[i-1])));
         thisPage->pageNoArray[i+1] = thisPage->pageNoArray[i];
       }
       // insert the current key
-      thisPage->keyArray[index] = thisKey;
+//       thisPage->keyArray[index] = thisKey;
+      if ( attributeType == STRING ) {
+        copyKey((void *)(&(thisPage->keyArray[index])), (void *)(&thisKey[0u]));
+      } else {
+        copyKey((void *)(&(thisPage->keyArray[index])), (void *)(&thisKey));
+      }
       thisPage->pageNoArray[index+1] = pkpair.pageNo;
+      (thisPage->size)++;
+      // done, close the file
+      bufMgr->unPinPage(file, pageNo, true);
     } else {
       // need to split this non-leaf node, potentially propagate up
-      // TODO split the non leaf node
 
+      // you know where to insert before split
+      int midIndex = nodeOccupancy/2+nodeOccupancy%2;
+      bool insertLeftNode = thisKey < thisPage->keyArray[midIndex];
+
+      // close the file for split
+      bufMgr->unPinPage(file, pageNo, false);
+
+      // split the non-leaf node, potentially affect upwards to the root
+      
+      PageId rightPageNo = splitNonLeafNode<T, T_NonLeafNode>(pageNo);
+
+      // insert to the proper page
+      PageId pageNoToInsert = pageNo;
+      if ( !insertLeftNode ) // insert second page
+        pageNoToInsert = rightPageNo;
+      insertNonLeafNode<T, T_NonLeafNode>(pageNoToInsert, pkpair);
     }
     
 }
 
 
+// -----------------------------------------------------------------------------
+// BTreeIndex::splitNonLeafNode
+// -----------------------------------------------------------------------------
 
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::splitNonLeafNode(PageId pageNo)
+template<class T, class T_NonLeafNode>
+const PageId BTreeIndex::splitNonLeafNode(PageId pageNo)
 {
-  Page *tempPage;
-  bufMgr->readPage(file, pageNo, tempPage);
-  T_NonLeafNode * thisNode = reinterpret_cast<T_NonLeafNode*>(tempPage);
+    Page *tempPage; // can be reused
+    PageId firstPageNo = pageNo;
+    bufMgr->readPage(file, pageNo, tempPage);
+    T_NonLeafNode * firstPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
+    PageId secondPageNo;
+    bufMgr->allocPage(file, secondPageNo, tempPage);
+    T_NonLeafNode* secondPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
 
-  if ( thisNode->size < nodeOccupancy ) {
-    // no split needed, done
-  } else {
-  }
+    // set the parent
+    secondPage->parentPageNo = firstPage->parentPageNo;
+  
+    // set the level
+    secondPage->level = firstPage->level;
+
+    // middle index will be push to parent
+    // TODO need to check the copy 
+    int midIndex = nodeOccupancy/2+nodeOccupancy%2;
+
+    // split keyArray
+    for ( int i1 = midIndex+1 , i2 = 0; i1 < nodeOccupancy; ++i1, ++i2) {
+      // +1 because the midIndex key will not be copied, it will be push up
+//       secondPage->keyArray[i2] = firstPage->keyArray[i1];
+      copyKey((void *)(&(secondPage->keyArray[i2])),
+              (void *)(&(firstPage->keyArray[i1] )));
+    }
+    // split pageNoArray
+    for ( int i1 = midIndex+1 , i2 = 0 ; i1 < nodeOccupancy+1 ; ++i1, ++i2) {
+      secondPage->pageNoArray[i2] = firstPage->pageNoArray[i1];
+    }
+    firstPage->size = midIndex;
+    secondPage->size = nodeOccupancy - midIndex -1; // -1 bcz mid is pushed up
+
+    T pushUpKey = firstPage->keyArray[midIndex];
+
+
+    bool currentNodeIsRoot = rootPageNum == pageNo;
+
+    // done with this two pages
+    bufMgr->unPinPage(file, firstPageNo, true);
+    bufMgr->unPinPage(file, secondPageNo, true);
+
+    if ( ! currentNodeIsRoot ) { // not root 
+      PageKeyPair<T> pkpair;
+      pkpair.set(secondPageNo, pushUpKey);
+      insertNonLeafNode<T, T_NonLeafNode>(firstPage->parentPageNo, pkpair);
+    } else { // this is the root to be splited, create new root
+      PageId parentPageNo;
+      bufMgr->allocPage(file, parentPageNo, tempPage);
+      T_NonLeafNode* parentPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
+
+      // update class fields
+      rootPageNum = parentPageNo;
+      // update meta info
+      bufMgr->readPage(file, headerPageNum, tempPage);
+      IndexMetaInfo* metaPage = reinterpret_cast<IndexMetaInfo*>(tempPage);
+      metaPage->rootPageNo = parentPageNo;
+      bufMgr->unPinPage(file, headerPageNum, true);
+
+      // update child pages' parent
+      firstPage->parentPageNo = parentPageNo;
+      secondPage->parentPageNo = parentPageNo;
+
+      // construct the parent page
+      parentPage->level = 0;
+      parentPage->size = 1;
+//       parentPage->keyArray[0] = pushUpKey;
+      if ( attributeType == STRING ) {
+        copyKey((void *)(&(parentPage->keyArray[0])),(void *)(&(pushUpKey[0u])));
+      } else {
+        copyKey((void *)(&(parentPage->keyArray[0])),(void *)(&(pushUpKey)));
+      }
+      parentPage->pageNoArray[0] = firstPageNo;
+      parentPage->pageNoArray[1] = secondPageNo;
+      
+      // done with parentPage
+      bufMgr->unPinPage(file, parentPageNo, true);
+      
+    }
+
+    // return newly alloc secondPage number
+    return secondPageNo;
+
 
 }
 
