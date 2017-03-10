@@ -496,7 +496,7 @@ class BTreeIndex {
     /**
      * insert the RIDKeyPair into a leaf node
      *
-     * @param pageNo Page number of the node
+     * @param pageNo Page number of the leaf node
      * @parem rkpair RIDKeyPair, contains rid and key
      * @param key	 Key to insert, pointer to integer/double/char string
      * @param rid	 Record ID of a record whose entry is getting inserted into the index.
@@ -508,13 +508,11 @@ class BTreeIndex {
     /**
      * General copy method. 
      * Has to do in this way because string is special
-     * @param dest     destiny page
-     * @param desIndex destiny page index
-     * @param scr      scource page
-     * @param scrIndex scource page index
+     * @param dest     destiny memory postion
+     * @param scr      scource memory postion
      */
-//     const void copyKey( Page * dest, int desIndex, Page * scr, int scrIndex);
     const void copyKey( void * dest, void * scr);
+//     const void copyKey( Page * dest, int desIndex, Page * scr, int scrIndex);
 
 
 
