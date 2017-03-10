@@ -563,6 +563,28 @@ class BTreeIndex {
       const void printTree();
 
 
+    /**
+     * generic start scan, use c++ template
+     *
+     * @param lowVal low value
+     * @param highal high value
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const void startScanHelper(T lowVal, T highVal);
+
+
+
+    /**
+     * generic scan next method, with c++ template
+     * @param outRid 
+     * @param lowVal
+     * @param highVal
+     */
+    template <class T, class T_LeafNode >
+      const void scanNextHelper(RecordId & outRid, T lowVal, T highVal);
+
+
+
  public:
 
     /**

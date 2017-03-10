@@ -1,3 +1,5 @@
+// #define DEBUG
+
 /**
  * @author See Contributors.txt for code contributors and overview of BadgerDB.
  *
@@ -34,7 +36,6 @@
 	}																	\
 }
 
-// #define DEBUG
 
 using namespace badgerdb;
 
@@ -390,10 +391,10 @@ void indexTests()
   else if(testNum == 2)
   {
     doubleTests();
-// 	try { // TODO
-// 		File::remove(doubleIndexName);
-// 	} catch(FileNotFoundException e) {
-//   	}
+	try { // TODO
+		File::remove(doubleIndexName);
+	} catch(FileNotFoundException e) {
+  	}
   }
   else if(testNum == 3)
   {
@@ -414,7 +415,7 @@ void intTests()
   std::cout << "Create a B+ Tree index on the integer field" << std::endl;
   BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
 
-#ifdef DEBUG
+#ifdef DEBUGMORE
 // haiyun
   std::cout<<intIndexName<<std::endl;
 #endif
@@ -443,7 +444,13 @@ int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operato
 	
 	try
 	{
-  	index->startScan(&lowVal, lowOp, &highVal, highOp);
+#ifdef DEBUGMORE
+  std::cout<<" start intTest startScan haiyun"<<std::endl;
+#endif
+      index->startScan(&lowVal, lowOp, &highVal, highOp);
+#ifdef DEBUGMORE
+  std::cout<<" end of intTest startScan haiyun"<<std::endl;
+#endif
 	}
 	catch(NoSuchKeyFoundException e)
 	{
@@ -498,15 +505,14 @@ void doubleTests()
   BTreeIndex index(relationName, doubleIndexName, bufMgr, offsetof(tuple,d), DOUBLE);
   std::cout << "FINISHED CREATING INDEX FILE" << std::endl;
 
-  // don't run test
-// 	// run some tests
-// 	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
-// 	checkPassFail(doubleScan(&index,20,GTE,35,LTE), 16)
-// 	checkPassFail(doubleScan(&index,-3,GT,3,LT), 3)
-// 	checkPassFail(doubleScan(&index,996,GT,1001,LT), 4)
-// 	checkPassFail(doubleScan(&index,0,GT,1,LT), 0)
-// 	checkPassFail(doubleScan(&index,300,GT,400,LT), 99)
-// 	checkPassFail(doubleScan(&index,3000,GTE,4000,LT), 1000)
+	// run some tests
+	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
+	checkPassFail(doubleScan(&index,20,GTE,35,LTE), 16)
+	checkPassFail(doubleScan(&index,-3,GT,3,LT), 3)
+	checkPassFail(doubleScan(&index,996,GT,1001,LT), 4)
+	checkPassFail(doubleScan(&index,0,GT,1,LT), 0)
+	checkPassFail(doubleScan(&index,300,GT,400,LT), 99)
+	checkPassFail(doubleScan(&index,3000,GTE,4000,LT), 1000)
 }
 
 int doubleScan(BTreeIndex * index, double lowVal, Operator lowOp, double highVal, Operator highOp)
