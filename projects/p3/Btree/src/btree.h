@@ -449,6 +449,7 @@ class BTreeIndex {
    * Low STRING value for scan.
    */
 	std::string	lowValString;
+	char lowStringKey[STRINGSIZE] ;
 
   /**
    * High INTEGER value for scan.
@@ -464,7 +465,9 @@ class BTreeIndex {
    * High STRING value for scan.
    */
 	std::string highValString;
-	
+	char highStringKey[STRINGSIZE];
+
+
     /**
      * Low Operator. Can only be GT(>) or GTE(>=).
      */
@@ -490,7 +493,7 @@ class BTreeIndex {
      * @param key key pointer
      */
     template<class T, class T_NonLeafNode>
-      const PageId findLeafNode(PageId pageNo, const T & key);
+      const PageId findLeafNode(PageId pageNo, T & key);
 
 
     /**
@@ -511,7 +514,7 @@ class BTreeIndex {
      * @param dest     destiny memory postion
      * @param scr      scource memory postion
      */
-    const void copyKey( void * dest, void * scr);
+//     const void copyKey( void * dest, void * scr);
 //     const void copyKey( Page * dest, int desIndex, Page * scr, int scrIndex);
 
 
@@ -537,7 +540,7 @@ class BTreeIndex {
      * @param rid	 Record ID of a record whose entry is getting inserted into the index.
      */
     template<class T, class T_NonLeafNode>
-      const void insertNonLeafNode(PageId pageNo, T key, PageId childPageNo);
+      const void insertNonLeafNode(PageId pageNo, T &key, PageId childPageNo);
 //       const void insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair);
 
 
@@ -570,7 +573,7 @@ class BTreeIndex {
      * @param highal high value
      */
     template<class T, class T_NonLeafNode, class T_LeafNode>
-      const void startScanHelper(T lowVal, T highVal);
+      const void startScanHelper(T & lowVal, T & highVal);
 
 
 

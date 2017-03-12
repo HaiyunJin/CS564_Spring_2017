@@ -68,12 +68,18 @@ int main(int argc, char **argv)
   cout<<endl;
   cout<<endl;
   cout<<"Testing char[] compare"<<endl;
-  char chara[5] = {'a','b','c','d','e'};
-  char charb[5] = {'b','c','d','e','f'};
+//   char chara[6] = {'a','b','c','d','e','f'};
+//   char charb[5] = {'a','b','d','e','f'};
+  char chara[10] = {'0','0','0','2','5',' ','s','t','r'};
+  char charb[10] = {'0','4','9','9','9',' ','s','t','r'};
+// cout<<"char chara[6] = {'a','b','c','d','e','f'};"<<endl;
+// cout<<"char charb[5] = {'a','b','d','e','f'};"<<endl;
+  cout<<"char chara[10] = {'0','0','0','2','5',' ','s','t','r'};"<<endl;
+  cout<<"char charb[10] = {'0','4','9','9','9',' ','s','t','r'};"<<endl;
   bool com = chara > charb;
-  cout<<com<<endl;
+  cout<<"chara > charb: "<<com<<endl;
   com = chara < charb;
-  cout<<com<<endl;
+  cout<<"chara < charb: "<<com<<endl;
 
 }
 

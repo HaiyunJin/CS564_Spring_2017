@@ -34,7 +34,6 @@
 	}																	\
 }
 
-// #define DEBUG
 
 using namespace badgerdb;
 
@@ -166,9 +165,9 @@ int main(int argc, char **argv)
 	File::remove(relationName);
 
 	test1();
-// 	test2();
-// 	test3();
-	//errorTests();
+	test2();
+	test3();
+	errorTests();
 
 	delete bufMgr;
 	return 0;
@@ -245,11 +244,11 @@ void createRelationForward()
     		new_page.insertRecord(new_data);
 				break;
 			}
-			catch(InsufficientSpaceException e)
-			{
-				file1->writePage(new_page_number, new_page);
-  			new_page = file1->allocatePage(new_page_number);
-			}
+            catch(InsufficientSpaceException e)
+            {
+              file1->writePage(new_page_number, new_page);
+              new_page = file1->allocatePage(new_page_number);
+            }
 		}
   }
 
@@ -437,15 +436,15 @@ int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operato
 
   int numResults = 0;
 	
-	try
-	{
-  	index->startScan(&lowVal, lowOp, &highVal, highOp);
-	}
-	catch(NoSuchKeyFoundException e)
-	{
+  try
+  {
+    index->startScan(&lowVal, lowOp, &highVal, highOp);
+  }
+  catch(NoSuchKeyFoundException e)
+  {
     std::cout << "No Key Found satisfying the scan criteria." << std::endl;
-		return 0;
-	}
+    return 0;
+  }
 
 	while(1)
 	{
@@ -600,15 +599,15 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
 
   int numResults = 0;
 
-	try
-	{
-  	index->startScan(lowValStr, lowOp, highValStr, highOp);
-	}
-	catch(NoSuchKeyFoundException e)
-	{
-    std::cout << "No Key Found satisfying the scan criteria." << std::endl;
-		return 0;
-	}
+    try
+    {
+      index->startScan(lowValStr, lowOp, highValStr, highOp);
+    }
+    catch(NoSuchKeyFoundException e)
+    {
+      std::cout << "No Key Found satisfying the scan criteria." << std::endl;
+      return 0;
+    }
 
 	while(1)
 	{

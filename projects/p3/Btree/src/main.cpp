@@ -1,4 +1,6 @@
+
 // #define DEBUG
+// #define DEBUGSTRING
 
 /**
  * @author See Contributors.txt for code contributors and overview of BadgerDB.
@@ -167,11 +169,22 @@ int main(int argc, char **argv)
 	File::remove(relationName);
 
 	test1();
-// 	test2();
-// 	test3();
-	//errorTests();
+	test2();
+	test3();
+	errorTests();
+#ifdef DEBUG
+	// haiyun, remove indexfile
+    try {
+		File::remove(intIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+  std::cout<< "in main before delete bufMgr"<< std::endl;
+#endif
 
 	delete bufMgr;
+#ifdef DEBUG
+  std::cout<< "in main after delete bufMgr"<< std::endl;
+#endif
 	return 0;
 }
 
@@ -183,7 +196,7 @@ void test1()
 	std::cout << "createRelationForward" << std::endl;
 	createRelationForward();
 	indexTests();
-// 	deleteRelation();
+	deleteRelation();
 }
 
 void test2()
@@ -376,7 +389,6 @@ void createRelationRandom()
 
 void indexTests()
 {
-
 #ifdef DEBUG
   std::cout<<"Starting indexTest!!!!!!!!!!!!!!!\n";
 #endif
@@ -391,7 +403,7 @@ void indexTests()
   else if(testNum == 2)
   {
     doubleTests();
-	try { // TODO
+	try {
 		File::remove(doubleIndexName);
 	} catch(FileNotFoundException e) {
   	}
@@ -415,7 +427,7 @@ void intTests()
   std::cout << "Create a B+ Tree index on the integer field" << std::endl;
   BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
 
-#ifdef DEBUGMORE
+#ifdef DEBUG
 // haiyun
   std::cout<<intIndexName<<std::endl;
 #endif
@@ -442,21 +454,21 @@ int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operato
 
   int numResults = 0;
 	
-	try
-	{
+  try
+  {
 #ifdef DEBUGMORE
-  std::cout<<" start intTest startScan haiyun"<<std::endl;
+    std::cout<<" start intTest startScan haiyun"<<std::endl;
 #endif
-      index->startScan(&lowVal, lowOp, &highVal, highOp);
+    index->startScan(&lowVal, lowOp, &highVal, highOp);
 #ifdef DEBUGMORE
-  std::cout<<" end of intTest startScan haiyun"<<std::endl;
+    std::cout<<" end of intTest startScan haiyun"<<std::endl;
 #endif
-	}
-	catch(NoSuchKeyFoundException e)
-	{
+  }
+  catch(NoSuchKeyFoundException e)
+  {
     std::cout << "No Key Found satisfying the scan criteria." << std::endl;
-		return 0;
-	}
+    return 0;
+  }
 
 	while(1)
 	{
@@ -503,7 +515,9 @@ void doubleTests()
 {
   std::cout << "Create a B+ Tree index on the double field" << std::endl;
   BTreeIndex index(relationName, doubleIndexName, bufMgr, offsetof(tuple,d), DOUBLE);
+#ifdef DEBUG
   std::cout << "FINISHED CREATING INDEX FILE" << std::endl;
+#endif
 
 	// run some tests
 	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
@@ -543,6 +557,10 @@ int doubleScan(BTreeIndex * index, double lowVal, Operator lowOp, double highVal
 		try
 		{
 			index->scanNext(scanRid);
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:552"<<std::endl;
+  std::cout<<" scanRid.page_number is "<< scanRid.page_number<<std::endl;
+#endif
 			bufMgr->readPage(file1, scanRid.page_number, curPage);
 			RECORD myRec = *(reinterpret_cast<const RECORD*>(curPage->getRecord(scanRid).data()));
 			bufMgr->unPinPage(file1, scanRid.page_number, false);
@@ -585,7 +603,13 @@ void stringTests()
   BTreeIndex index(relationName, stringIndexName, bufMgr, offsetof(tuple,s), STRING);
 
 	// run some tests
+#ifdef DEBUGSTRING
+    int out = stringScan(&index,25,GT,40,LT);
+std::cout<<" stringScan(&index,25,GT,40,LT); RESULT is "<<out<<std::endl;
+	checkPassFail(out, 14)
+#else
 	checkPassFail(stringScan(&index,25,GT,40,LT), 14)
+#endif
 	checkPassFail(stringScan(&index,20,GTE,35,LTE), 16)
 	checkPassFail(stringScan(&index,-3,GT,3,LT), 3)
 	checkPassFail(stringScan(&index,996,GT,1001,LT), 4)
@@ -605,6 +629,9 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
   if( highOp == LT ) { std::cout << ")"; } else { std::cout << "]"; }
   std::cout << std::endl;
 
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:613"<<std::endl;
+#endif
   char lowValStr[100];
   sprintf(lowValStr,"%05d string record",lowVal);
   char highValStr[100];
@@ -612,21 +639,33 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
 
   int numResults = 0;
 
-	try
-	{
-  	index->startScan(lowValStr, lowOp, highValStr, highOp);
-	}
-	catch(NoSuchKeyFoundException e)
-	{
-    std::cout << "No Key Found satisfying the scan criteria." << std::endl;
-		return 0;
-	}
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:623"<<std::endl;
+#endif
+    try
+    {
+      index->startScan(lowValStr, lowOp, highValStr, highOp);
+    }
+    catch(NoSuchKeyFoundException e)
+    {
+      std::cout << "No Key Found satisfying the scan criteria." << std::endl;
+      return 0;
+    }
+
+
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:639"<<std::endl;
+#endif
 
 	while(1)
 	{
 		try
 		{
 			index->scanNext(scanRid);
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:648"<<std::endl;
+  std::cout<<" scanRid.page_number is "<< scanRid.page_number<<std::endl;
+#endif
 			bufMgr->readPage(file1, scanRid.page_number, curPage);
 			RECORD myRec = *(reinterpret_cast<const RECORD*>(curPage->getRecord(scanRid).data()));
 			bufMgr->unPinPage(file1, scanRid.page_number, false);
@@ -643,6 +682,9 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
 		}
 		catch(IndexScanCompletedException e)
 		{
+#ifdef DEBUGSTRING
+  std::cout<<" catch IndexScanCompletedException !!!"<<std::endl;
+#endif
 			break;
 		}
 
@@ -773,6 +815,9 @@ void errorTests()
 	}
 
 	deleteRelation();
+#ifdef DEBUG
+  std::cout<<"in errorTests, deleteRelation done"<<std::endl;
+#endif
 }
 
 void deleteRelation()
