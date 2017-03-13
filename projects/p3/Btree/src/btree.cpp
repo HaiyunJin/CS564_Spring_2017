@@ -1,10 +1,10 @@
 
-#define DEBUG
+// #define DEBUG
 // #define DEBUGle // catch invalid record exception
-#define DEBUGLEAF
-#define DEBUGNONLEAF
-#define DEBUGFINDLEAF
-#define DEBUGPRINTTREE
+// #define DEBUGLEAF
+// #define DEBUGNONLEAF
+// #define DEBUGFINDLEAF
+// #define DEBUGPRINTTREE
 
 // #define DEBUGMORE
 // #define DEBUGSCAN
@@ -409,15 +409,6 @@ const PageId BTreeIndex::findLeafNode(PageId pageNo, T &key)
 #endif
 
 //   //TODO Use binary search to speed up
-//   int index = size; // assume last page
-//   for ( int i = 0 ; i < size ; ++i ) {
-//     if ( compare<T>(key, thisPage->keyArray[i]) < 0 )  // ascending
-// //     if ( compare<T>(key, thisPage->keyArray[i]) > 0 )  // descending
-//     {
-//       index = i;
-//       break;
-//     }
-//   }
 
   int index = 0;
 #ifdef DEBUGCOMPAREOK
@@ -458,13 +449,10 @@ const PageId BTreeIndex::findLeafNode(PageId pageNo, T &key)
   int thisPageLevel  = thisPage->level;
   bufMgr->unPinPage(file, pageNo, false);
   if ( thisPageLevel == 0 ) { // next level is non-leaf node
-///////////////// Due to the size of relA is small, this part is not tested //////
-//     PageId nextPageNo = thisPage->pageNoArray[index];
 #ifdef DEBUGFINDLEAF
   std::cout<< "  findLeafNode: next level is still non-leaf, continue search on pageNo " << leafNodeNo/*nextPageNo*/ << std::endl;
 #endif
     leafNodeNo = findLeafNode<T, T_NonLeafNode>(leafNodeNo, key);
-///////////////// end of comments ////////////////////////////////////////////////
   }
 #ifdef DEBUGFINDLEAF
   else {
@@ -541,7 +529,6 @@ const void BTreeIndex::insertLeafNode(PageId pageNo, RIDKeyPair<T> rkpair)
             (void*)(&(thisPage->ridArray[index])), sizeof(RecordId)*(size-index));
 
     // insert the current key
-//     copyKey((void *)(&(thisPage->keyArray[index])), (void *)(&thisKey));
     copyKey(((thisPage->keyArray[index])), (thisKey));
 #ifdef DEBUGCOPY
   std::cout<<"After copy key, the new value of thisPage->keyArray[index] is ";
@@ -779,7 +766,7 @@ const void BTreeIndex::insertNonLeafNode(PageId pageNo, T &key, PageId childPage
       memmove((void*)(&(thisPage->keyArray[index+1])),
               (void*)(&(thisPage->keyArray[index])), sizeof(T)*(size-index));
       memmove((void*)(&(thisPage->pageNoArray[index+2])),
-              (void*)(&(thisPage->pageNoArray[index+1])), sizeof(RecordId)*(size-index));
+              (void*)(&(thisPage->pageNoArray[index+1])), sizeof(PageId)*(size-index));
 
       // insert the current key
       copyKey(thisPage->keyArray[index], thisKey);
@@ -809,14 +796,12 @@ const void BTreeIndex::insertNonLeafNode(PageId pageNo, T &key, PageId childPage
 //// DEBUG
 //       insertLeftNode = true;
 
-
       if ( nodeOccupancy%2 == 0 ) {
         midIndex--;
         insertLeftNode = compare<T>(thisKey, thisPage->keyArray[midIndex])<0;
       }
 
       // possible to insert in the mid, aka, push up further
-
 
 
 #ifdef DEBUGNONLEAF
@@ -959,7 +944,7 @@ const PageId BTreeIndex::splitNonLeafNode(PageId pageNo, int midIndex)
 
 
     T pushUpKey;
-    copyKey((pushUpKey), ((firstPage->keyArray[midIndex])));
+    copyKey(pushUpKey, firstPage->keyArray[midIndex]);
 #ifdef DEBUGCOPY
   std::cout<<"After copy key, the new value of pushUpKey is ";
   std::cout<<pushUpKey<<" and it should be "<<firstPage->keyArray[midIndex]<<std::endl;
@@ -1100,8 +1085,6 @@ std::cout<<std::endl<<" PageId: "<<currNo<<std::endl;
 }
 
 
-
-
 // -----------------------------------------------------------------------------
 // BTreeIndex::startScan
 // -----------------------------------------------------------------------------
@@ -1179,7 +1162,7 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
       // find the first index
       T_LeafNode*  thisPage;
 #ifdef DEBUGSCAN
-  std::cout<<" in startScan, currentPageNum is "<<currentPageNum<<std::endl;
+  std::cout<<" in startScanHelper, currentPageNum is "<<currentPageNum<<std::endl;
 #endif
 
       bufMgr->readPage(file, currentPageNum, currentPageData);
@@ -1196,10 +1179,9 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
   std::cout<<(thisPage->keyArray[size-1])<<"|"<< std::endl;
 #endif
       // if lowValInt is larger than the last entry, it should goto next page
-#ifdef DEBUGCOMPAREOK
-  std::cout<<" ooooooooo call compare at "<<__LINE__<<" oooooooo" <<std::endl;
-#endif
-      if ( compare<T>(lowVal , thisPage->keyArray[size-1]) > 0 ) {
+      // if it is equal, check the lowOPs to decide
+      if ( compare<T>(lowVal , thisPage->keyArray[size-1]) > 0 
+       ||( compare<T>(lowVal , thisPage->keyArray[size-1]) == 0 && lowOp == GT )) {
 #ifdef DEBUGSCAN
   std::cout<<" in startScanHelper,goto next page "<<std::endl;
 #endif
@@ -1212,9 +1194,6 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
 
       // TODO Use binary search to get log(N) time complexity
       nextEntry = 0;
-#ifdef DEBUGCOMPAREOK
-  std::cout<<" ooooooooo call compare at "<<__LINE__<<" oooooooo" <<std::endl;
-#endif
       while ( nextEntry < size && compare<T>(lowVal, thisPage->keyArray[nextEntry]) > 0 ) {
 #ifdef DEBUGSCAN
   std::cout<<"lowVal: |" << lowVal<<"||| thisPage->keyArray[nextEntry]: |";
@@ -1224,8 +1203,8 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
       }
 
 #ifdef DEBUGSCAN
-  std::cout<<" in startScan, currentPageNum is "<<currentPageNum<<std::endl;
-  std::cout<<" in startScan, nextEntry is "<<nextEntry<<std::endl;
+  std::cout<<" in startScanHelper, currentPageNum is "<<currentPageNum<<std::endl;
+  std::cout<<" in startScanHelper, nextEntry is "<<nextEntry<<std::endl;
 #endif
 
 #ifdef DEBUGCOMPAREOK

@@ -111,10 +111,10 @@ class Page {
    * Page size in bytes.  If this is changed, database files created with a
    * different page size value will be unreadable by the resulting binaries.
    */
-  static const std::size_t SIZE = 8192;
+//   static const std::size_t SIZE = 8192;
 
   // haiyun 
-//   static const std::size_t SIZE = 512;
+  static const std::size_t SIZE = 512;
 
 
 

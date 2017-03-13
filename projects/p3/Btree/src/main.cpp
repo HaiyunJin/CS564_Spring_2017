@@ -1,5 +1,5 @@
 
-#define DEBUG
+// #define DEBUG
 // #define DEBUGSTRING
 
 /**
@@ -250,19 +250,19 @@ void test4()
 
 	// Create a relation with tuples valued 0 to relationSize in reverse order and perform index tests 
 	// on attributes of all three types (int, double, string)
-	std::cout << "----------------------" << std::endl;
-	std::cout << "createRelationBackward" << std::endl;
-	createRelationBackward();
-	indexTests2();
-	deleteRelation();
+// 	std::cout << "----------------------" << std::endl;
+// 	std::cout << "createRelationBackward" << std::endl;
+// 	createRelationBackward();
+// 	indexTests2();
+// 	deleteRelation();
 
 	// Create a relation with tuples valued 0 to relationSize in random order and perform index tests 
 	// on attributes of all three types (int, double, string)
-// 	std::cout << "--------------------" << std::endl;
-// 	std::cout << "createRelationRandom" << std::endl;
-// 	createRelationRandom();
-// 	indexTests2();
-// 	deleteRelation();
+	std::cout << "--------------------" << std::endl;
+	std::cout << "createRelationRandom" << std::endl;
+	createRelationRandom();
+	indexTests2();
+	deleteRelation();
 }
 
 void test5()
