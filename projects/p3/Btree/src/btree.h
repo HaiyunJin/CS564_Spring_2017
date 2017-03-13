@@ -179,17 +179,16 @@ struct NonLeafNodeInt{
    * Level of the node in the tree.
    */
 	int level;
-  
-  /**
-   * Number of entries in this node
-   */
-    int size;
 
   /**
    * Parent PageId
    */
     PageId parentPageNo;
-
+  
+  /**
+   * Number of entries in this node
+   */
+    int size;
 
   /**
    * Stores keys.
@@ -213,14 +212,14 @@ struct NonLeafNodeDouble{
 	int level;
 
   /**
-   * Number of entries in this node
-   */
-    int size;
-
-  /**
    * Parent PageId
    */
     PageId parentPageNo;
+
+  /**
+   * Number of entries in this node
+   */
+    int size;
 
   /**
    * Stores keys.
@@ -244,14 +243,15 @@ struct NonLeafNodeString{
 	int level;
 
   /**
+   * Parent PageId
+   * Has to be the second argument in the struct, align with LeafNode
+   */
+    PageId parentPageNo;
+
+  /**
    * Number of entries in this node
    */
     int size;
-
-  /**
-   * Parent PageId
-   */
-    PageId parentPageNo;
 
   /**
    * Stores keys.
@@ -277,6 +277,7 @@ struct LeafNodeInt{
 
   /**
    * Parent PageId
+   * Has to be the second argument in the struct, align with NonLeafNode
    */
     PageId parentPageNo;
 
@@ -529,6 +530,7 @@ class BTreeIndex {
      */
     template<class T, class T_NonLeafNode, class T_LeafNode>
       const PageId splitLeafNode( PageId pageNo);
+    // haiyun, try be the same as splitNonLeafNode
 
 
 
@@ -539,7 +541,7 @@ class BTreeIndex {
      * @param key	 Key to insert, pointer to integer/double/char string
      * @param rid	 Record ID of a record whose entry is getting inserted into the index.
      */
-    template<class T, class T_NonLeafNode>
+    template<class T, class T_NonLeafNode, class T_LeafNode>
       const void insertNonLeafNode(PageId pageNo, T &key, PageId childPageNo);
 //       const void insertNonLeafNode(PageId pageNo, PageKeyPair<T> pkpair);
 
@@ -549,12 +551,15 @@ class BTreeIndex {
      * Split non-leaf node.
      * If necessary, the split will propagate upward until no split is needed.
      * Worst case the root get splitted
+     *
+     *
      * @param pageNo the node to be splitted
+     * @param insertLeftNode after the split, whether new key is left or right
      *
      * @return PageId of the newly created page
      */
-    template<class T, class T_NonLeafNode>
-      const PageId splitNonLeafNode( PageId pageNo);
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const PageId splitNonLeafNode( PageId pageNo, int midIndex);
 
 
 

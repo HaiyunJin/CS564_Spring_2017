@@ -1,9 +1,14 @@
+
+// #define DEBUG
+
 /**
  * @author See Contributors.txt for code contributors and overview of BadgerDB.
  *
  * @section LICENSE
  * Copyright (c) 2012 Database Group, Computer Sciences Department, University of Wisconsin-Madison.
  */
+
+
 
 #include <cassert>
 
@@ -44,6 +49,10 @@ RecordId Page::insertRecord(const std::string& record_data) {
 }
 
 std::string Page::getRecord(const RecordId& record_id) const {
+// haiyun 
+#ifdef DEBUG
+  std::cout<< "call validate at "<<__LINE__  <<std::endl;
+#endif
   validateRecordId(record_id);
   const PageSlot& slot = getSlot(record_id.slot_number);
 	std::string retStr = std::string(data_, DATA_SIZE).substr(slot.item_offset, slot.item_length);
@@ -53,6 +62,10 @@ std::string Page::getRecord(const RecordId& record_id) const {
 
 void Page::updateRecord(const RecordId& record_id,
                         const std::string& record_data) {
+// haiyun 
+#ifdef DEBUG
+  std::cout<< "call validate at "<<__LINE__  <<std::endl;
+#endif
   validateRecordId(record_id);
   const PageSlot* slot = getSlot(record_id.slot_number);
   const std::size_t free_space_after_delete =
@@ -74,6 +87,10 @@ void Page::deleteRecord(const RecordId& record_id) {
 
 void Page::deleteRecord(const RecordId& record_id,
                         const bool allow_slot_compaction) {
+// haiyun 
+#ifdef DEBUG
+  std::cout<< "call validate at "<<__LINE__  <<std::endl;
+#endif
   validateRecordId(record_id);
   PageSlot* slot = getSlot(record_id.slot_number);
 
@@ -201,13 +218,17 @@ void Page::insertRecordInSlot(const SlotId slot_number,
 void Page::validateRecordId(const RecordId& record_id) const {
   if (record_id.page_number != page_number()) {
 // haiyun
+#ifdef DEBUG
 std::cout<<"page number not match"<<std::endl;
+#endif
     throw InvalidRecordException(record_id, page_number());
   }
   const PageSlot& slot = getSlot(record_id.slot_number);
   if (!slot.used) {
 // haiyun
+#ifdef DEBUG
 std::cout<<"slot not used"<<std::endl;
+#endif
     throw InvalidRecordException(record_id, page_number());
   }
 }

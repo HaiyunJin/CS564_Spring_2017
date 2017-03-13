@@ -1,5 +1,5 @@
 
-// #define DEBUG
+#define DEBUG
 // #define DEBUGSTRING
 
 /**
@@ -72,11 +72,15 @@ BufMgr * bufMgr = new BufMgr(100);
 // -----------------------------------------------------------------------------
 
 void createRelationForward();
+void createRelationForward(int size);
 void createRelationBackward();
+void createRelationBackward(int size);
 void createRelationRandom();
+void createRelationRandom(int size);
 void intTests();
 int intScan(BTreeIndex *index, int lowVal, Operator lowOp, int highVal, Operator highOp);
 void indexTests();
+void indexTests2();
 void doubleTests();
 int doubleScan(BTreeIndex *index, double lowVal, Operator lowOp, double highVal, Operator highOp);
 void stringTests();
@@ -84,6 +88,8 @@ int stringScan(BTreeIndex *index, int lowVal, Operator lowOp, int highVal, Opera
 void test1();
 void test2();
 void test3();
+void test4();
+void test5();
 void errorTests();
 void deleteRelation();
 
@@ -168,19 +174,21 @@ int main(int argc, char **argv)
 
 	File::remove(relationName);
 
-	test1();
-	test2();
-	test3();
+// 	test1();
+// 	test2();
+// 	test3();
+    // haiyun add
+    test4(); // test read old file
+//     test5(); // test split non-leaf file
 	errorTests();
-#ifdef DEBUG
-	// haiyun, remove indexfile
-    try {
+	try {
 		File::remove(intIndexName);
 	} catch(FileNotFoundException e) {
   	}
+
+#ifdef DEBUG
   std::cout<< "in main before delete bufMgr"<< std::endl;
 #endif
-
 	delete bufMgr;
 #ifdef DEBUG
   std::cout<< "in main after delete bufMgr"<< std::endl;
@@ -221,11 +229,91 @@ void test3()
 	deleteRelation();
 }
 
+
+void test4()
+{
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "----------------------" << std::endl;
+	std::cout << "- test read old file -" << std::endl;
+	std::cout << "----------------------" << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	// Create a relation with tuples valued 0 to relationSize and perform index tests 
+	// on attributes of all three types (int, double, string)
+// 	std::cout << "---------------------" << std::endl;
+// 	std::cout << "createRelationForward" << std::endl;
+// 	createRelationForward();
+// 	indexTests2();
+// 	deleteRelation();
+
+	// Create a relation with tuples valued 0 to relationSize in reverse order and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "----------------------" << std::endl;
+	std::cout << "createRelationBackward" << std::endl;
+	createRelationBackward();
+	indexTests2();
+	deleteRelation();
+
+	// Create a relation with tuples valued 0 to relationSize in random order and perform index tests 
+	// on attributes of all three types (int, double, string)
+// 	std::cout << "--------------------" << std::endl;
+// 	std::cout << "createRelationRandom" << std::endl;
+// 	createRelationRandom();
+// 	indexTests2();
+// 	deleteRelation();
+}
+
+void test5()
+{
+
+    const int size = 130000; // 340*340
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "----------------------" << std::endl;
+	std::cout << "- test split non-leaf node -" << std::endl;
+	std::cout << "----------------------" << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	// Create a relation with tuples valued 0 to relationSize and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "---------------------" << std::endl;
+	std::cout << "createRelationForward" << std::endl;
+	createRelationForward(size);
+	indexTests();
+	deleteRelation();
+
+	// Create a relation with tuples valued 0 to relationSize in reverse order and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "----------------------" << std::endl;
+	std::cout << "createRelationBackward" << std::endl;
+	createRelationBackward(size);
+	indexTests();
+	deleteRelation();
+
+	// Create a relation with tuples valued 0 to relationSize in random order and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "--------------------" << std::endl;
+	std::cout << "createRelationRandom" << std::endl;
+	createRelationRandom(size);
+	indexTests();
+	deleteRelation();
+}
+
+
 // -----------------------------------------------------------------------------
 // createRelationForward
 // -----------------------------------------------------------------------------
 
 void createRelationForward()
+{
+    createRelationForward(relationSize);
+}
+
+void createRelationForward(int size)
 {
 	std::vector<RecordId> ridVec;
   // destroy any old copies of relation file
@@ -245,7 +333,7 @@ void createRelationForward()
   Page new_page = file1->allocatePage(new_page_number);
 
   // Insert a bunch of tuples into the relation.
-  for(int i = 0; i < relationSize; i++ )
+  for(int i = 0; i < size; i++ )
 	{
     sprintf(record1.s, "%05d string record", i);
     record1.i = i;
@@ -270,11 +358,17 @@ void createRelationForward()
 	file1->writePage(new_page_number, new_page);
 }
 
+
 // -----------------------------------------------------------------------------
 // createRelationBackward
 // -----------------------------------------------------------------------------
 
 void createRelationBackward()
+{
+  createRelationBackward(relationSize);
+}
+
+void createRelationBackward(int size)
 {
   // destroy any old copies of relation file
 	try
@@ -292,7 +386,7 @@ void createRelationBackward()
   Page new_page = file1->allocatePage(new_page_number);
 
   // Insert a bunch of tuples into the relation.
-  for(int i = relationSize - 1; i >= 0; i-- )
+  for(int i = size - 1; i >= 0; i-- )
 	{
     sprintf(record1.s, "%05d string record", i);
     record1.i = i;
@@ -318,11 +412,18 @@ void createRelationBackward()
 	file1->writePage(new_page_number, new_page);
 }
 
+
+
 // -----------------------------------------------------------------------------
 // createRelationRandom
 // -----------------------------------------------------------------------------
 
 void createRelationRandom()
+{
+  createRelationRandom(relationSize);
+}
+
+void createRelationRandom(int size)
 {
   // destroy any old copies of relation file
 	try
@@ -341,8 +442,8 @@ void createRelationRandom()
 
   // insert records in random order
 
-  std::vector<int> intvec(relationSize);
-  for( int i = 0; i < relationSize; i++ )
+  std::vector<int> intvec(size);
+  for( int i = 0; i < size; i++ )
   {
     intvec[i] = i;
   }
@@ -350,9 +451,8 @@ void createRelationRandom()
   long pos;
   int val;
 	int i = 0;
-  while( i < relationSize )
-  {
-    pos = random() % (relationSize-i);
+  while( i < size ) {
+    pos = random() % (size-i);
     val = intvec[pos];
     sprintf(record1.s, "%05d string record", val);
     record1.i = val;
@@ -360,24 +460,21 @@ void createRelationRandom()
 
     std::string new_data(reinterpret_cast<char*>(&record1), sizeof(RECORD));
 
-		while(1)
-		{
-			try
-			{
-    		new_page.insertRecord(new_data);
-				break;
-			}
-			catch(InsufficientSpaceException e)
-			{
-      	file1->writePage(new_page_number, new_page);
-  			new_page = file1->allocatePage(new_page_number);
-			}
-		}
+    while(1) {
+      try {
+        new_page.insertRecord(new_data);
+        break;
+      } catch(InsufficientSpaceException e)
+      {
+        file1->writePage(new_page_number, new_page);
+        new_page = file1->allocatePage(new_page_number);
+      }
+    }
 
-		int temp = intvec[relationSize-1-i];
-		intvec[relationSize-1-i] = intvec[pos];
-		intvec[pos] = temp;
-		i++;
+    int temp = intvec[size-1-i];
+    intvec[size-1-i] = intvec[pos];
+    intvec[pos] = temp;
+    i++;
   }
   
 	file1->writePage(new_page_number, new_page);
@@ -418,6 +515,49 @@ void indexTests()
   }
 }
 
+
+
+// -----------------------------------------------------------------------------
+// indexTests
+// -----------------------------------------------------------------------------
+
+void indexTests2()
+{
+#ifdef DEBUG
+  std::cout<<"Starting indexTest2!!!!!!!!!!!!!!!\n";
+#endif
+  if(testNum == 1)
+  {
+    intTests();
+    intTests();
+	try {
+		File::remove(intIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+  }
+  else if(testNum == 2)
+  {
+    doubleTests();
+    doubleTests();
+	try {
+		File::remove(doubleIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+  }
+  else if(testNum == 3)
+  {
+    stringTests();
+    stringTests();
+	try {
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+  }
+}
+
+
+
+
 // -----------------------------------------------------------------------------
 // intTests
 // -----------------------------------------------------------------------------
@@ -440,6 +580,7 @@ void intTests()
 	checkPassFail(intScan(&index,300,GT,400,LT), 99)
 	checkPassFail(intScan(&index,3000,GTE,4000,LT), 1000)
 }
+
 
 int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operator highOp)
 {
@@ -475,7 +616,14 @@ int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operato
 		try
 		{
 			index->scanNext(scanRid);
+#ifdef DEBUG
+  std::cout<<" start intScan.cpp:"<<__LINE__<<std::endl;
+  std::cout<<" scanRid.page_number is "<< scanRid.page_number<<std::endl;
+#endif
 			bufMgr->readPage(file1, scanRid.page_number, curPage);
+#ifdef DEBUG
+    std::cout<<" cal Page::getRecord at "<<__LINE__<<std::endl;
+#endif
 			RECORD myRec = *(reinterpret_cast<const RECORD*>(curPage->getRecord(scanRid).data()));
 			bufMgr->unPinPage(file1, scanRid.page_number, false);
 
@@ -558,7 +706,7 @@ int doubleScan(BTreeIndex * index, double lowVal, Operator lowOp, double highVal
 		{
 			index->scanNext(scanRid);
 #ifdef DEBUG
-  std::cout<<" start stringScan.cpp:552"<<std::endl;
+  std::cout<<" start doubleScan.cpp:"<<__LINE__<<std::endl;
   std::cout<<" scanRid.page_number is "<< scanRid.page_number<<std::endl;
 #endif
 			bufMgr->readPage(file1, scanRid.page_number, curPage);
@@ -630,7 +778,7 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
   std::cout << std::endl;
 
 #ifdef DEBUG
-  std::cout<<" start stringScan.cpp:613"<<std::endl;
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
 #endif
   char lowValStr[100];
   sprintf(lowValStr,"%05d string record",lowVal);
@@ -640,7 +788,7 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
   int numResults = 0;
 
 #ifdef DEBUG
-  std::cout<<" start stringScan.cpp:623"<<std::endl;
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
 #endif
     try
     {
@@ -654,7 +802,7 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
 
 
 #ifdef DEBUG
-  std::cout<<" start stringScan.cpp:639"<<std::endl;
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
 #endif
 
 	while(1)
@@ -663,7 +811,7 @@ int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Oper
 		{
 			index->scanNext(scanRid);
 #ifdef DEBUG
-  std::cout<<" start stringScan.cpp:648"<<std::endl;
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
   std::cout<<" scanRid.page_number is "<< scanRid.page_number<<std::endl;
 #endif
 			bufMgr->readPage(file1, scanRid.page_number, curPage);
@@ -815,9 +963,19 @@ void errorTests()
 	}
 
 	deleteRelation();
-#ifdef DEBUG
-  std::cout<<"in errorTests, deleteRelation done"<<std::endl;
-#endif
+// #ifdef DEBUG // why I can't remove the file here?
+//     // haiyun, remove indexfile
+//     std::cout<<"in errorTests, deleteRelation done"<<std::endl;
+//     // close the file first
+//     index.~BTreeIndex();
+//     std::cout<<"in errorTests, close index file done"<<std::endl;
+//     try {
+//       // remove the file from disk
+//       File::remove(intIndexName);
+//       std::cout<<"in errorTests, index file removed"<<std::endl;
+//     } catch ( FileNotFoundException e ) {
+//     }
+// #endif
 }
 
 void deleteRelation()

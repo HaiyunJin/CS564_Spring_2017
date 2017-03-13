@@ -70,6 +70,13 @@ Some questions here:
 2017/03/11
 
 Question here:
-  Do not work with existing relA.0
+  1. Do not work with existing relA.0
+  2. Add a test that test with existing relA.0
+
+
+New Testcase add:
+  1. test4(). Testing on reading old index file. PASSED
+  2. test5(). Test split non-leaf node.  ONLY work with forward insertion
+
 
 

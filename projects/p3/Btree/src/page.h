@@ -113,6 +113,11 @@ class Page {
    */
   static const std::size_t SIZE = 8192;
 
+  // haiyun 
+//   static const std::size_t SIZE = 512;
+
+
+
   /**
    * Size of page free space area in bytes.
    */
