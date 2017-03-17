@@ -24,6 +24,10 @@
 #include "exceptions/scan_not_initialized_exception.h"
 #include "exceptions/end_of_file_exception.h"
 
+// #include "exceptions/file_open_exception.h"
+
+
+
 #define checkPassFail(a, b)	                                            \
 {                                       								\
 	if(a == b)											                \
@@ -77,19 +81,26 @@ void createRelationBackward();
 void createRelationBackward(int size);
 void createRelationRandom();
 void createRelationRandom(int size);
+void createRelationLarge(std::string mode, int size);
 void intTests();
+void intTestsnonleaf();
 int intScan(BTreeIndex *index, int lowVal, Operator lowOp, int highVal, Operator highOp);
 void indexTests();
 void indexTests2();
 void doubleTests();
+void doubleTestsnonleaf();
 int doubleScan(BTreeIndex *index, double lowVal, Operator lowOp, double highVal, Operator highOp);
 void stringTests();
+void stringTestsnonleaf();
+int stringScanLarge(BTreeIndex *index, int lowVal, Operator lowOp, int highVal, Operator highOp);
 int stringScan(BTreeIndex *index, int lowVal, Operator lowOp, int highVal, Operator highOp);
 void test1();
 void test2();
 void test3();
 void test4();
 void test5();
+void test55();
+void test6();
 void errorTests();
 void deleteRelation();
 
@@ -177,14 +188,18 @@ int main(int argc, char **argv)
 // 	test1();
 // 	test2();
 // 	test3();
-    // haiyun add
-    test4(); // test read old file
-//     test5(); // test split non-leaf file
-	errorTests();
+// 	errorTests();
 	try {
 		File::remove(intIndexName);
 	} catch(FileNotFoundException e) {
   	}
+
+    // haiyun add
+//     test4(); // test read old file
+//     test5(); // test split non-leaf file, small page
+    test55(); // test split non-leaf file, large entries
+    test6(); // test read existing but bad file
+
 
 #ifdef DEBUG
   std::cout<< "in main before delete bufMgr"<< std::endl;
@@ -242,19 +257,19 @@ void test4()
 
 	// Create a relation with tuples valued 0 to relationSize and perform index tests 
 	// on attributes of all three types (int, double, string)
-// 	std::cout << "---------------------" << std::endl;
-// 	std::cout << "createRelationForward" << std::endl;
-// 	createRelationForward();
-// 	indexTests2();
-// 	deleteRelation();
+	std::cout << "---------------------" << std::endl;
+	std::cout << "createRelationForward" << std::endl;
+	createRelationForward();
+	indexTests2();
+	deleteRelation();
 
 	// Create a relation with tuples valued 0 to relationSize in reverse order and perform index tests 
 	// on attributes of all three types (int, double, string)
-// 	std::cout << "----------------------" << std::endl;
-// 	std::cout << "createRelationBackward" << std::endl;
-// 	createRelationBackward();
-// 	indexTests2();
-// 	deleteRelation();
+	std::cout << "----------------------" << std::endl;
+	std::cout << "createRelationBackward" << std::endl;
+	createRelationBackward();
+	indexTests2();
+	deleteRelation();
 
 	// Create a relation with tuples valued 0 to relationSize in random order and perform index tests 
 	// on attributes of all three types (int, double, string)
@@ -302,6 +317,291 @@ void test5()
 	indexTests();
 	deleteRelation();
 }
+
+void test55()
+{
+
+    const int size = 500000; // 340*340*2
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "---------------------------------------" << std::endl;
+	std::cout << "- test split non-leaf node scan large -" << std::endl;
+	std::cout << "---------------------------------------" << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	// Create a relation with tuples valued 0 to relationSize and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "---------------------" << std::endl;
+	std::cout << "createRelationForward" << std::endl;
+	createRelationLarge("forward", size);
+
+    intTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+    doubleTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+    stringTestsnonleaf();
+	try {
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+		File::remove(intIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+	deleteRelation();
+
+	// Create a relation with tuples valued 0 to relationSize in reverse order and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "----------------------" << std::endl;
+	std::cout << "createRelationBackward" << std::endl;
+	createRelationLarge("backward", size);
+    intTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+    doubleTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+    stringTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+// 	indexTests();
+	deleteRelation();
+
+	// Create a relation with tuples valued 0 to relationSize in random order and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "--------------------" << std::endl;
+	std::cout << "createRelationRandom" << std::endl;
+	createRelationLarge("random", size);
+    intTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+    doubleTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+    stringTestsnonleaf();
+	try {
+		File::remove(intIndexName);
+		File::remove(doubleIndexName);
+		File::remove(stringIndexName);
+	} catch(FileNotFoundException e) {
+  	}
+	deleteRelation();
+}
+
+
+void test6()
+{
+
+
+	// Create a relation with tuples valued 0 to relationSize and perform index tests 
+	// on attributes of all three types (int, double, string)
+	std::cout << "---------------------" << std::endl;
+	createRelationForward();
+    
+//     try
+    {
+      std::cout << "  Treat as integer   " << std::endl;
+      BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
+    }
+    {
+      std::cout << "  Treat as double   " << std::endl;
+      BTreeIndex index2(relationName, doubleIndexName, bufMgr, offsetof(tuple,i), DOUBLE);
+
+    }
+    try {
+        File::remove(intIndexName);
+        File::remove(doubleIndexName);
+    } catch(FileNotFoundException e) {
+    }
+    deleteRelation();
+
+
+}
+
+
+
+
+// -----------------------------------------------------------------------------
+// createRelationLarge
+// -----------------------------------------------------------------------------
+
+void createRelationLarge( std::string mode, int size )
+{
+
+  if ( mode.compare("forward") == 0 ) {
+
+	std::vector<RecordId> ridVec;
+  // destroy any old copies of relation file
+	try
+	{
+		File::remove(relationName);
+	}
+	catch(FileNotFoundException e)
+	{
+	}
+
+  file1 = new PageFile(relationName, true);
+
+  // initialize all of record1.s to keep purify happy
+  memset(record1.s, ' ', sizeof(record1.s));
+  PageId new_page_number;
+  Page new_page = file1->allocatePage(new_page_number);
+
+  // Insert a bunch of tuples into the relation.
+  for(int i = 0; i < size; i++ )
+	{
+    sprintf(record1.s, "%010d string record", i);
+    record1.i = i;
+    record1.d = (double)i;
+    std::string new_data(reinterpret_cast<char*>(&record1), sizeof(record1));
+
+		while(1)
+		{
+			try
+			{
+    		new_page.insertRecord(new_data);
+				break;
+			}
+            catch(InsufficientSpaceException e)
+            {
+              file1->writePage(new_page_number, new_page);
+              new_page = file1->allocatePage(new_page_number);
+            }
+		}
+  }
+
+	file1->writePage(new_page_number, new_page);
+
+  } else if ( mode.compare("backward") == 0 ) {
+  // destroy any old copies of relation file
+	try
+	{
+		File::remove(relationName);
+	}
+	catch(FileNotFoundException e)
+	{
+	}
+  file1 = new PageFile(relationName, true);
+
+  // initialize all of record1.s to keep purify happy
+  memset(record1.s, ' ', sizeof(record1.s));
+	PageId new_page_number;
+  Page new_page = file1->allocatePage(new_page_number);
+
+  // Insert a bunch of tuples into the relation.
+  for(int i = size - 1; i >= 0; i-- )
+	{
+    sprintf(record1.s, "%010d string record", i);
+    record1.i = i;
+    record1.d = i;
+
+    std::string new_data(reinterpret_cast<char*>(&record1), sizeof(RECORD));
+
+		while(1)
+		{
+			try
+			{
+    		new_page.insertRecord(new_data);
+				break;
+			}
+			catch(InsufficientSpaceException e)
+			{
+				file1->writePage(new_page_number, new_page);
+  			new_page = file1->allocatePage(new_page_number);
+			}
+		}
+  }
+
+	file1->writePage(new_page_number, new_page);
+
+  } else if ( mode.compare("random") == 0 ) {
+  // destroy any old copies of relation file
+	try
+	{
+		File::remove(relationName);
+	}
+	catch(FileNotFoundException e)
+	{
+	}
+  file1 = new PageFile(relationName, true);
+
+  // initialize all of record1.s to keep purify happy
+  memset(record1.s, ' ', sizeof(record1.s));
+	PageId new_page_number;
+  Page new_page = file1->allocatePage(new_page_number);
+
+  // insert records in random order
+
+  std::vector<int> intvec(size);
+  for( int i = 0; i < size; i++ )
+  {
+    intvec[i] = i;
+  }
+
+  long pos;
+  int val;
+	int i = 0;
+  while( i < size ) {
+    pos = random() % (size-i);
+    val = intvec[pos];
+    sprintf(record1.s, "%010d string record", val);
+    record1.i = val;
+    record1.d = val;
+
+    std::string new_data(reinterpret_cast<char*>(&record1), sizeof(RECORD));
+
+    while(1) {
+      try {
+        new_page.insertRecord(new_data);
+        break;
+      } catch(InsufficientSpaceException e)
+      {
+        file1->writePage(new_page_number, new_page);
+        new_page = file1->allocatePage(new_page_number);
+      }
+    }
+
+    int temp = intvec[size-1-i];
+    intvec[size-1-i] = intvec[pos];
+    intvec[pos] = temp;
+    i++;
+  }
+  
+	file1->writePage(new_page_number, new_page);
+  }
+
+}
+
+
+
 
 
 // -----------------------------------------------------------------------------
@@ -518,7 +818,7 @@ void indexTests()
 
 
 // -----------------------------------------------------------------------------
-// indexTests
+// indexTests2
 // -----------------------------------------------------------------------------
 
 void indexTests2()
@@ -580,6 +880,33 @@ void intTests()
 	checkPassFail(intScan(&index,300,GT,400,LT), 99)
 	checkPassFail(intScan(&index,3000,GTE,4000,LT), 1000)
 }
+
+
+// -----------------------------------------------------------------------------
+// intTests customized
+// -----------------------------------------------------------------------------
+
+void intTestsnonleaf()
+{
+  std::cout << "Create a B+ Tree index on the integer field" << std::endl;
+  BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
+
+#ifdef DEBUG
+// haiyun
+  std::cout<<intIndexName<<std::endl;
+#endif
+	// run some tests
+	checkPassFail(intScan(&index,25,GT,40,LT), 14)
+// 	checkPassFail(intScan(&index,20,GTE,35,LTE), 16)
+// 	checkPassFail(intScan(&index,-3,GT,3,LT), 3)
+// 	checkPassFail(intScan(&index,996,GT,1001,LT), 4)
+// 	checkPassFail(intScan(&index,0,GT,1,LT), 0)
+// 	checkPassFail(intScan(&index,300,GT,400,LT), 99)
+	checkPassFail(intScan(&index,3000,GTE,400000,LT), 397000)
+}
+
+
+
 
 
 int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operator highOp)
@@ -653,6 +980,24 @@ int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operato
   std::cout << std::endl;
 
 	return numResults;
+}
+
+void doubleTestsnonleaf()
+{
+  std::cout << "Create a B+ Tree index on the double field" << std::endl;
+  BTreeIndex index(relationName, doubleIndexName, bufMgr, offsetof(tuple,d), DOUBLE);
+#ifdef DEBUG
+  std::cout << "FINISHED CREATING INDEX FILE" << std::endl;
+#endif
+
+	// run some tests
+	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
+// 	checkPassFail(doubleScan(&index,20,GTE,35,LTE), 16)
+// 	checkPassFail(doubleScan(&index,-3,GT,3,LT), 3)
+// 	checkPassFail(doubleScan(&index,996,GT,1001,LT), 4)
+// 	checkPassFail(doubleScan(&index,0,GT,1,LT), 0)
+// 	checkPassFail(doubleScan(&index,300,GT,400,LT), 99)
+	checkPassFail(doubleScan(&index,3000,GTE,400000,LT), 397000)
 }
 
 // -----------------------------------------------------------------------------
@@ -741,6 +1086,34 @@ int doubleScan(BTreeIndex * index, double lowVal, Operator lowOp, double highVal
 	return numResults;
 }
 
+
+// -----------------------------------------------------------------------------
+// stringTestsnonleaf
+// -----------------------------------------------------------------------------
+
+void stringTestsnonleaf()
+{
+  std::cout << "Create a B+ Tree index on the string field" << std::endl;
+  BTreeIndex index(relationName, stringIndexName, bufMgr, offsetof(tuple,s), STRING);
+
+	// run some tests
+#ifdef DEBUGSTRING
+    int out = stringScan(&index,25,GT,40,LT);
+std::cout<<" stringScan(&index,25,GT,40,LT); RESULT is "<<out<<std::endl;
+	checkPassFail(out, 14)
+#else
+	checkPassFail(stringScanLarge(&index,25,GT,40,LT), 14)
+#endif
+// 	checkPassFail(stringScanLarge(&index,20,GTE,35,LTE), 16)
+// 	checkPassFail(stringScanLarge(&index,-3,GT,3,LT), 3)
+// 	checkPassFail(stringScanLarge(&index,996,GT,1001,LT), 4)
+// 	checkPassFail(stringScanLarge(&index,0,GT,1,LT), 0)
+// 	checkPassFail(stringScanLarge(&index,300,GT,400,LT), 99)
+// 	checkPassFail(stringScanLarge(&index,3000,GTE,4000,LT), 1000)
+	checkPassFail(stringScanLarge(&index,3000,GTE,400000,LT), 397000)
+}
+
+
 // -----------------------------------------------------------------------------
 // stringTests
 // -----------------------------------------------------------------------------
@@ -765,6 +1138,92 @@ std::cout<<" stringScan(&index,25,GT,40,LT); RESULT is "<<out<<std::endl;
 	checkPassFail(stringScan(&index,300,GT,400,LT), 99)
 	checkPassFail(stringScan(&index,3000,GTE,4000,LT), 1000)
 }
+
+
+int stringScanLarge(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operator highOp)
+{
+  RecordId scanRid;
+	Page *curPage;
+
+  std::cout << "Scan for ";
+  if( lowOp == GT ) { std::cout << "("; } else { std::cout << "["; }
+  std::cout << lowVal << "," << highVal;
+  if( highOp == LT ) { std::cout << ")"; } else { std::cout << "]"; }
+  std::cout << std::endl;
+
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
+#endif
+
+  char lowValStr[100];
+  sprintf(lowValStr, "%010d string record",lowVal);
+  char highValStr[100];
+  sprintf(highValStr,"%010d string record",highVal);
+
+  int numResults = 0;
+
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
+#endif
+    try
+    {
+      index->startScan(lowValStr, lowOp, highValStr, highOp);
+    }
+    catch(NoSuchKeyFoundException e)
+    {
+      std::cout << "No Key Found satisfying the scan criteria." << std::endl;
+      return 0;
+    }
+
+
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
+#endif
+
+	while(1)
+	{
+		try
+		{
+			index->scanNext(scanRid);
+#ifdef DEBUG
+  std::cout<<" start stringScan.cpp:"<<__LINE__<<std::endl;
+  std::cout<<" scanRid.page_number is "<< scanRid.page_number<<std::endl;
+#endif
+			bufMgr->readPage(file1, scanRid.page_number, curPage);
+			RECORD myRec = *(reinterpret_cast<const RECORD*>(curPage->getRecord(scanRid).data()));
+			bufMgr->unPinPage(file1, scanRid.page_number, false);
+
+			if( numResults < 5 )
+			{
+				std::cout << "rid:" << scanRid.page_number << "," << scanRid.slot_number;
+				std::cout << " -->:" << myRec.i << ":" << myRec.d << ":" << myRec.s << ":" <<std::endl;
+			}
+			else if( numResults == 5 )
+			{
+				std::cout << "..." << std::endl;
+			}
+		}
+		catch(IndexScanCompletedException e)
+		{
+#ifdef DEBUGSTRING
+  std::cout<<" catch IndexScanCompletedException !!!"<<std::endl;
+#endif
+			break;
+		}
+
+		numResults++;
+	}
+
+  if( numResults >= 5 )
+  {
+    std::cout << "Number of results: " << numResults << std::endl;
+  }
+  index->endScan();
+  std::cout << std::endl;
+
+	return numResults;
+}
+
 
 int stringScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operator highOp)
 {

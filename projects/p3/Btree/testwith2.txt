@@ -1,0 +1,575 @@
+leaf size:511 non-leaf size:680
+Extracted : 0
+Extracted : 1
+Extracted : 2
+Extracted : 3
+Extracted : 4
+Extracted : 5
+Extracted : 6
+Extracted : 7
+Extracted : 8
+Extracted : 9
+Extracted : 10
+Extracted : 11
+Extracted : 12
+Extracted : 13
+Extracted : 14
+Extracted : 15
+Extracted : 16
+Extracted : 17
+Extracted : 18
+Extracted : 19
+Read all records
+---------------------
+createRelationForward
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:1,27 -->:26:26:00026 string record:
+rid:1,28 -->:27:27:00027 string record:
+rid:1,29 -->:28:28:00028 string record:
+rid:1,30 -->:29:29:00029 string record:
+rid:1,31 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:1,21 -->:20:20:00020 string record:
+rid:1,22 -->:21:21:00021 string record:
+rid:1,23 -->:22:22:00022 string record:
+rid:1,24 -->:23:23:00023 string record:
+rid:1,25 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:1,1 -->:0:0:00000 string record:
+rid:1,2 -->:1:1:00001 string record:
+rid:1,3 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:11,48 -->:997:997:00997 string record:
+rid:11,49 -->:998:998:00998 string record:
+rid:11,50 -->:999:999:00999 string record:
+rid:11,51 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:4,17 -->:301:301:00301 string record:
+rid:4,18 -->:302:302:00302 string record:
+rid:4,19 -->:303:303:00303 string record:
+rid:4,20 -->:304:304:00304 string record:
+rid:4,21 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:32,56 -->:3000:3000:03000 string record:
+rid:32,57 -->:3001:3001:03001 string record:
+rid:32,58 -->:3002:3002:03002 string record:
+rid:32,59 -->:3003:3003:03003 string record:
+rid:32,60 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+----------------------
+createRelationBackward
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:53,34 -->:26:26:00026 string record:
+rid:53,33 -->:27:27:00027 string record:
+rid:53,32 -->:28:28:00028 string record:
+rid:53,31 -->:29:29:00029 string record:
+rid:53,30 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:53,40 -->:20:20:00020 string record:
+rid:53,39 -->:21:21:00021 string record:
+rid:53,38 -->:22:22:00022 string record:
+rid:53,37 -->:23:23:00023 string record:
+rid:53,36 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:53,60 -->:0:0:00000 string record:
+rid:53,59 -->:1:1:00001 string record:
+rid:53,58 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:43,13 -->:997:997:00997 string record:
+rid:43,12 -->:998:998:00998 string record:
+rid:43,11 -->:999:999:00999 string record:
+rid:43,10 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:50,44 -->:301:301:00301 string record:
+rid:50,43 -->:302:302:00302 string record:
+rid:50,42 -->:303:303:00303 string record:
+rid:50,41 -->:304:304:00304 string record:
+rid:50,40 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:22,5 -->:3000:3000:03000 string record:
+rid:22,4 -->:3001:3001:03001 string record:
+rid:22,3 -->:3002:3002:03002 string record:
+rid:22,2 -->:3003:3003:03003 string record:
+rid:22,1 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+--------------------
+createRelationRandom
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:25,28 -->:26:26:00026 string record:
+rid:41,35 -->:27:27:00027 string record:
+rid:38,25 -->:28:28:00028 string record:
+rid:36,84 -->:29:29:00029 string record:
+rid:47,7 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:32,95 -->:20:20:00020 string record:
+rid:27,44 -->:21:21:00021 string record:
+rid:53,1 -->:22:22:00022 string record:
+rid:26,57 -->:23:23:00023 string record:
+rid:33,17 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:45,37 -->:0:0:00000 string record:
+rid:13,25 -->:1:1:00001 string record:
+rid:20,5 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:49,25 -->:997:997:00997 string record:
+rid:27,1 -->:998:998:00998 string record:
+rid:4,89 -->:999:999:00999 string record:
+rid:18,29 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:18,64 -->:301:301:00301 string record:
+rid:31,24 -->:302:302:00302 string record:
+rid:53,51 -->:303:303:00303 string record:
+rid:42,76 -->:304:304:00304 string record:
+rid:10,29 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:3,81 -->:3000:3000:03000 string record:
+rid:45,93 -->:3001:3001:03001 string record:
+rid:24,54 -->:3002:3002:03002 string record:
+rid:49,93 -->:3003:3003:03003 string record:
+rid:9,77 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+Error handling tests
+--------------------
+Call endScan before startScan
+ScanNotInitialized Test 1 Passed.
+Call scanNext before startScan
+No scan started
+ScanNotInitialized Test 2 Passed.
+Scan with bad lowOp
+BadOpcodesException Test 1 Passed.
+Scan with bad highOp
+BadOpcodesException Test 2 Passed.
+Scan with bad range
+BadScanrangeException Test 1 Passed.
+
+
+----------------------
+- test read old file -
+----------------------
+
+
+--------------------
+createRelationRandom
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:40,58 -->:26:26:00026 string record:
+rid:35,25 -->:27:27:00027 string record:
+rid:37,58 -->:28:28:00028 string record:
+rid:23,29 -->:29:29:00029 string record:
+rid:18,58 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:24,42 -->:20:20:00020 string record:
+rid:3,6 -->:21:21:00021 string record:
+rid:5,51 -->:22:22:00022 string record:
+rid:25,25 -->:23:23:00023 string record:
+rid:14,26 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:51,43 -->:0:0:00000 string record:
+rid:45,33 -->:1:1:00001 string record:
+rid:9,5 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:11,1 -->:997:997:00997 string record:
+rid:2,5 -->:998:998:00998 string record:
+rid:38,94 -->:999:999:00999 string record:
+rid:14,75 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:5,23 -->:301:301:00301 string record:
+rid:33,54 -->:302:302:00302 string record:
+rid:22,52 -->:303:303:00303 string record:
+rid:46,1 -->:304:304:00304 string record:
+rid:11,20 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:26,5 -->:3000:3000:03000 string record:
+rid:49,9 -->:3001:3001:03001 string record:
+rid:28,47 -->:3002:3002:03002 string record:
+rid:19,45 -->:3003:3003:03003 string record:
+rid:15,14 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:40,58 -->:26:26:00026 string record:
+rid:35,25 -->:27:27:00027 string record:
+rid:37,58 -->:28:28:00028 string record:
+rid:23,29 -->:29:29:00029 string record:
+rid:18,58 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:24,42 -->:20:20:00020 string record:
+rid:3,6 -->:21:21:00021 string record:
+rid:5,51 -->:22:22:00022 string record:
+rid:25,25 -->:23:23:00023 string record:
+rid:14,26 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:51,43 -->:0:0:00000 string record:
+rid:45,33 -->:1:1:00001 string record:
+rid:9,5 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:11,1 -->:997:997:00997 string record:
+rid:2,5 -->:998:998:00998 string record:
+rid:38,94 -->:999:999:00999 string record:
+rid:14,75 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:5,23 -->:301:301:00301 string record:
+rid:33,54 -->:302:302:00302 string record:
+rid:22,52 -->:303:303:00303 string record:
+rid:46,1 -->:304:304:00304 string record:
+rid:11,20 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:26,5 -->:3000:3000:03000 string record:
+rid:49,9 -->:3001:3001:03001 string record:
+rid:28,47 -->:3002:3002:03002 string record:
+rid:19,45 -->:3003:3003:03003 string record:
+rid:15,14 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+
+
+----------------------
+- test split non-leaf node -
+----------------------
+
+
+---------------------
+createRelationForward
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:1,27 -->:26:26:00026 string record:
+rid:1,28 -->:27:27:00027 string record:
+rid:1,29 -->:28:28:00028 string record:
+rid:1,30 -->:29:29:00029 string record:
+rid:1,31 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:1,21 -->:20:20:00020 string record:
+rid:1,22 -->:21:21:00021 string record:
+rid:1,23 -->:22:22:00022 string record:
+rid:1,24 -->:23:23:00023 string record:
+rid:1,25 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:1,1 -->:0:0:00000 string record:
+rid:1,2 -->:1:1:00001 string record:
+rid:1,3 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:11,48 -->:997:997:00997 string record:
+rid:11,49 -->:998:998:00998 string record:
+rid:11,50 -->:999:999:00999 string record:
+rid:11,51 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:4,17 -->:301:301:00301 string record:
+rid:4,18 -->:302:302:00302 string record:
+rid:4,19 -->:303:303:00303 string record:
+rid:4,20 -->:304:304:00304 string record:
+rid:4,21 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:32,56 -->:3000:3000:03000 string record:
+rid:32,57 -->:3001:3001:03001 string record:
+rid:32,58 -->:3002:3002:03002 string record:
+rid:32,59 -->:3003:3003:03003 string record:
+rid:32,60 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+----------------------
+createRelationBackward
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:1369,14 -->:26:26:00026 string record:
+rid:1369,13 -->:27:27:00027 string record:
+rid:1369,12 -->:28:28:00028 string record:
+rid:1369,11 -->:29:29:00029 string record:
+rid:1369,10 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:1369,20 -->:20:20:00020 string record:
+rid:1369,19 -->:21:21:00021 string record:
+rid:1369,18 -->:22:22:00022 string record:
+rid:1369,17 -->:23:23:00023 string record:
+rid:1369,16 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:1369,40 -->:0:0:00000 string record:
+rid:1369,39 -->:1:1:00001 string record:
+rid:1369,38 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:1358,88 -->:997:997:00997 string record:
+rid:1358,87 -->:998:998:00998 string record:
+rid:1358,86 -->:999:999:00999 string record:
+rid:1358,85 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:1366,24 -->:301:301:00301 string record:
+rid:1366,23 -->:302:302:00302 string record:
+rid:1366,22 -->:303:303:00303 string record:
+rid:1366,21 -->:304:304:00304 string record:
+rid:1366,20 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:1337,80 -->:3000:3000:03000 string record:
+rid:1337,79 -->:3001:3001:03001 string record:
+rid:1337,78 -->:3002:3002:03002 string record:
+rid:1337,77 -->:3003:3003:03003 string record:
+rid:1337,76 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679
+--------------------
+createRelationRandom
+Create a B+ Tree index on the double field
+Scan for (25,40)
+rid:761,49 -->:26:26:00026 string record:
+rid:1028,9 -->:27:27:00027 string record:
+rid:908,51 -->:28:28:00028 string record:
+rid:991,12 -->:29:29:00029 string record:
+rid:1357,70 -->:30:30:00030 string record:
+...
+Number of results: 14
+
+
+Test passed at line no:673
+Scan for [20,35]
+rid:186,1 -->:20:20:00020 string record:
+rid:303,6 -->:21:21:00021 string record:
+rid:1156,35 -->:22:22:00022 string record:
+rid:431,20 -->:23:23:00023 string record:
+rid:33,59 -->:24:24:00024 string record:
+...
+Number of results: 16
+
+
+Test passed at line no:674
+Scan for (-3,3)
+rid:254,16 -->:0:0:00000 string record:
+rid:198,83 -->:1:1:00001 string record:
+rid:881,77 -->:2:2:00002 string record:
+
+
+Test passed at line no:675
+Scan for (996,1001)
+rid:1194,36 -->:997:997:00997 string record:
+rid:435,47 -->:998:998:00998 string record:
+rid:731,30 -->:999:999:00999 string record:
+rid:1249,11 -->:1000:1000:01000 string record:
+
+
+Test passed at line no:676
+Scan for (0,1)
+
+
+Test passed at line no:677
+Scan for (300,400)
+rid:1366,64 -->:301:301:00301 string record:
+rid:1266,20 -->:302:302:00302 string record:
+rid:1116,35 -->:303:303:00303 string record:
+rid:1319,29 -->:304:304:00304 string record:
+rid:761,30 -->:305:305:00305 string record:
+...
+Number of results: 99
+
+
+Test passed at line no:678
+Scan for [3000,4000)
+rid:1145,52 -->:3000:3000:03000 string record:
+rid:780,83 -->:3001:3001:03001 string record:
+rid:1285,66 -->:3002:3002:03002 string record:
+rid:755,13 -->:3003:3003:03003 string record:
+rid:717,51 -->:3004:3004:03004 string record:
+...
+Number of results: 1000
+
+
+Test passed at line no:679

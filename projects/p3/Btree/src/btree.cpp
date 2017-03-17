@@ -5,10 +5,10 @@
 // #define DEBUGNONLEAF
 // #define DEBUGFINDLEAF
 // #define DEBUGPRINTTREE
+// #define ADDZERO
 
 // #define DEBUGMORE
 // #define DEBUGSCAN
-// #define ADDZERO
 // #define DEBUGCOMPARE
 // #define DEBUGSTRING
 // #define DEBUGCOPY
@@ -55,7 +55,7 @@ template<> // explicit specialization for T = void
 const int compare<char[STRINGSIZE]>( char a[STRINGSIZE], char b[STRINGSIZE])
 {
   return strncmp(a,b,STRINGSIZE);
-}
+
 
 
 template <class T>
@@ -156,6 +156,8 @@ std::cout<<"Reading old index file!!!\n";
       // meta info does not match in index file, clear and return;
 //       delete file;
       std::cout<<"Meta info does not match the index!\n";
+      delete file;
+      file = NULL;
       return;
     }
   } catch (FileNotFoundException e ) {
@@ -308,6 +310,11 @@ BTreeIndex::~BTreeIndex()
   
     // delete the rkpair in the BTree  
 
+
+#ifdef DEBUG
+  std::cout<<"BTreeIndex destructor"<<std::endl;
+#endif
+
     if ( currentPageNum ) {
       try {
         bufMgr->unPinPage(file, currentPageNum, false);
@@ -321,15 +328,19 @@ BTreeIndex::~BTreeIndex()
       }
     }
 
-    std::string indexFileName = file->filename();
-
     scanExecuting = false;
+#ifdef DEBUG
+  std::cout<<" try to delete file object "<<std::endl;
+#endif
     if ( file ) {
+#ifdef DEBUG
+  std::cout<<" delete file object "<<std::endl;
+#endif
       // unpin
       bufMgr->flushFile(file);
       delete file;
       file = NULL;
-    } 
+    }
 
 #ifdef DEBUG
     std::cout<<"BTreeIndex destructor called"<<std::endl;
@@ -750,6 +761,9 @@ const void BTreeIndex::insertNonLeafNode(PageId pageNo, T &key, PageId childPage
   std::cout<<thisKey<<" and it should be "<<key<<std::endl;
 #endif
     int size = thisPage->size;
+#ifdef DEBUGNONLEAF
+  std::cout<<"size " << size <<"  nodeOccupancy "<< nodeOccupancy<<std::endl;
+#endif
     if ( size < nodeOccupancy ) {
       // still have space, just insert
 #ifdef DEBUGNONLEAF
