@@ -179,11 +179,6 @@ struct NonLeafNodeInt{
    * Level of the node in the tree.
    */
 	int level;
-
-  /**
-   * Parent PageId
-   */
-    PageId parentPageNo;
   
   /**
    * Number of entries in this node
@@ -212,11 +207,6 @@ struct NonLeafNodeDouble{
 	int level;
 
   /**
-   * Parent PageId
-   */
-    PageId parentPageNo;
-
-  /**
    * Number of entries in this node
    */
     int size;
@@ -241,12 +231,6 @@ struct NonLeafNodeString{
    * Level of the node in the tree.
    */
 	int level;
-
-  /**
-   * Parent PageId
-   * Has to be the second argument in the struct, align with LeafNode
-   */
-    PageId parentPageNo;
 
   /**
    * Number of entries in this node
@@ -275,11 +259,6 @@ struct LeafNodeInt{
    */
     int size;
 
-  /**
-   * Parent PageId
-   * Has to be the second argument in the struct, align with NonLeafNode
-   */
-    PageId parentPageNo;
 
   /**
    * Stores keys.
@@ -310,11 +289,6 @@ struct LeafNodeDouble{
     int size;
 
   /**
-   * Parent PageId
-   */
-    PageId parentPageNo;
-
-  /**
    * Stores keys.
    */
 	double keyArray[ DOUBLEARRAYLEAFSIZE ];
@@ -341,11 +315,6 @@ struct LeafNodeString{
    * Number of entries in this node
    */
     int size;
-
-  /**
-   * Parent PageId
-   */
-    PageId parentPageNo;
 
   /**
    * Stores keys.
@@ -491,10 +460,26 @@ class BTreeIndex {
      * Find Leaf page to insert the record in
      *
      * @param pageNo given leaf/non-leaf node, find the key or trace down further
-     * @param key key pointer
+     * @param key key
+     *
+     * @return return the leaf node page number that the key should be inserted
+     *  into.
      */
     template<class T, class T_NonLeafNode>
       const PageId findLeafNode(PageId pageNo, T & key);
+
+
+    /**
+     * Find the parent node of the given node with the help of key.
+     *
+     * @param childPageNo the page number that the parent should points to
+     * @param key key
+     *
+     * @return parent page number. If no parent, return 0.
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const PageId findParentOf( PageId childPageNo, T &key);
+
 
 
     /**
@@ -590,6 +575,18 @@ class BTreeIndex {
      */
     template <class T, class T_LeafNode >
       const void scanNextHelper(RecordId & outRid, T lowVal, T highVal);
+
+
+
+    /**
+     * More complete nextEntry++. 
+     * Do size check. If next entry is valid, simple ++, else shift to next
+     * page and set nextEntry to 0.
+     *
+     * @param thisPage Page pointer of current page
+     */
+    template<class T_NodeType>
+      const void shiftToNextEntry(T_NodeType *thisPage);
 
 
 

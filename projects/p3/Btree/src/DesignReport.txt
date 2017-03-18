@@ -1,61 +1,8 @@
 
 Design:
 
-
-
-
-Non-leaf nodes uses the first key of it's right child as key
-
-
-rootIsLeaf:
-
-"""
-Root page starts as page 2 but since a split can occur at the root the root
-page may get moved up and get a new page no.
-"""
-In other word, if the root num is 2, it is the leaf, otherwise, root is non-leaf
-
-
-if rootIsLeaf:
-  insert the RIDKeyPair in the root 
-
-
-// insert into a leaf page/node ( node is page, page is node)
-insertLeafNode(RIDKeyPair rkpair, node)
-
-
-
-
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const PageID findLeafNode(PageId pageNo, T *key)
-{
-  // pageNo should points to a non-leaf node page
-  Page tempPage;
-  bufMgr->readFile(file, pageNo, &tempPage);
-  T_NonLeafNode* rootPage = (T_NonLeafNode*) tempPage;
-  if ( rootPage->level == 0 ) { // next level is non-leaf node
-    return findLeafNode<T, T_NonLeafNode, T_LeafNode>(rkpair);
-  } else { // next level is leaf node
-  
-  }
-
-}
-
-// need two methods for both leaf and non-leaf?? Maybe one?
-splitNode
-
-
-
-when adding the record into the leaf node, does it need to be sorted?
-If not, it will be painful later when split and delete.
-
-
-Is it beneficial to define a parent node pageNo in the split?
-Pros: can speed up the insertion if split encountered
-
-
-
 New Testcase added:
+  0. Added Scan at the beginning of the page. PASSED
   1. test4(). Test on reading old index file. PASSED
   2. test6(). Test on reading bad index file. PASSED
   3. test5(). Test split non-leaf node using small page size. PASSED
@@ -66,33 +13,32 @@ New Testcase added:
           modified to include %010d in stringScanLarge. 500000 entries are 
           used to test. CAUTION the test takes about 30 seconds.
 
-
 Design:
+The insertion of new records into the B+Tree is designed as following:
 
-  The insertion of new records into the B+Tree is designed as following:
+findLeafNode():
+    Given a page number amd Key, find the leaf node that this Key should be inserted. If the page is non-leaf page, find the page number that may contain the key and recursively call findLeafNode.
 
-findLeafNode(): Given a page number amd Key, find the leaf node that this Key should be inserted. If the page is non-leaf page, find the page number that may contain the key and recursively call findLeafNode.
-
-insertLeafNode(): insert a Key-Rid pair into a leaf node, if the node need to be splitted, call splitLeafNode() to split the node and add the key-rid pair the the proper node after splitted.
-
-insertNonLeafNode(): Designed to be called by splitLeafNode/splitNonLeafNode only since only a split in leaf/non-leaf results new non-leaf entries that need to be copied/pushed into a non-leaf node.
-
-splitLeafNode(): Called by insertLeafNode when there is no enough space in that node. It deals with two cases. One, this leaf is not the root, it will split, use the first key in the second node and the page number of the second node and a Key-PageNo pair, then it calls insertNonLeafNode to insert this pair into parent page. Two, the leaf itself is the root, then it will create a new non-leaf node and try to insert the pair to new root.
-
-splitNonLeafNode(): Similar to splitLeafNode, it is called by insertNonLeafNode when there is no enough space to insert. It will choose a pivot, and split the node into three part: left part, pivot, and right part. It allocates a new page and move the right part into the new page, updates the pages pointed by right part's keys's parentNodeNo into the newly allocated PageId. The pivot key and the newly allocated PageId forms a key-page pair. Then it will call insertNonLeafNode to insert this pair to its parent page.
+findParentOf():``
+    Given a page number and the last key in this page, find the parent page that has this page number as one of its pointers. This is preferred to use a parentPageNo field in the page structure because we don't need to update the field when split. Although it takes some time to find the page, it will not flush the buffer.
 
 
+insertLeafNode():
+    Insert a Key-Rid pair into a leaf node, if the node need to be splitted, call splitLeafNode() to split the node and add the key-rid pair the the proper node after splitted.
+
+insertNonLeafNode():
+    Designed to be called by splitLeafNode/splitNonLeafNode only since only a split in leaf/non-leaf results new non-leaf entries that need to be copied/pushed into a non-leaf node.
+
+splitLeafNode():
+    Called by insertLeafNode when there is no enough space in that node. It deals with two cases. One, this leaf is not the root, it will split, use the first key in the second node and the page number of the second node and a Key-PageNo pair, then it calls insertNonLeafNode to insert this pair into parent page. Two, the leaf itself is the root, then it will create a new non-leaf node and try to insert the pair to new root.
+
+splitNonLeafNode():
+    Similar to splitLeafNode, it is called by insertNonLeafNode when there is no enough space to insert. It will choose a pivot, and split the node into three part: left part, pivot, and right part. It allocates a new page and move the right part into the new page, updates the pages pointed by right part's keys's parentNodeNo into the newly allocated PageId. The pivot key and the newly allocated PageId forms a key-page pair. Then it will call insertNonLeafNode to insert this pair to its parent page.
 
 
-The efficiently insert and delete, two additional fields are added to the leaf node and non-leaf node: int size and PageId parentPageNo.
-The size field is used to mark the number of keys in this node. With this size, we don't have to clear the memory whenever nodes are splited or in record is deleted.
-The parentPageNo field remember the parent node's PageId so that whenever a split of the current node leads to a split of parent node, we get the parent without search the whole tree again.
-<<Note>>: better change to findParentOf() because updating all childs is essetially flushin the buffer, leading to cool buffer.
+The efficiently insert and delete, one additional field is added to the leaf node and non-leaf node: int size. This is used to mark the number of keys in this node. With this field, we don't have to clear the memory whenever nodes are splited or in record is deleted.
 
 
-
-
-
-To efficiently locate a key, binary search are used to find the position.
+To efficiently locate a key, binary search ( getIndex() ) are used to find the position.
 
 

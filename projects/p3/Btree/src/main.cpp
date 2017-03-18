@@ -185,20 +185,20 @@ int main(int argc, char **argv)
 
 	File::remove(relationName);
 
-// 	test1();
-// 	test2();
-// 	test3();
-// 	errorTests();
+	test1();
+	test2();
+	test3();
+	errorTests();
 	try {
 		File::remove(intIndexName);
 	} catch(FileNotFoundException e) {
   	}
 
     // haiyun add
-//     test4(); // test read old file
+    test4(); // test read old file
 //     test5(); // test split non-leaf file, small page
-    test55(); // test split non-leaf file, large entries
-    test6(); // test read existing but bad file
+//     test55(); // test split non-leaf file, large entries
+//     test6(); // test read existing but bad file
 
 
 #ifdef DEBUG
@@ -875,6 +875,16 @@ void intTests()
 	checkPassFail(intScan(&index,25,GT,40,LT), 14)
 	checkPassFail(intScan(&index,20,GTE,35,LTE), 16)
 	checkPassFail(intScan(&index,-3,GT,3,LT), 3)
+	checkPassFail(intScan(&index,338,GT,1001,LT), 1001-338-1)
+	checkPassFail(intScan(&index,339,GT,1001,LT), 1001-339-1)
+	checkPassFail(intScan(&index,340,GT,1001,LT), 1001-340-1)
+	checkPassFail(intScan(&index,341,GT,1001,LT), 1001-341-1)
+	checkPassFail(intScan(&index,342,GT,1001,LT), 1001-342-1)
+	checkPassFail(intScan(&index,338,GTE,1001,LT), 1001-338)
+	checkPassFail(intScan(&index,339,GTE,1001,LT), 1001-339)
+	checkPassFail(intScan(&index,340,GTE,1001,LT), 1001-340)
+	checkPassFail(intScan(&index,341,GTE,1001,LT), 1001-341)
+	checkPassFail(intScan(&index,342,GTE,1001,LT), 1001-342)
 	checkPassFail(intScan(&index,996,GT,1001,LT), 4)
 	checkPassFail(intScan(&index,0,GT,1,LT), 0)
 	checkPassFail(intScan(&index,300,GT,400,LT), 99)
@@ -1016,6 +1026,16 @@ void doubleTests()
 	checkPassFail(doubleScan(&index,25,GT,40,LT), 14)
 	checkPassFail(doubleScan(&index,20,GTE,35,LTE), 16)
 	checkPassFail(doubleScan(&index,-3,GT,3,LT), 3)
+	checkPassFail(doubleScan(&index,253,GT,1001,LT), 1001-253-1)
+	checkPassFail(doubleScan(&index,254,GT,1001,LT), 1001-254-1)
+	checkPassFail(doubleScan(&index,255,GT,1001,LT), 1001-255-1)
+	checkPassFail(doubleScan(&index,256,GT,1001,LT), 1001-256-1)
+	checkPassFail(doubleScan(&index,257,GT,1001,LT), 1001-257-1)
+	checkPassFail(doubleScan(&index,253,GTE,1001,LT), 1001-253)
+	checkPassFail(doubleScan(&index,254,GTE,1001,LT), 1001-254)
+	checkPassFail(doubleScan(&index,255,GTE,1001,LT), 1001-255)
+	checkPassFail(doubleScan(&index,256,GTE,1001,LT), 1001-256)
+	checkPassFail(doubleScan(&index,257,GTE,1001,LT), 1001-257)
 	checkPassFail(doubleScan(&index,996,GT,1001,LT), 4)
 	checkPassFail(doubleScan(&index,0,GT,1,LT), 0)
 	checkPassFail(doubleScan(&index,300,GT,400,LT), 99)
@@ -1133,6 +1153,16 @@ std::cout<<" stringScan(&index,25,GT,40,LT); RESULT is "<<out<<std::endl;
 #endif
 	checkPassFail(stringScan(&index,20,GTE,35,LTE), 16)
 	checkPassFail(stringScan(&index,-3,GT,3,LT), 3)
+	checkPassFail(stringScan(&index,225,GT,1001,LT), 1001-225-1)
+	checkPassFail(stringScan(&index,226,GT,1001,LT), 1001-226-1)
+	checkPassFail(stringScan(&index,227,GT,1001,LT), 1001-227-1)
+	checkPassFail(stringScan(&index,228,GT,1001,LT), 1001-228-1)
+	checkPassFail(stringScan(&index,229,GT,1001,LT), 1001-229-1)
+	checkPassFail(stringScan(&index,225,GTE,1001,LT), 1001-225)
+	checkPassFail(stringScan(&index,226,GTE,1001,LT), 1001-226)
+	checkPassFail(stringScan(&index,227,GTE,1001,LT), 1001-227)
+	checkPassFail(stringScan(&index,228,GTE,1001,LT), 1001-228)
+	checkPassFail(stringScan(&index,229,GTE,1001,LT), 1001-229)
 	checkPassFail(stringScan(&index,996,GT,1001,LT), 4)
 	checkPassFail(stringScan(&index,0,GT,1,LT), 0)
 	checkPassFail(stringScan(&index,300,GT,400,LT), 99)
