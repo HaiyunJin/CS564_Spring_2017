@@ -1,4 +1,6 @@
 
+#define DEBUGDUP
+// #define DEBUGINSERT
 // #define DEBUG
 // #define DEBUGle // catch invalid record exception
 // #define DEBUGLEAF
@@ -415,6 +417,10 @@ const void BTreeIndex::insertEntry(const void *key, const RecordId rid)
 #ifdef DEBUGMORE
   std::cout<< " call findLeafNode from insertEntry " << std::endl;
 #endif
+#ifdef DEBUGINSERT
+  std::cout<<"  inserting "<<intKey<<std::endl;
+#endif
+
         PageId leafToInsert = 
           findLeafNode<int, struct NonLeafNodeInt>(rootPageNum, intKey);
         insertLeafNode<int, struct NonLeafNodeInt, struct LeafNodeInt>(leafToInsert, rkpair);
