@@ -457,6 +457,13 @@ class BTreeIndex {
 
 
     /**
+     * print the whole tree
+     */
+    template <class T, class T_NonLeafNode, class T_LeafNode>
+      const void printTree();
+
+
+    /**
      * Find Leaf page to insert the record in
      *
      * @param pageNo given leaf/non-leaf node, find the key or trace down further
@@ -473,7 +480,7 @@ class BTreeIndex {
      * Find the parent node of the given node with the help of key.
      *
      * @param childPageNo the page number that the parent should points to
-     * @param key key
+     * @param key key, usually the last key in the page
      *
      * @return parent page number. If no parent, return 0.
      */
@@ -492,16 +499,6 @@ class BTreeIndex {
      */
     template<class T, class T_NonLeafNode, class T_LeafNode> 
       const void insertLeafNode(PageId pageNo, RIDKeyPair<T> rkpair);
-
-
-    /**
-     * General copy method. 
-     * Has to do in this way because string is special
-     * @param dest     destiny memory postion
-     * @param scr      scource memory postion
-     */
-//     const void copyKey( void * dest, void * scr);
-//     const void copyKey( Page * dest, int desIndex, Page * scr, int scrIndex);
 
 
 
@@ -549,11 +546,54 @@ class BTreeIndex {
 
 
 
+
+
     /**
-     * print the whole tree
+     * Delete a key from a leaf node.
+     * Note that it is possible that the key is not in this page that is pointed
+     * by the pageNo. The pageNo is the PageId that the key is supposed to be in
+     * but there is no guarantee that the key exists.
+     * 
+     * @param pageNo PageId of the leaf to delete key from.
+     * @param key    Pointer to the key that to be deleted.
      */
-    template <class T, class T_NonLeafNode, class T_LeafNode>
-      const void printTree();
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const void deleteLeafNode(PageId pageNo, T& key);
+
+
+    /**
+     * Merge two succssive leaf nodes
+     *
+     * @param firstPageNo
+     * @param secondPageNo
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const void mergeLeafNode(PageId firstPageNo, PageId secondPageNo);
+
+
+
+    /**
+     * Delete a key from a nonleaf node.
+     * Unlike delete key from a leaf node, the key is guaranteed not to exist
+     * in the page, what we deleted from this nonleaf page is the last key that
+     * is smaller than the target key.
+     * 
+     * @param pageNo PageId of the nonleaf to delete key from.
+     * @param key    Pointer to the key that to be deleted.
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const void deleteNonLeafNode(PageId pageNo, T& key);
+
+
+    /**
+     * Merge two succssive non leaf nodes
+     *
+     * @param firstPageNo
+     * @param secondPageNo
+     */
+    template<class T, class T_NonLeafNode, class T_LeafNode>
+      const void mergeNonLeafNode(PageId firstPageNo, PageId secondPageNo);
+
 
 
     /**
@@ -587,6 +627,9 @@ class BTreeIndex {
      */
     template<class T_NodeType>
       const void shiftToNextEntry(T_NodeType *thisPage);
+
+
+
 
 
 
@@ -635,20 +678,41 @@ class BTreeIndex {
     const void insertEntry(const void* key, const RecordId rid);
 
 
-  /**
-	 * Begin a filtered scan of the index.  For instance, if the method is called 
-	 * using ("a",GT,"d",LTE) then we should seek all entries with a value 
-	 * greater than "a" and less than or equal to "d".
-	 * If another scan is already executing, that needs to be ended here.
-	 * Set up all the variables for scan. Start from root to find out the leaf 
-     * page that contains the first RecordID that satisfies the scan parameters.
-     * Keep that page pinned in the buffer pool.
-   * @param lowVal	Low value of range, pointer to integer / double / char string
-   * @param lowOp		Low operator (GT/GTE)
-   * @param highVal	High value of range, pointer to integer / double / char string
-   * @param highOp	High operator (LT/LTE)
-   * @throws  BadOpcodesException If lowOp and highOp do not contain one of their their expected values 
-   * @throws  BadScanrangeException If lowVal > highval
+    /**
+     * Delete a key.
+     * Start from root to recursively find out the leaf that contains the key.
+     * The deletion may cause key redistribution or leaf nodes merge.
+     * The merge may leads to deletion of a key in the parent node.
+     * If the last key in the root node is deleted, new root is choosed from
+     * its children and the metapage needs to be updated.
+     *
+     * @param key   Key to delete.
+     */
+    const void deleteEntry(const void* key);
+
+
+
+    /**
+     * public method print the whole tree
+     */
+      const void printTree();
+
+
+
+      /**
+       * Begin a filtered scan of the index.  For instance, if the method is called 
+       * using ("a",GT,"d",LTE) then we should seek all entries with a value 
+       * greater than "a" and less than or equal to "d".
+       * If another scan is already executing, that needs to be ended here.
+       * Set up all the variables for scan. Start from root to find out the leaf 
+       * page that contains the first RecordID that satisfies the scan parameters.
+       * Keep that page pinned in the buffer pool.
+       * @param lowVal	Low value of range, pointer to integer / double / char string
+       * @param lowOp		Low operator (GT/GTE)
+       * @param highVal	High value of range, pointer to integer / double / char string
+       * @param highOp	High operator (LT/LTE)
+       * @throws  BadOpcodesException If lowOp and highOp do not contain one of their their expected values 
+       * @throws  BadScanrangeException If lowVal > highval
 	 * @throws  NoSuchKeyFoundException If there is no key in the B+ tree that satisfies the scan criteria.
 	**/
 	const void startScan(const void* lowVal, const Operator lowOp, const void* highVal, const Operator highOp);
