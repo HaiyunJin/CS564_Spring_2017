@@ -1,9 +1,6 @@
 
 // #define DEBUG
-// #define DEBUGMORE
 // #define DEBUGSTRING
-// #define DEBUGSCAN
-// #define DEBUGPRINTTREE
 
 /**
  * @author See Contributors.txt for code contributors and overview of BadgerDB.
@@ -28,7 +25,6 @@
 #include "exceptions/end_of_file_exception.h"
 
 // #include "exceptions/file_open_exception.h"
-#include "exceptions/empty_btree_exception.h"
 
 
 
@@ -106,11 +102,6 @@ void test5();
 void test55();
 void test6();
 void test7(); // duplicate key
-void test8(); // test delete
-void test9(); // test delete
-void test10(); // test delete
-void test11(); // test delete
-void test12(); // test delete
 void errorTests();
 void deleteRelation();
 
@@ -195,13 +186,14 @@ int main(int argc, char **argv)
 
 	File::remove(relationName);
 
-	test1();
-	test2();
-	test3();
-    {
-      errorTests();
-      try { File::remove(intIndexName);} catch(FileNotFoundException e) { }
-    }
+// 	test1();
+// 	test2();
+// 	test3();
+// 	errorTests();
+// 	try {
+// 		File::remove(intIndexName);
+// 	} catch(FileNotFoundException e) {
+//   	}
 
     // haiyun add
     test4(); // test read old file
@@ -209,12 +201,7 @@ int main(int argc, char **argv)
     test55(); // test split non-leaf file, large entries
     test6(); // test read existing but bad file
 //     test7(); // test duplicate key // not working
-  
-    test8(); // test delete: delete an entry
-    test9(); // test delete: delete entries until redistribute
-    test10(); // test delete: delete until merge leaf
-    test11(); // test delete: delete until merge non leaf
-    test12(); // test delete: delete from an empty tree
+
 
 #ifdef DEBUG
   std::cout<< "in main before delete bufMgr"<< std::endl;
@@ -904,7 +891,6 @@ void intTests()
 	checkPassFail(intScan(&index,0,GT,1,LT), 0)
 	checkPassFail(intScan(&index,300,GT,400,LT), 99)
 	checkPassFail(intScan(&index,3000,GTE,4000,LT), 1000)
-	checkPassFail(intScan(&index,4950,GTE,5000,LT), 50) // added
 }
 
 
@@ -992,9 +978,6 @@ int intScan(BTreeIndex * index, int lowVal, Operator lowOp, int highVal, Operato
 		}
 		catch(IndexScanCompletedException e)
 		{
-#ifdef DEBUGSCAN
-  std::cout<<"scan complete\n";
-#endif
 			break;
 		}
 
@@ -1527,10 +1510,7 @@ void createRelationForwardDup(int size)
   file1->writePage(new_page_number, new_page);
 }
 
-
-// duplicate key
-void test7() 
-{
+void test7(){
   // create duplaite key
     const int size = 5000;
 
@@ -1582,191 +1562,3 @@ void test7()
 	deleteRelation();
 
 }
-
-// delete an entry
-void test8()
-{
-    const int size = 5000; 
-	std::cout << "\n\n------------------------------------\n";
-	std::cout <<     "- test delete entry without adjust -\n";
-	std::cout <<     "------------------------------------\n\n\n";
-    // create normal relation
-    createRelationForward(size);
-    { // create index, delete, and check
-      {
-        std::cout << "Create a B+ Tree index on the integer field" << std::endl;
-        BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
-        checkPassFail(intScan(&index,4995,GTE,5000,LT), 5)
-        // test 1. delete keys without adjuct tree
-        for (int i = 1 ; i < 5 ; ++i ) {
-          int key = size - i ;
-          index.deleteEntry((void*)(&key));
-          std::cout<<"delete "<<key<<"\n";
-          checkPassFail(intScan(&index,4000,GTE, 5000,LT), 1000-i)
-        }
-#ifdef DEBUGPRINTTREE
-        index.printTree();
-#endif
-      }
-      try { // remove index file
-        File::remove(intIndexName);
-      } catch(FileNotFoundException e) {
-      }
-    }
-    deleteRelation();
-}
-
-
-// delete an entry leads to redistribution
-void test9()
-{
-    const int size = 5000; 
-	std::cout << "\n\n------------------------------------------\n";
-	std::cout <<     "- test delete entry until redistribution -\n";
-	std::cout <<     "------------------------------------------\n\n\n";
-
-    // create normal relation
-    createRelationForward(size);
-    
-    {
-      // create index, delete, and check
-      {
-        std::cout << "Create a B+ Tree index on the integer field" << std::endl;
-        BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
-
-        checkPassFail(intScan(&index,4000,GTE,4500,LT), 500)
-        // test 2. delete key that needs redistribution
-        for (int i = 1 ; i < 5 ; ++i ) {
-          int key = 4300 - i ;
-          std::cout<<"delete "<<key<<"\n";
-          index.deleteEntry((void*)(&key));
-          checkPassFail(intScan(&index,4000,GTE,4500,LT), 500-i)
-        }
-#ifdef DEBUGPRINTTREE
-        index.printTree();
-#endif
-      }
-      try { // remove index file
-        File::remove(intIndexName);
-      } catch(FileNotFoundException e) {}
-    }
-    deleteRelation();
-}
-
-
-
-// delete an entry leads merge leaf
-void test10()
-{
-    const int size = 5000; 
-	std::cout << "\n\n--------------------------------------\n";
-	std::cout <<     "- test delete entry until merge leaf -\n";
-	std::cout <<     "--------------------------------------\n\n\n";
-    // create normal relation
-    createRelationForward(size);
-    
-    { // create index, delete, and check
-      {
-        std::cout << "Create a B+ Tree index on the integer field" << std::endl;
-        BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
-        // delete the last couple of keys
-        int key = 0;
-        // test 3. delete key that needs merge 
-	    checkPassFail(intScan(&index,25,GT,40,LT), 14)
-        int end = 30;
-        for ( int i = 27 ; i <= end ; ++i ) {
-          key = i;
-          index.deleteEntry((void*)(&key));
-	      checkPassFail(intScan(&index,25,GT,40,LT), 14+26-i)
-        }
-#ifdef DEBUGPRINTTREE
-        index.printTree();
-#endif
-      }
-      // remove index file
-      try {
-        File::remove(intIndexName);
-      } catch(FileNotFoundException e) {
-      }
-    }
-    deleteRelation();
-}
-
-
-
-//delete until merge non leaf
-
-void test11()
-{
-    const int size = 5000; 
-	std::cout << "\n\n------------------------------------------\n";
-	std::cout <<     "- test delete entry until merge non leaf -\n";
-	std::cout <<     "------------------------------------------\n\n\n";
-    // create normal relation
-    createRelationForward(size);
-    
-    { // create index, delete, and check
-      {
-        std::cout << "Create a B+ Tree index on the integer field" << std::endl;
-        BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
-        // delete the last couple of keys
-        int key = 0;
-        // test 4. delete key that needs merge non leaf
-	    checkPassFail(intScan(&index,25,GT,40,LT), 14)
-        int end = 4800;
-        for ( int i = 1 ; i <= end ; ++i ) {
-          key = i;
-          index.deleteEntry((void*)(&key));
-//  	      checkPassFail(intScan(&index,0,GT,5000,LT), 4999-i)
-        }
- 	      checkPassFail(intScan(&index,0,GT,5000,LT), 4999-4800)
-#ifdef DEBUGPRINTTREE
-        index.printTree();
-#endif
-      }
-      // remove index file
-      try {
-        File::remove(intIndexName);
-      } catch(FileNotFoundException e) {
-      }
-    }
-    deleteRelation();
-}
-
-
-// delete from empty tree
-
-void test12()
-{
-    const int size = 1; 
-	std::cout << "\n\n-------------------------------------\n";
-	std::cout <<     "- test delete entry from empty tree -\n";
-	std::cout <<     "-------------------------------------\n\n\n";
-    // create normal relation
-    createRelationForward(size);
-    
-    { // create index, delete, and check
-      {
-        try {
-          std::cout << "Create a B+ Tree index on the integer field" << std::endl;
-          BTreeIndex index(relationName, intIndexName, bufMgr, offsetof(tuple,i), INTEGER);
-          int key = 0;
-          index.printTree();
-          index.deleteEntry((void*)(&key));
-          index.printTree();
-          // test 5. delete key from empty tree
-          index.deleteEntry((void*)(&key));
-          index.printTree();
-        } catch (EmptyBTreeException e) {
-          std::cout<<" empty tree test passed\n";
-        }
-      }
-      // remove index file
-      try {
-        File::remove(intIndexName);
-      } catch(FileNotFoundException e) {
-      }
-    }
-    deleteRelation();
-}
-

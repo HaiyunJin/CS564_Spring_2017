@@ -22,7 +22,6 @@
 #include "exceptions/page_not_pinned_exception.h"
 #include "exceptions/invalid_record_exception.h"
 #include "exceptions/page_pinned_exception.h"
-#include "exceptions/empty_btree_exception.h"
 
 namespace badgerdb
 {
@@ -40,42 +39,22 @@ const int compare<char[STRINGSIZE]>( char a[STRINGSIZE], char b[STRINGSIZE])
   return strncmp(a,b,STRINGSIZE);
 }
 
-
-
 template <class T>
 const void copyKey( T &a, T &b )
 {
   a = b;
 }
 
-
-template<> // explicit specialization for T = char[STRINGSIZE]
+template<> // explicit specialization for T = void
 const void copyKey<char[STRINGSIZE]>( char (&a)[STRINGSIZE], char (&b)[STRINGSIZE])
 {
   strncpy(a,b,STRINGSIZE);
-//  memcpy(a,b,STRINGSIZE);
 }
 
-
-/**
- * Return the index of the first key in the given page that is larger than or
- * equal to the param key.
- * 
- * @param thisPage Leaf/NonLeaf node page.
- * @param key      Key to compare
- *
- * @return index of the first key that is not smaller than key
- */
 template<class T, class T_NodeType>
 const int getIndex( T_NodeType * thisPage, T &key )
 {
     int size = thisPage->size;
-
-    // no entries at all
-    if ( size <= 0 ) {
-      return -1;
-    }
-
     // 1. check if the 0th is 
     if ( compare<T>(key, thisPage->keyArray[0]) <= 0 )
       return 0;
@@ -103,16 +82,12 @@ const int getIndex( T_NodeType * thisPage, T &key )
     return mid;
 }
 
-
 template<class T_NodeType>
 const void BTreeIndex::shiftToNextEntry(T_NodeType *thisPage)
 {
     if ( ++nextEntry >= thisPage->size ) { // move to next page
       if ( thisPage->rightSibPageNo == 0 ) { // no more pages
-//         throw IndexScanCompletedException();
-        // haiyun test
-          nextEntry = -1;
-          return; // just return
+        throw IndexScanCompletedException();
       }
       PageId nextPageNo = thisPage->rightSibPageNo; 
       bufMgr->unPinPage(file, currentPageNum, false);
@@ -121,7 +96,6 @@ const void BTreeIndex::shiftToNextEntry(T_NodeType *thisPage)
       nextEntry = 0;
     }
 }
-
 
 
 // -----------------------------------------------------------------------------
@@ -143,7 +117,6 @@ BTreeIndex::BTreeIndex(const std::string & relationName,
    outIndexName = idxStr.str(); 
   } // idxStr goes out of scope here, so idxStr is automatically closed.
 
-
   // 1. set up the BTreeIndex data field
   switch  (attributeType ) {
     case INTEGER:
@@ -162,11 +135,9 @@ BTreeIndex::BTreeIndex(const std::string & relationName,
       std::cout<<"Unsupported data type\n";
   }
 
-
     scanExecuting = false;
     nextEntry = -1;
     currentPageNum = 0;
-
 
   // 2. check if the index file exits. open or create new
   //   if it is new, create metanode, create the root node
@@ -184,14 +155,12 @@ BTreeIndex::BTreeIndex(const std::string & relationName,
         || metaInfo->attrType != attrType
        ) {
       // meta info does not match in index file, clear and return;
-//       delete file;
       std::cout<<"Meta info does not match the index!\n";
       delete file;
       file = NULL;
       return;
     }
   } catch (FileNotFoundException e ) {
-//     delete file;
     // This is a new index file, create and contruct the new index file
     Page *tempPage;
     file = new BlobFile(outIndexName, true);
@@ -255,6 +224,7 @@ const void BTreeIndex::buildBTree(const std::string & relationName)
     } 
 }
 
+
 // -----------------------------------------------------------------------------
 // BTreeIndex::~BTreeIndex -- destructor
 // -----------------------------------------------------------------------------
@@ -265,8 +235,7 @@ BTreeIndex::~BTreeIndex()
     //  unpinning pages
     //  flush the index file
     //  delete the index file
-    // delete the rkpair in the BTree  
-
+    
     if ( currentPageNum ) {
       try {
         bufMgr->unPinPage(file, currentPageNum, false);
@@ -288,6 +257,7 @@ BTreeIndex::~BTreeIndex()
       std::cout<<"PagePinnedException"<<std::endl;
     } 
 }
+
 
 // -----------------------------------------------------------------------------
 // BTreeIndex::insertEntry
@@ -313,7 +283,6 @@ const void BTreeIndex::insertEntry(const void *key, const RecordId rid)
     } else if ( attributeType == STRING ) {
         RIDKeyPair<char[STRINGSIZE]> rkpair;
         strncpy(rkpair.key, (char*)key, STRINGSIZE);
-//         memcpy(rkpair.key, (char*)key, STRINGSIZE);
         rkpair.rid = rid;
         PageId leafToInsert = 
           findLeafNode<char[STRINGSIZE], struct NonLeafNodeString>(rootPageNum,rkpair.key);
@@ -334,6 +303,7 @@ const PageId BTreeIndex::findLeafNode(PageId pageNo, T &key)
   if ( rootPageNum == 2 ) { // root is leaf
     return rootPageNum; 
   }
+
   // pageNo should points to a non-leaf node page
   Page *tempPage;
   bufMgr->readPage(file, pageNo, tempPage);
@@ -370,7 +340,6 @@ const void BTreeIndex::insertLeafNode(PageId pageNo, RIDKeyPair<T> rkpair)
   if ( size < leafOccupancy ) {
     // Still have space, just insert into correct position
     int index = getIndex<T, T_LeafNode>(thisPage, thisKey);
-    if ( index == -1 ) index = 0;
 
     // use memmove
     memmove((void*)(&(thisPage->keyArray[index+1])),
@@ -380,6 +349,7 @@ const void BTreeIndex::insertLeafNode(PageId pageNo, RIDKeyPair<T> rkpair)
 
     // insert the current key
     copyKey(((thisPage->keyArray[index])), (thisKey));
+
     thisPage->ridArray[index] = rkpair.rid;
 
     // increase the size by 1;
@@ -387,6 +357,7 @@ const void BTreeIndex::insertLeafNode(PageId pageNo, RIDKeyPair<T> rkpair)
     bufMgr->unPinPage(file, pageNo, true);
   } else {
     // not enough space, need to split
+
     // determine where this rkpair should go
     int midIndex = leafOccupancy/2 + leafOccupancy%2;
     bool insertLeftNode = compare<T>(thisKey, thisPage->keyArray[midIndex])<0;
@@ -444,9 +415,8 @@ const PageId BTreeIndex::splitLeafNode(PageId pageNo)
     T copyUpKey;
     copyKey((copyUpKey), ((firstPage->keyArray[midIndex])));
 
-    bool rootIsLeaf = rootPageNum == 2;
-
     // check if here is parent
+    bool rootIsLeaf = rootPageNum == 2;
     if ( !rootIsLeaf ) { // normal parent, insert new key and pageNo
       PageId firstPageParentNo = findParentOf<T, T_NonLeafNode, T_LeafNode>
         (firstPageNo, firstPage->keyArray[firstPage->size-1]);
@@ -524,7 +494,12 @@ const void BTreeIndex::insertNonLeafNode(PageId pageNo, T &key, PageId childPage
       // need to split this non-leaf node, potentially propagate up
 
       // you know where to insert before split
+//       int midIndex = nodeOccupancy/2 + nodeOccupancy%2;
+      //  TODO  Decide where to insert, left or right
       int midIndex = nodeOccupancy/2;
+//       if ( !insertLeftNode ) {
+//         midIndex += nodeOccupancy%2;
+//       }
 
       bool insertLeftNode = compare<T>(thisKey, thisPage->keyArray[midIndex])<0;
 
@@ -532,6 +507,8 @@ const void BTreeIndex::insertNonLeafNode(PageId pageNo, T &key, PageId childPage
         midIndex--;
         insertLeftNode = compare<T>(thisKey, thisPage->keyArray[midIndex])<0;
       }
+
+      // possible to insert in the mid, aka, push up further
 
       // close the file for split
       bufMgr->unPinPage(file, pageNo, false);
@@ -568,6 +545,18 @@ const PageId BTreeIndex::splitNonLeafNode(PageId pageNo, int midIndex)
     // set the level
     secondPage->level = firstPage->level;
 
+    // TODO decide whether the key is inserted left or right
+//     // middle index will be push to parent
+//     int midIndex = nodeOccupancy/2;
+// //     if ( !insertLeftNode ) {
+// //       midIndex += nodeOccupancy%2;
+// //     }
+//     if ( nodeOccupancy%2 == 0 ) {
+//       if ( insertLeftNode ) {
+//         midIndex--;
+//       }
+//     }
+
     // use memmove to split keys and pageNo s
     memmove((void*)(&(secondPage->keyArray[0])),
             (void*)(&( firstPage->keyArray[midIndex+1])),
@@ -582,17 +571,16 @@ const PageId BTreeIndex::splitNonLeafNode(PageId pageNo, int midIndex)
     T pushUpKey;
     copyKey(pushUpKey, firstPage->keyArray[midIndex]);
 
-      // done with this two pages
-      bufMgr->unPinPage(file, firstPageNo, true);
-      bufMgr->unPinPage(file, secondPageNo, true);
-
     bool currentNodeIsRoot = rootPageNum == firstPageNo;
 
     if ( ! currentNodeIsRoot ) { // not root 
       // done with this two pages
+
       PageId parentPageNo = findParentOf<T, T_NonLeafNode, T_LeafNode>
         (firstPageNo, firstPage->keyArray[firstPage->size-1]);
 
+      bufMgr->unPinPage(file, firstPageNo, true);
+      bufMgr->unPinPage(file, secondPageNo, true);
       // insert the pushUpKey to parent
       insertNonLeafNode<T, T_NonLeafNode, T_LeafNode>
         (parentPageNo, pushUpKey, secondPageNo);
@@ -608,6 +596,10 @@ const PageId BTreeIndex::splitNonLeafNode(PageId pageNo, int midIndex)
       IndexMetaInfo* metaPage = reinterpret_cast<IndexMetaInfo*>(tempPage);
       metaPage->rootPageNo = parentPageNo;
       bufMgr->unPinPage(file, headerPageNum, true);
+
+      // done with this two pages
+      bufMgr->unPinPage(file, firstPageNo, true);
+      bufMgr->unPinPage(file, secondPageNo, true);
 
       // construct the parent page
       parentPage->level = 0;
@@ -652,523 +644,6 @@ const PageId BTreeIndex::findParentOf(PageId childPageNo, T &key)
 }
 
 
-const void BTreeIndex::printTree()
-{
-  switch  (attributeType ) {
-    case INTEGER:
-      printTree<int, struct NonLeafNodeInt, struct LeafNodeInt>();
-      break;
-    case DOUBLE:
-      printTree<double, struct NonLeafNodeDouble, struct LeafNodeDouble>();
-      break;
-    case STRING:
-      printTree<char[STRINGSIZE], struct NonLeafNodeString, struct LeafNodeString>();
-      break;
-    default:
-      std::cout<<"Unsupported data type\n";
-  }
-}
-
-
-template <class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::printTree() 
-{
-  std::cout<<"<><><><><><>Printing Tree " << std::endl;
-  Page *tempPage;
-  PageId currNo = rootPageNum;
-
-  bool rootIsLeaf = rootPageNum == 2;
-  bufMgr->readPage(file, currNo, tempPage);
-
-  int lineSize = 20;
-
-  try {
-    if ( rootIsLeaf ) {
-      // print the root
-      T_LeafNode *currPage = reinterpret_cast<T_LeafNode*>(tempPage);
-      int size = currPage->size;
-  std::cout<<" Root is leaf and the size is "<<size<<std::endl;
-  std::cout<<std::endl<<" PageId: "<<currNo<<std::endl;
-      for ( int i = 0 ; i < size ; ++i) {
-        if ( i%lineSize == 0 ) std::cout<<std::endl<<i<<": ";
-        std::cout<<currPage->keyArray[i]<<" ";
-      }
-      std::cout<<std::endl<<" Root Leaf BTree printed"<<std::endl;
-      bufMgr->unPinPage(file, currNo, false);
-    } else {
-      T_NonLeafNode *currPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-      // travease down to the 1 level above leaf
-      while ( currPage->level != 1 ) {
-        PageId nextPageNo = currPage->pageNoArray[0];
-        bufMgr->unPinPage(file, currNo, false);
-        currNo = nextPageNo;
-        bufMgr->readPage(file, currNo, tempPage);
-        currPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-      }
-
-      PageId leafNo = currPage->pageNoArray[0];
-      bufMgr->unPinPage(file, currNo, false);
-
-      // print the tree
-      currNo = leafNo;
-      bufMgr->readPage(file, currNo, tempPage);
-      T_LeafNode *currLeafPage = reinterpret_cast<T_LeafNode*>(tempPage);
-      while ( 1 ) {
-        int size = currLeafPage->size;
-        std::cout<<std::endl<<" PageId: "<<currNo<<std::endl;
-        for ( int i = 0 ; i < size ; ++i) {
-          if ( i%lineSize == 0 ) std::cout<<std::endl<<i<<": ";
-          std::cout<<currLeafPage->keyArray[i]<<" ";
-        }
-        std::cout<<std::endl;
-        bufMgr->unPinPage(file, currNo, false);
-        if ( currLeafPage->rightSibPageNo == 0 ) break;
-        currNo = currLeafPage->rightSibPageNo;
-        bufMgr->readPage(file, currNo, tempPage);
-        currLeafPage = reinterpret_cast<T_LeafNode*>(tempPage);
-      }
-      std::cout<<std::endl<<" BTree printed"<<std::endl;
-      bufMgr->unPinPage(file, currNo, false);
-    }
-  } catch ( PageNotPinnedException e ) {
-  }
-  
-}
-
-
-
-
-// -----------------------------------------------------------------------------
-// BTreeIndex::deleteEntry
-// -----------------------------------------------------------------------------
-
-const void BTreeIndex::deleteEntry(const void* key)
-{
-    // determine the type
-    if ( attributeType == INTEGER ) {
-        int intKey = *(int*)key;
-        PageId leafToDelete = findLeafNode<int, struct NonLeafNodeInt>
-          (rootPageNum, intKey);
-        deleteLeafNode<int, struct NonLeafNodeInt, struct LeafNodeInt>
-          (leafToDelete, intKey);
-    } else if ( attributeType == DOUBLE ) {
-        double doubleKey = *(double*)key;
-        PageId leafToDelete = findLeafNode<double, struct NonLeafNodeDouble>
-          (rootPageNum, doubleKey);
-        deleteLeafNode<double, struct NonLeafNodeDouble, struct LeafNodeDouble>
-          (leafToDelete, doubleKey);
-    } else if ( attributeType == STRING ) {
-        char stringKey[STRINGSIZE];
-        strncpy(stringKey, (char*)key, STRINGSIZE);
-//         memcpy(stringKey, (char*)key, STRINGSIZE);
-        PageId leafToDelete = findLeafNode<char[STRINGSIZE], struct NonLeafNodeString>
-          (rootPageNum, stringKey);
-        deleteLeafNode<char[STRINGSIZE], struct NonLeafNodeString, struct LeafNodeString>
-          (leafToDelete, stringKey);
-    }
-}
-
-
-
-// -----------------------------------------------------------------------------
-// BTreeIndex::deleteLeafNode
-// -----------------------------------------------------------------------------
-
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::deleteLeafNode(PageId pageNo, T& key)
-{
-  Page * tempPage;
-  bufMgr->readPage(file, pageNo, tempPage);
-  T_LeafNode * thisPage = reinterpret_cast<T_LeafNode*>(tempPage);
-
-  int index = getIndex<T, T_LeafNode>(thisPage, key);
-  if ( index == -1 ) {
-    bufMgr->unPinPage(file, pageNo, false);
-    throw EmptyBTreeException();
-  }
-
-  // check if this key is equal to the key to be deleted. 
-  // If not, key does not exist in the tree, just return.
-  if ( compare(thisPage->keyArray[index], key) != 0 ) {
-    std::cout<<"key does not exist!\n";
-    bufMgr->unPinPage(file, pageNo, false);
-    return;
-  }
-
-  // delete one anyway
-  (thisPage->size)--;
-  int thisSize = thisPage->size;
-  memmove((void*)(&(thisPage->keyArray[index])),
-          (void*)(&(thisPage->keyArray[index+1])), sizeof(T)*(thisSize-index));
-  memmove((void*)(&(thisPage->ridArray[index])),
-          (void*)(&(thisPage->ridArray[index+1])), sizeof(RecordId)*(thisSize-index));
-
-  int leafHalfFillNo = leafOccupancy/2;
-
-  // size of node in  [leafOccupancy/2, leafOccupancy]
-  // Exception: root page does not need to be at least half filled
-  // return if it is root or size is large enough
-  if ( pageNo == rootPageNum || thisSize >= leafHalfFillNo ) {
-    bufMgr->unPinPage(file, pageNo, true);
-    return;
-  }
-
-  { // need to redistribution or merge
-    // check if the neigbours have extra, check both neigbour
-    // If this is the last child, need to find the previous child, with a bit pain.
-
-    bool needToMerge = false; // need to merge or not
-    PageId firstPageNo = 0, secondPageNo = 0;
-    PageId parentPageNo = findParentOf<T, T_NonLeafNode, T_LeafNode>
-      (pageNo, thisPage->keyArray[thisSize-1]);
-
-    bufMgr->readPage(file, parentPageNo, tempPage);
-    T_NonLeafNode* parentPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-
-    // easier case first, check right sibling
-    PageId rightPageNo = thisPage->rightSibPageNo;
-
-    if ( rightPageNo != 0 ) { // try to borrow one from right sibling
-      bufMgr->readPage(file, rightPageNo, tempPage);
-      T_LeafNode* rightPage = reinterpret_cast<T_LeafNode*>(tempPage);
-      int rightPageSize = rightPage->size;
-      if ( rightPageSize > leafHalfFillNo ) { // just borrow one, change parent key, done!
-        // update the parent key
-        int pindex = getIndex<T, T_NonLeafNode>(parentPage, rightPage->keyArray[0]);
-        copyKey(parentPage->keyArray[pindex], rightPage->keyArray[1]);
-        // copy one from right to left
-        copyKey(thisPage->keyArray[thisSize], rightPage->keyArray[0]);
-        thisPage->ridArray[thisSize] = rightPage->ridArray[0];
-        // delete the original one
-        memmove((void*)(&(rightPage->keyArray[0])),
-                (void*)(&(rightPage->keyArray[1])), sizeof(T)*(rightPageSize-1));
-        memmove((void*)(&(rightPage->ridArray[0])),
-                (void*)(&(rightPage->ridArray[1])), sizeof(RecordId)*(rightPageSize-1));
-        (rightPage->size)--;
-        (thisPage->size)++;
-        bufMgr->unPinPage(file, pageNo, true);
-        bufMgr->unPinPage(file, rightPageNo, true);
-        bufMgr->unPinPage(file, parentPageNo, true);
-        return;
-      } else {// unfortunately, merge.
-        needToMerge = true;
-        firstPageNo = pageNo;
-        secondPageNo = rightPageNo;
-        bufMgr->unPinPage(file, rightPageNo, false);
-      }
-    }
-
-    // do extra work to retreive the left sibling
-    int pindex = getIndex<T, T_NonLeafNode>(parentPage, thisPage->keyArray[thisSize-1]);
-    // if the current page is already the first, pindex is 0
-    if ( pindex > 0 ) { // try to borrow one from left sibling
-      PageId leftPageNo = parentPage->pageNoArray[pindex-1];
-      bufMgr->readPage(file, leftPageNo, tempPage);
-      T_LeafNode* leftPage = reinterpret_cast<T_LeafNode*>(tempPage);
-      int leftPageSize = leftPage->size;
-
-      if ( leftPageSize > leafHalfFillNo ) { // just borrow one
-        // update the parent
-        copyKey(parentPage->keyArray[pindex], leftPage->keyArray[leftPageSize-1]);
-        // shift all keys in this page to make room for incoming key
-        memmove((void*)(&(thisPage->keyArray[1])),
-                (void*)(&(thisPage->keyArray[0])), sizeof(T)*(thisSize));
-        memmove((void*)(&(thisPage->ridArray[1])),
-                (void*)(&(thisPage->ridArray[0])), sizeof(RecordId)*(thisSize));
-        // copy one from left to right
-        copyKey(thisPage->keyArray[0], leftPage->keyArray[leftPageSize-1]);
-        thisPage->ridArray[0] = leftPage->ridArray[leftPageSize-1];
-        (leftPage->size)--;
-        (thisPage->size)++;
-        bufMgr->unPinPage(file, pageNo, true);
-        bufMgr->unPinPage(file, leftPageNo, true);
-        bufMgr->unPinPage(file, parentPageNo, true);
-        return;
-      } else {
-        bufMgr->unPinPage(file, leftPageNo, false);
-      }
-    }
-    bufMgr->unPinPage(file, pageNo, true);
-
-    // merge if redistribution fails
-    if ( needToMerge ) {
-//       mergeLeafNode<T, T_NonLeafNode, T_LeafNode>(firstPageNo, secondPageNo);
-      bufMgr->readPage(file, firstPageNo, tempPage);
-      T_LeafNode* firstPage = reinterpret_cast<T_LeafNode*>(tempPage);
-      bufMgr->readPage(file, secondPageNo, tempPage);
-      T_LeafNode* secondPage = reinterpret_cast<T_LeafNode*>(tempPage);
-
-      int size1 = firstPage->size, size2 = secondPage->size;
-      // validate
-      if ( size1+size2 > leafOccupancy) {
-        std::cout<<" final size larger than leafOccupancy after merging!\n";
-        return;
-      }
-
-      // combine entries
-      memmove((void*)(&( firstPage->keyArray[size1])),
-              (void*)(&(secondPage->keyArray[0])), sizeof(T)*(size2));
-      memmove((void*)(&( firstPage->ridArray[size1])),
-              (void*)(&(secondPage->ridArray[0])), sizeof(RecordId)*(size2));
-      firstPage->size = size1+size2;
-
-      // delete the second page
-      firstPage->rightSibPageNo = secondPage->rightSibPageNo;
-      bufMgr->unPinPage(file, secondPageNo, false);
-//       bufMgr->disposePage(file, secondPageNo); // TODO
-
-      // delete parent entry
-      T key;
-      copyKey(key, firstPage->keyArray[0]);
-      bufMgr->unPinPage(file, firstPageNo, true);
-      bufMgr->unPinPage(file, parentPageNo, true);
-      deleteNonLeafNode<T, T_NonLeafNode, T_LeafNode>(parentPageNo, key);
-    } else {
-      bufMgr->unPinPage(file, parentPageNo, true);
-    }
-  }
-}
-
-
-// -----------------------------------------------------------------------------
-// BTreeIndex::mergeLeafNode
-// -----------------------------------------------------------------------------
-
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::mergeLeafNode(PageId firstPageNo, PageId secondPageNo)
-{
-  Page* tempPage;
-  bufMgr->readPage(file, firstPageNo, tempPage);
-  T_LeafNode* firstPage = reinterpret_cast<T_LeafNode*>(tempPage);
-  bufMgr->readPage(file, secondPageNo, tempPage);
-  T_LeafNode* secondPage = reinterpret_cast<T_LeafNode*>(tempPage);
-
-  int size1 = firstPage->size, size2 = secondPage->size;
-
-  // validate
-  if ( size1+size2 > leafOccupancy) {
-    std::cout<<" final size larger than leafOccupancy after merging!\n";
-    return;
-  }
-
-  // combine entries
-  memmove((void*)(&( firstPage->keyArray[size1])),
-          (void*)(&(secondPage->keyArray[0])), sizeof(T)*(size2));
-  memmove((void*)(&( firstPage->ridArray[size1])),
-          (void*)(&(secondPage->ridArray[0])), sizeof(RecordId)*(size2));
-  firstPage->size = size1+size2;
-
-  // delete the second page
-  firstPage->rightSibPageNo = secondPage->rightSibPageNo;
-  bufMgr->unPinPage(file, secondPageNo, false);
-//   bufMgr->disposePage(file, secondPageNo); // TODO lead to invaildpagee
-
-  // delete parent entry
-  PageId parentPageNo = findParentOf<T, T_NonLeafNode, T_LeafNode>
-    (firstPageNo, firstPage->keyArray[size1-1]);
-  T key;
-  copyKey(key, firstPage->keyArray[0]);
-  bufMgr->unPinPage(file, firstPageNo, true);
-  deleteNonLeafNode<T, T_NonLeafNode, T_LeafNode>(parentPageNo, key);
-//   deleteNonLeafNode<T, T_NonLeafNode, T_LeafNode>(parentPageNo, index);
-}
-
-
-
-// -----------------------------------------------------------------------------
-// BTreeIndex::deleteNonLeafNode
-// -----------------------------------------------------------------------------
-
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::deleteNonLeafNode(PageId pageNo, T& key)
-{
-  Page* tempPage;
-  bufMgr->readPage(file, pageNo, tempPage);
-  T_NonLeafNode* thisPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-
-//   int index = getIndex(thisPage, key);
-  int index = getIndex<T, T_NonLeafNode>(thisPage, key);
-  // delete the key at index
-  (thisPage->size)--;
-  int thisSize = thisPage->size;
-  if ( index == thisSize ) { // if it is the last key to be delete, done.
-  } else { // otherwise, need to shift all keys left by one
-    memmove((void*)(&(thisPage->keyArray[index])),
-            (void*)(&(thisPage->keyArray[index+1])), sizeof(T)*(thisSize-index));
-    memmove((void*)(&(thisPage->pageNoArray[index+1])),
-            (void*)(&(thisPage->pageNoArray[index+2])), sizeof(PageId)*(thisSize-index));
-  }
-
-
-  // check if we need to cut down the tree
-  if ( pageNo == rootPageNum && thisSize == 0 ) {
-    // cut down tree by 1 level
-    // update class field
-    rootPageNum = thisPage->pageNoArray[0];
-    // update meta page
-    bufMgr->readPage(file, headerPageNum, tempPage);
-    IndexMetaInfo* metaPage = reinterpret_cast<IndexMetaInfo*>(tempPage);
-    metaPage->rootPageNo = thisPage->pageNoArray[0];
-    bufMgr->unPinPage(file, headerPageNum, true);
-    
-    // delete current page
-    bufMgr->unPinPage(file, pageNo, false);
-//     bufMgr->disposePage(file, pageNo); // TODO
-    return;
-  }
-
-  // determine if we need to redistribute or merge nodes
-  int nodeHalfFillNo = nodeOccupancy/2;
-  if ( pageNo == rootPageNum || thisSize >= nodeHalfFillNo ) {
-    bufMgr->unPinPage(file, pageNo, true);
-    return;
-  }
-
-  // decide how to adjust the tree
-  {
-    bool needToMerge = false;
-    PageId firstPageNo = 0, secondPageNo = 0;
-
-    PageId parentPageNo = findParentOf<T, T_NonLeafNode, T_LeafNode>
-      (pageNo, thisPage->keyArray[thisSize-1]);
-    bufMgr->readPage(file, parentPageNo, tempPage);
-    T_NonLeafNode* parentPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-
-    // there is not shortcut to find sibling nodes, use the painful way as in leaf node
-
-    //                                                use the last one as index
-    //                                                to get pointer that points
-    //                                                to current page
-    int pindex = getIndex<T, T_NonLeafNode>(parentPage, thisPage->keyArray[thisSize-1]);
-    // pindex is in [1,size], guaranteed to have previous one, but not next one
-
-    if ( pindex < parentPage->size ) { // try right page 
-      // next index points to the right child
-      PageId rightPageNo = parentPage->pageNoArray[pindex+1];
-      bufMgr->readPage(file, rightPageNo, tempPage);
-      T_NonLeafNode* rightPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-      int rightPageSize = rightPage->size;
-
-      if ( rightPageSize > nodeHalfFillNo ) { // just borrow one
-        // 1. move the parent key and the first pointer in right page to this page
-        copyKey(thisPage->keyArray[thisSize], parentPage->keyArray[pindex]);
-        thisPage->pageNoArray[thisSize+1] = rightPage->pageNoArray[0];
-        // 2. move right page key to the parent
-        copyKey(parentPage->keyArray[pindex], rightPage->keyArray[0]);
-        // 3. shift all data in right page
-        memmove((void*)(&(rightPage->keyArray[0])),
-                (void*)(&(rightPage->keyArray[1])), sizeof(T)*(rightPageSize-1));
-        memmove((void*)(&(rightPage->pageNoArray[0])),
-                (void*)(&(rightPage->pageNoArray[1])), sizeof(PageId)*(rightPageSize));
-
-        (thisPage->size)++;
-        (rightPage->size)--;
-        bufMgr->unPinPage(file, pageNo, true);
-        bufMgr->unPinPage(file, parentPageNo, true);
-        bufMgr->unPinPage(file, rightPageNo, true);
-        return;
-      } else { // need to merge
-        needToMerge = true;
-        firstPageNo = pageNo;
-        secondPageNo = rightPageNo;
-        bufMgr->unPinPage(file, rightPageNo, false);
-      }
-    }
-
-    { // try left page
-      // the previous one is the left child
-      PageId leftPageNo = parentPage->pageNoArray[pindex-1];
-      bufMgr->readPage(file, leftPageNo, tempPage);
-      T_NonLeafNode* leftPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-      int leftPageSize = leftPage->size;
-
-      if ( leftPageSize > nodeHalfFillNo ) { // just borrow one
-        // 0. make room for new key in this page
-        memmove((void*)(&(thisPage->keyArray[1])),
-                (void*)(&(thisPage->keyArray[0])), sizeof(T)*(thisSize));
-        memmove((void*)(&(thisPage->pageNoArray[1])),
-                (void*)(&(thisPage->pageNoArray[0])), sizeof(PageId)*(thisSize+1));
-        // 1. move the parent key to this page, and last pointer in left page to this page
-        copyKey(thisPage->keyArray[0], parentPage->keyArray[pindex]);
-        thisPage->pageNoArray[0] = leftPage->pageNoArray[leftPageSize];
-        // 2. move the last key in left to parent
-        copyKey(parentPage->keyArray[pindex], leftPage->keyArray[leftPageSize-1]);
-        (thisPage->size)++;
-        (leftPage->size)--;
-        bufMgr->unPinPage(file, pageNo, true);
-        bufMgr->unPinPage(file, parentPageNo, true);
-        bufMgr->unPinPage(file, leftPageNo, true);
-        return;
-      } else { // need to Merge
-        bufMgr->unPinPage(file, leftPageNo, false);
-      }
-    }
-
-    bufMgr->unPinPage(file, pageNo, true);
-    bufMgr->unPinPage(file, parentPageNo, true);
-
-    // merge if redistribution fails
-    if (needToMerge) 
-      mergeNonLeafNode<T, T_NonLeafNode, T_LeafNode>(firstPageNo, secondPageNo);
-
-  }
-
-}
-
-
-// -----------------------------------------------------------------------------
-// BTreeIndex::mergeNonLeafNode
-// -----------------------------------------------------------------------------
-
-template<class T, class T_NonLeafNode, class T_LeafNode>
-const void BTreeIndex::mergeNonLeafNode(PageId firstPageNo, PageId secondPageNo)
-{
-  Page* tempPage;
-  bufMgr->readPage(file, firstPageNo, tempPage);
-  T_NonLeafNode* firstPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-  bufMgr->readPage(file, secondPageNo, tempPage);
-  T_NonLeafNode* secondPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-
-  int size1 = firstPage->size, size2 = secondPage->size;
-  // validate
-  if ( size1+size2 > nodeOccupancy) {
-    std::cout<<" final size larger than nodeOccupancy after merging!\n";
-    return;
-  }
-
-
-  PageId parentPageNo = findParentOf<T, T_NonLeafNode, T_LeafNode>
-    (firstPageNo, firstPage->keyArray[size1-1]);
-  bufMgr->readPage(file, parentPageNo, tempPage);
-  T_NonLeafNode* parentPage = reinterpret_cast<T_NonLeafNode*>(tempPage);
-
-  // there is not shortcut to find sibling nodes, use the painful way as in leaf node
-
-  //                                                use the last one as index
-  //                                                to get pointer that points
-  //                                                to current page
-  int pindex = getIndex<T, T_NonLeafNode>(parentPage, firstPage->keyArray[size1-1]);
-
-  // combine entries
-  copyKey(firstPage->keyArray[size1], parentPage->keyArray[pindex]);
-  memmove((void*)(&( firstPage->keyArray[size1+1])),
-          (void*)(&(secondPage->keyArray[0])), sizeof(T)*(size2));
-  memmove((void*)(&( firstPage->pageNoArray[size1+1])),
-          (void*)(&(secondPage->pageNoArray[0])), sizeof(RecordId)*(size2+1));
-  firstPage->size = size1+size2+1; // one from the parent page
-
-  // delete the second page
-  bufMgr->unPinPage(file, secondPageNo, false);
-//   bufMgr->disposePage(file, secondPageNo); // TODO
-
-  // delete parent entry
-  T key;
-  copyKey(key, firstPage->keyArray[0]);
-  bufMgr->unPinPage(file, firstPageNo, true);
-  deleteNonLeafNode<T, T_NonLeafNode, T_LeafNode>(parentPageNo, key);
-}
-
-
 // -----------------------------------------------------------------------------
 // BTreeIndex::startScan
 // -----------------------------------------------------------------------------
@@ -1178,6 +653,7 @@ const void BTreeIndex::startScan(const void*    lowValParm,
                                  const void*    highValParm,
                                  const Operator highOpParm)
 {
+
     // input validation
     if ( (lowOpParm  != GT && lowOpParm  != GTE) 
       || (highOpParm != LT && highOpParm != LTE) ) {
@@ -1207,10 +683,9 @@ const void BTreeIndex::startScan(const void*    lowValParm,
     } else if ( attributeType == STRING ) {
       strncpy(lowStringKey, (char*)lowValParm, STRINGSIZE);
       strncpy(highStringKey, (char*)highValParm, STRINGSIZE);
-//       memcpy(lowStringKey, (char*)lowValParm, STRINGSIZE);
-//       memcpy(highStringKey, (char*)highValParm, STRINGSIZE);
       startScanHelper<char[STRINGSIZE], struct NonLeafNodeString, struct LeafNodeString>
           (lowStringKey, highStringKey);
+
     } else {
        std::cout<<"Unsupported data type\n";
        exit(1);  // dangerous exit, need to clean the memory ??
@@ -1229,9 +704,10 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
         scanExecuting = false;
         throw BadScanrangeException();
       }
+      
       // find the first page
       // findLeafNode method only find the page that key shoud be insert in,
-      // which means if the lowVal is equal to the first key in some page,
+      // which means it the lowVal is equal to the first key in some page,
       // the returned page is the previous page
       currentPageNum = findLeafNode<T, T_NonLeafNode>(rootPageNum, lowVal);
       // find the first index
@@ -1240,6 +716,7 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
       thisPage = reinterpret_cast<T_LeafNode*>(currentPageData);
       
       int size = thisPage->size;
+
       // if lowValInt is larger than the last entry, it should goto next page
       // else search the nextEntry
       if ( compare<T>(lowVal, thisPage->keyArray[size-1]) > 0 ) {
@@ -1254,6 +731,7 @@ const void BTreeIndex::startScanHelper(T &lowVal, T &highVal)
       if ( lowOp==GT && compare<T>(lowVal, thisPage->keyArray[nextEntry])==0) {
         shiftToNextEntry<T_LeafNode>(thisPage);
       }
+
       // will not unpin this page, because it will be used later
 //       bufMgr->unPinPage(file, currentPageNum, false);
 }
@@ -1277,10 +755,12 @@ const void BTreeIndex::scanNext(RecordId& outRid)
       scanNextHelper<double, struct LeafNodeDouble>(outRid, lowValDouble, highValDouble);
     } else if ( attributeType == STRING ) {
       scanNextHelper<char[STRINGSIZE], struct LeafNodeString>(outRid, lowStringKey, highStringKey);
+
     } else {
        std::cout<<"Unsupported data type\n";
        exit(1);  // dangerous exit, need to clean the memory ??
     }
+
 }
 
 
@@ -1291,9 +771,6 @@ const void BTreeIndex::scanNext(RecordId& outRid)
 template <class T, class T_LeafNode >
 const void BTreeIndex::scanNextHelper(RecordId & outRid, T lowVal, T highVal)
 {
-    if ( nextEntry == -1 ) 
-      throw IndexScanCompletedException();
-
     T_LeafNode* thisPage = reinterpret_cast<T_LeafNode*>(currentPageData);
 
     if ( compare<T>(thisPage->keyArray[nextEntry], highVal) > 0 ) {
@@ -1302,6 +779,7 @@ const void BTreeIndex::scanNextHelper(RecordId & outRid, T lowVal, T highVal)
     // check with LT or LTE
       throw IndexScanCompletedException();
     }
+
     outRid = thisPage->ridArray[nextEntry];
     shiftToNextEntry<T_LeafNode>(thisPage);
 }
