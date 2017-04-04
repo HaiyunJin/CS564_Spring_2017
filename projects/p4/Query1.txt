@@ -1,0 +1,11 @@
+.mode column
+.headers on
+
+SELECT Nutr_Val
+FROM NUT_DATA N, FOOD_DES F
+WHERE N.Nutr_No = 205
+    AND N.NDB_No = F.NDB_No
+    AND F.Long_Desc = "McDONALD'S, Hamburger";
+
+
+-- List the nutrition value of the nutrient 205 (205 is the unique 3-digit identifier code for a nutrient) in “McDONALD'S, Hamburger”.

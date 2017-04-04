@@ -1,0 +1,67 @@
+-- .width 10 20 10 60
+.mode column
+.headers on
+
+-- Find all the food items that contain both “Caffeine” and “Alcohol, ethyl” and then list both these ingredients per 100 grams of the food item.
+
+
+---- Query that find food has Caffeine ----
+-- SELECT DISTINCT N1.NDB_No
+-- FROM NUT_DATA N1, NUTR_DEF ND1
+-- WHERE N1.Nutr_No = ND1.Nutr_No
+--     AND ND1.NutrDesc like  "%Caffeine%" COLLATE NOCASE
+--     AND N1.Nutr_Val > 0
+
+---- Query to find the food that has Alcohol, ethyl ----
+-- SELECT DISTINCT N1.NDB_No
+-- FROM NUT_DATA N1, NUTR_DEF ND1
+-- WHERE N1.Nutr_No = ND1.Nutr_No
+--     AND ND1.NutrDesc LIKE "%Alcohol, ethyl%" COLLATE NOCASE
+--     AND N1.Nutr_Val > 0
+
+
+
+---- Query to find food have both
+WITH hascaff(NDB_No, Nutr_Val) AS (
+         SELECT DISTINCT N1.NDB_No, N1.Nutr_Val
+         FROM NUT_DATA N1, NUTR_DEF ND1
+         WHERE N1.Nutr_No = ND1.Nutr_No
+             AND ND1.NutrDesc like  "%Caffeine%" COLLATE NOCASE
+             AND N1.Nutr_Val > 0
+      ),
+     hasAlcol(NDB_No, Nutr_Val) AS (
+         SELECT DISTINCT N2.NDB_No, N2.Nutr_Val
+         FROM NUT_DATA N2, NUTR_DEF ND2
+         WHERE N2.Nutr_No = ND2.Nutr_No
+             AND ND2.NutrDesc LIKE "%Alcohol, ethyl%" COLLATE NOCASE
+             AND N2.Nutr_Val > 0
+      )
+SELECT F.Long_Desc AS "Food Name", C.Nutr_Val AS "Caffeine", A.Nutr_Val AS "Alcohol"
+FROM hascaff C, hasAlcol A, FOOD_DES F
+WHERE C.NDB_No IN ( SELECT NDB_No FROM hasAlcol )
+    AND C.NDB_No = F.NDB_No
+GROUP BY F.NDB_No
+;
+
+
+------ try ---- but not finish
+-- WITH food(NDB_No) AS (
+--   -- SELECT DISTINCT N1.NDB_No, N1.Nutr_Val,  ND1.NutrDesc, F.Long_Desc
+--   SELECT DISTINCT N1.NDB_No
+--   FROM NUT_DATA N1, NUTR_DEF ND1, FOOD_DES F
+--   WHERE N1.Nutr_No = ND1.Nutr_No
+--       AND ND1.NutrDesc like  "%Caffeine%" COLLATE NOCASE
+--       AND F.NDB_No = N1.NDB_No
+--   INTERSECT
+--   -- SELECT DISTINCT N2.NDB_No, N2.Nutr_Val,  ND2.NutrDesc, F2.Long_Desc
+--   SELECT DISTINCT N2.NDB_No
+--   FROM NUT_DATA N2, NUTR_DEF ND2, FOOD_DES F2
+--   WHERE N2.Nutr_No = ND2.Nutr_No
+--       AND ND2.NutrDesc LIKE "%Alcohol, ethyl%" COLLATE NOCASE
+--       AND F2.NDB_No = N2.NDB_No
+-- ) 
+-- SELECT F3.Long_Desc, 
+-- FROM  FOOD_DES F3, food FO, NUT_DATA N3
+-- WHERE F3.NDB_No = FO.NDB_No
+--     AND 
+

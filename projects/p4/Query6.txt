@@ -1,0 +1,57 @@
+.width 10 20 10 60
+.mode column
+.headers on
+
+-- List all the food item(s) that contain "water" but do not contain "calcium". Sort the result in descending order of food group code. For food items belonging to the same food group, sort them in ascending order of short description of the food item.
+
+
+
+---- Query that find food has water ----
+-- SELECT DISTINCT N1.NDB_No
+-- FROM NUT_DATA N1, NUTR_DEF ND1
+-- WHERE N1.Nutr_No = ND1.Nutr_No
+--     AND ND1.NutrDesc = "water" COLLATE NOCASE
+
+---- Query to find the food that has calcium ----
+-- SELECT DISTINCT N1.NDB_No
+-- FROM NUT_DATA N1, NUTR_DEF ND1
+-- WHERE N1.Nutr_No = ND1.Nutr_No
+--     AND ND1.NutrDesc LIKE "%calcium%" COLLATE NOCASE
+
+---- Query to find the food that does not have calcium ----
+-- SELECT F.Long_Desc AS "Food Name"
+-- FROM FOOD_DES F, NUT_DATA N, NUTR_DEF ND
+-- WHERE F.NDB_No = N.NDB_No
+--     AND N.Nutr_No = ND.Nutr_No
+--     AND F.NDB_No NOT IN ( SELECT DISTINCT N1.NDB_No
+--                           FROM NUT_DATA N1, NUTR_DEF ND1
+--                           WHERE N1.Nutr_No = ND1.Nutr_No
+--                             AND ND1.NutrDesc LIKE "%calcium%" COLLATE NOCASE
+-- --                              AND ND1.NutrDesc = "calcium" COLLATE NOCASE
+--                         )
+-- GROUP BY F.NDB_No
+-- ORDER BY F.FdGrp_Cd
+
+
+---- Query to find food has water but not calcium ----
+WITH haswater AS (
+         SELECT DISTINCT N1.NDB_No
+         FROM NUT_DATA N1, NUTR_DEF ND1
+         WHERE N1.Nutr_No = ND1.Nutr_No
+             AND ND1.NutrDesc = "water" COLLATE NOCASE
+      ),
+     nocalcium AS (
+          SELECT DISTINCT N2.NDB_No
+          FROM NUT_DATA N2, NUTR_DEF ND2
+          WHERE N2.Nutr_No = ND2.Nutr_No
+              AND ND2.NutrDesc LIKE "%calcium%" COLLATE NOCASE
+      )
+SELECT F.FdGrp_Cd AS "Group Code", F.Shrt_Desc AS "Short Name", W.NDB_No, F.Long_Desc AS "Food Name"
+FROM haswater W, nocalcium C, FOOD_DES F
+WHERE W.NDB_No NOT IN ( SELECT * FROM nocalcium )
+    AND W.NDB_No = F.NDB_No
+GROUP BY F.NDB_No
+ORDER BY F.FdGrp_Cd DESC, F.Shrt_Desc
+;
+
+

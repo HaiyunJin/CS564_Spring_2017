@@ -1,0 +1,30 @@
+.mode column
+.headers on
+
+-- Print the name of the food item(s) with the highest number of nutrients in it and also print the count of the nutrients.
+
+-- table with name and its nutrients count
+WITH Temp_T (Long_Desc, count) AS (
+    SELECT F2.Long_Desc, count(Nutr_No) AS count
+        FROM FOOD_DES F2, NUT_DATA N2
+        WHERE N2.NDB_No = F2.NDB_No
+        GROUP BY N2.NDB_No
+  )
+SELECT Temp_T.Long_Desc AS Name , max(Temp_T.count) AS "No. Nutrients"
+  FROM Temp_T
+;
+
+
+
+
+-- Attemp 1 --
+-- 
+-- SELECT Temp.Long_Desc , max(Temp.count)
+-- FROM  ( SELECT F2.Long_Desc, count(Nutr_No) AS count
+--             FROM FOOD_DES F2, NUT_DATA N2 
+--             WHERE N2.NDB_No = F2.NDB_No
+--             GROUP BY N2.NDB_No
+--       ) AS Temp
+-- WHERE Temp.count = (SELECT max(Temp.count) FROM Temp)
+-- ;
+-- create temporary table in FROM statement is not allowed

@@ -1,0 +1,22 @@
+.width 8 30 8
+.mode column
+.headers on
+
+
+-- Write a query to generate Table 1 in the sr28_doc.pdf (you don’t need to sort it in exactly the same way as Table 1).
+-- Nutr. No | Nutrient | Count
+
+SELECT N.Nutr_No as "Nutr. No", ND.NutrDesc AS "Nutrient" , count(N.Nutr_No) as "Count"
+-- SELECT N.Nutr_No as "Nutr. No", ND.NutrDesc AS "Nutrient" , count(F.NDB_No) as "Count"
+FROM NUT_DATA N, FOOD_DES F,  NUTR_DEF ND
+WHERE ND.Nutr_No = N.Nutr_No
+    AND F.NDB_No = N.NDB_No
+GROUP BY N.Nutr_No;
+
+
+
+-- By the query
+--  SELECT count(NDB_No)
+--      from FOOD_DES;
+-- the total number of food is 7797, different from Table 1
+

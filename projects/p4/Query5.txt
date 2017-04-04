@@ -1,0 +1,29 @@
+.width 40 10
+.mode column
+.headers on
+
+-- List all the food items whose average nutrition value (total nutrition value per 100 grams/ number of nutrients) is greater than that of “McDONALD'S, Hamburger”.
+
+
+-- find that value for hamburger
+-- 31.6684939759036
+
+WITH MCD(avgvalue) AS (
+  SELECT sum(N.Nutr_Val)/count(N.Nutr_No ) AS "Average Nutrition Value"
+  FROM FOOD_DES F, NUT_DATA N
+  WHERE N.NDB_No = F.NDB_No
+      AND F.Long_Desc = "McDONALD'S, Hamburger"
+),
+AVGNUT ( name, avgvalue ) AS (
+  SELECT F.Long_Desc,  sum(N.Nutr_Val)/count(N.Nutr_No )
+  FROM FOOD_DES F, NUT_DATA N
+  WHERE N.NDB_No = F.NDB_No
+  GROUP BY N.NDB_No
+)
+SELECT A.name as Name, A.avgvalue AS "Average Nutrition Value"
+FROM AVGNUT A, MCD M
+WHERE A.avgvalue > M.avgvalue
+;
+
+
+
