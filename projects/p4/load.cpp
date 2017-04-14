@@ -38,14 +38,17 @@ int main(int argc, char *argv[])
       filename = "FOOD_DES.txt"; // 4
       int numValue = 14;
       string values[] = {"NDB_No","FdGrp_Cd","Long_Desc","Shrt_Desc","ComName",
-        "ManufacName","Survey","Ref_desc","Refuse","SciName","N_Factor",
-        "Pro_Factor","Fat_Factor","CHO_Factor"};
+        "ManufacName","Survey","Ref_desc","Refuse","SciName",
+        "N_Factor","Pro_Factor","Fat_Factor","CHO_Factor"};
       Datatype types[] = {VARCHAR,VARCHAR,VARCHAR,VARCHAR,VARCHAR,VARCHAR,
          VARCHAR,VARCHAR,NUMERIC,VARCHAR,NUMERIC,NUMERIC,NUMERIC,NUMERIC};
       int sizes[] = {5, 4 , 200, 60, 100, 65, 1, 135, 2, 65,4,4,4,4};
-      bool hasNull[] = { false, false, false, false, true, true, true,
-                        true, true, true, true, true, true, true};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = { 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+      bool unique[] =  { 1, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0};
+      string primaykey = "NDB_No";
+      string foreignkey = "FOREIGN KEY (FdGrp_Cd) REFERENCES FOOD_DES(FdGrp_Cd)";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 5. Food Group Description File
@@ -54,8 +57,12 @@ int main(int argc, char *argv[])
       string values[] = {"FdGrp_Cd", "FdGrp_Desc"};
       Datatype types[] = {VARCHAR,VARCHAR};
       int sizes[] = {4, 60};
-      bool hasNull[] = {false, false};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = {0, 0};
+      bool unique[] = {1, 0};
+      string primaykey = "FdGrp_Cd";
+      string foreignkey = "";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 6. LanguaL Factor File 
@@ -64,8 +71,13 @@ int main(int argc, char *argv[])
       string values[] = {"NDB_No","Factor_Code"};
       Datatype types[] = {VARCHAR, VARCHAR};
       int sizes[] = {5,5};
-      bool hasNull[] = {false,false}; //
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = {0,0}; //
+      bool unique[] = {0, 0};
+      string primaykey = "NDB_No, Factor_Code";
+      string foreignkey = "FOREIGN KEY (NDB_No) REFERENCES FOOD_DES(NDB_No),\n";
+      foreignkey += "\tFOREIGN KEY (Factor_Code) REFERENCES LANGDESC(Factor_Code)";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 7. LanguaL Factors Description File
@@ -74,8 +86,12 @@ int main(int argc, char *argv[])
       string values[] = {"Factor_Code", "Description"};
       Datatype types[] = {VARCHAR, VARCHAR};
       int sizes[] = {5,140};
-      bool hasNull[] = {false,false}; // 
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = {0,0}; // 
+      bool unique[] = {1, 0};
+      string primaykey = "Factor_Code";
+      string foreignkey = "";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 8. Nutrient Data File
@@ -94,10 +110,15 @@ int main(int argc, char *argv[])
       int sizes[] = {5,3,10,5, 8,2, 
                       4,5,1,2,10,10,
                       4,10,10,10,10,1};
-      bool hasNull[] = {false, false, false, false, true, false,
-                        true, true, true, true, true, true,
-                        true, true, true, true, true, true,};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = {0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,};
+      bool unique[] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+      string primaykey = "NDB_No, Nutr_No";
+      string foreignkey = "FOREIGN KEY (NDB_No) REFERENCES FOOD_DES(NDB_No),\n";
+      foreignkey += "\tFOREIGN KEY (Nutr_No) REFERENCES NUTR_DEF(Nutr_No),\n";
+      foreignkey += "\tFOREIGN KEY (Src_Cd) REFERENCES SRC_CD(Src_Cd),\n";
+      foreignkey += "\tFOREIGN KEY (Deriv_Cd) REFERENCES DERIV_CD(Deriv_Cd)";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 9. Nutrient Definition File
@@ -108,8 +129,12 @@ int main(int argc, char *argv[])
       Datatype types[] = {  VARCHAR, VARCHAR, VARCHAR,
                             VARCHAR, VARCHAR, NUMERIC};
       int sizes[] = {3, 7 , 20, 60 ,1 ,6};
-      bool hasNull[] = {false, false, true, false, false, false };
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = {0, 0, 1, 0, 0, 0 };
+      bool unique[] = {1, 0, 0, 0, 0, 0 };
+      string primaykey = "Nutr_No";
+      string foreignkey = "";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 10. Source Code File
@@ -118,8 +143,12 @@ int main(int argc, char *argv[])
       string values[] = {"Src_Cd", "SrcCd_Desc"};
       Datatype types[] = {VARCHAR, VARCHAR};
       int sizes[] = {2,60};
-      bool hasNull[] = {false,false}; // 
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = {0,0}; // 
+      bool unique[] = {1,0}; // 
+      string primaykey = "Src_Cd";
+      string foreignkey = "";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 11. Data Derivation Code Description File
@@ -128,8 +157,12 @@ int main(int argc, char *argv[])
       string values[] = {"Deriv_Cd", "Deriv_Desc"};
       Datatype types[] = {VARCHAR,VARCHAR};
       int sizes[] = {4, 120};
-      bool hasNull[] = { false, false};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = { 0, 0};
+      bool unique[] = {1,0}; // 
+      string primaykey = "Deriv_Cd";
+      string foreignkey = "";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 12. Weight File
@@ -140,8 +173,12 @@ int main(int argc, char *argv[])
       Datatype types[] = {VARCHAR, VARCHAR, NUMERIC, VARCHAR,
                           NUMERIC, NUMERIC, NUMERIC};
       int sizes[] = {5, 2, 5, 84, 7, 3,7};
-      bool hasNull[] = { false, false, false, false, false, true, true};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = { 0, 0, 0, 0, 0, 1, 1};
+      bool unique[] = { 0, 0, 0, 0, 0, 0, 0};
+      string primaykey = "NDB_No, Seq";
+      string foreignkey = "FOREIGN KEY (NDB_No) REFERENCES FOOD_DES(NDB_No)";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 13. Footnote File
@@ -151,8 +188,13 @@ int main(int argc, char *argv[])
                         "Nutr_No","Footnt_Txt"};
       Datatype types[] = {VARCHAR,VARCHAR,VARCHAR,VARCHAR,VARCHAR};
       int sizes[] = {5, 4, 1, 3, 200};
-      bool hasNull[] = { false, false, false, true, false};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = { 0, 0, 0, 1, 0};
+      bool unique[] = { 0, 0, 0, 0, 0};
+      string primaykey = "";
+      string foreignkey = "FOREIGN KEY (NDB_No) REFERENCES FOOD_DES(NDB_No),\n";
+      foreignkey += "\tFOREIGN KEY (Nutr_No) REFERENCES NUTR_DEF(Nutr_No)";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 14. Sources of Data Link File
@@ -161,8 +203,14 @@ int main(int argc, char *argv[])
       string values[] = {"NDB_No", "Nutr_No","DataSrc_ID"};
       Datatype types[] = {VARCHAR,VARCHAR,VARCHAR};
       int sizes[] = {5, 3, 6};
-      bool hasNull[] = { false, false, false};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = { 0, 0, 0};
+      bool unique[] = { 0, 0, 0};
+      string primaykey = "NDB_No, Nutr_No, DataSrc_ID";
+      string foreignkey = "FOREIGN KEY (NDB_No) REFERENCES FOOD_DES(NDB_No),\n";
+      foreignkey += "\tFOREIGN KEY (Nutr_No) REFERENCES NUTR_DEF(Nutr_No),\n";
+      foreignkey += "\tFOREIGN KEY (DataSrc_ID) REFERENCES DATA_SRC(DataSrc_ID)";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     { // Table 15. Sources of Data File
@@ -173,19 +221,31 @@ int main(int argc, char *argv[])
       Datatype types[] = {VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR,
                           VARCHAR, VARCHAR, VARCHAR, VARCHAR};
       int sizes[] = {6, 255, 255, 4, 135, 16, 5, 5, 5};
-      bool hasNull[] = { false, true, false,  true, true, true,
-                         true, true, true};
-      loadData(db,filename, numValue, values, types, sizes, hasNull);
+      bool hasNull[] = { 0, 1, 0, 1, 1, 1, 1, 1, 1};
+      bool unique[] = { 1, 0, 0, 0, 0, 0, 0, 0, 0};
+      string primaykey = "DataSrc_ID";
+      string foreignkey = "";
+      loadData(db,filename, numValue, values, types, sizes, hasNull,
+          unique, primaykey, foreignkey);
     }
 
     sqlite3_close(db);
 }
 
-void loadData(sqlite3 *db, string filename, int numValue,
-              string values[], Datatype types[], int sizes[], bool hasNull[] )
+void loadData(sqlite3 *db,
+              string filename,
+              int numValue,
+              string values[],
+              Datatype types[],
+              int sizes[],
+              bool hasNull[],
+              bool unique[],
+              string primaykey,
+              string foreignkey)
 {
       string tablename = filename.substr(0,filename.length()-4);
-      rc = createTable(db, tablename, numValue, values, types, sizes, hasNull);
+      rc = createTable(db, tablename, numValue, values, types, sizes,
+                        hasNull, unique, primaykey, foreignkey);
       if ( rc != -1 )
         addToTable(db, filename, tablename);
 #ifdef PRINT
@@ -209,9 +269,27 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
   return 0;
 }
 
-int createTable(sqlite3* db, string& tablename, int numValue,
-                string values[], Datatype types[], int sizes[], bool hasNull[])
+int createTable(sqlite3* db,
+                string& tablename,
+                int numValue,
+                string values[],
+                Datatype types[],
+                int sizes[],
+                bool hasNull[],
+                bool unique[],
+                string primaykey,
+                string foreignkey)
 {
+  // drop table if exist
+  clearcmd();
+  sprintf(cmd, "DROP TABLE IF EXISTS %s", tablename.c_str());
+  rc = sqlite3_exec(db, cmd, callback, 0, &zErrMsg);
+  if( rc!=SQLITE_OK ){
+    fprintf(stderr, "SQL error: %s\n", zErrMsg);
+    sqlite3_free(zErrMsg);
+  }
+
+  // create table
   clearcmd();
   sprintf(cmd, "create table %s (\n", tablename.c_str());
 
@@ -222,10 +300,18 @@ int createTable(sqlite3* db, string& tablename, int numValue,
       sprintf(cmd+strlen(cmd), "\t%s decimal(%d)",values[i].c_str(), sizes[i] );
     }
     if ( !hasNull[i] ) sprintf(cmd+strlen(cmd), " NOT NULL");
+    if ( unique[i] ) sprintf(cmd+strlen(cmd), " UNIQUE ");
     sprintf(cmd+strlen(cmd), ",\n");
   }
+
+  if (primaykey.compare("") != 0 )
+    sprintf(cmd+strlen(cmd), "\tPRIMARY KEY (%s),\n",primaykey.c_str());
+  if (foreignkey.compare("") != 0 )
+    sprintf(cmd+strlen(cmd), "\t%s,\n",foreignkey.c_str());
+
   // remove the last comma
   sprintf(cmd+strlen(cmd)-2, "\n);\n");
+
 #ifdef DEBUG
   cout<<" strlen of cmd: "<<strlen(cmd)<<endl;
   cout<<cmd<<endl;
@@ -238,8 +324,9 @@ int createTable(sqlite3* db, string& tablename, int numValue,
     fprintf(stderr, "SQL error: %s\n", zErrMsg);
     char * pos = strstr(zErrMsg, "already exists");
     sqlite3_free(zErrMsg);
-    if ( pos != NULL )
+    if ( pos != NULL ) {
       return -1;
+    }
   }
   return 0;
 }

@@ -31,7 +31,9 @@ int createTable(sqlite3* db,
             string values[],
             Datatype types[],
             int sizes[],
-            bool hasNull[]);
+            bool hasNull[],
+            bool unique[],
+            string primarykey);
 
 /**
  * Add the data in file into a table in Database
@@ -55,5 +57,7 @@ void loadData(sqlite3 *db,
               string values[],
               Datatype types[],
               int sizes[],
-              bool hasNull[] );
+              bool hasNull[],
+              bool unique[],
+              string primarykey);
 
